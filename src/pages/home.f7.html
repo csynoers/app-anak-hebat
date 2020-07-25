@@ -1,0 +1,193 @@
+<template>
+  <div class="page" data-name="home">
+    <!-- Top Navbar -->
+    <div class="navbar navbar-large">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" class="link icon-only panel-open" data-panel="left">
+            <i class="icon f7-icons if-not-md">menu</i>
+            <i class="icon material-icons if-md">menu</i>
+          </a>
+        </div>
+        <div class="title sliding">My App</div>
+        <div class="right">
+          <a href="#" class="link icon-only panel-open" data-panel="right">
+            <i class="icon f7-icons if-not-md">menu</i>
+            <i class="icon material-icons if-md">menu</i>
+          </a>
+        </div>
+        <div class="title-large">
+          <div class="title-large-text">My App</div>
+        </div>
+      </div>
+    </div>
+    <!-- Toolbar-->
+    <!-- Additional "tabbar-labels" class -->
+    <div class="toolbar tabbar tabbar-labels toolbar-bottom">
+      <div class="toolbar-inner">
+        <a href="#" class="tab-link tab-link-active">
+          <i class="icon f7-icons">house</i>
+          <!-- Label text -->
+          <span class="tabbar-label">Home</span>
+        </a>
+        <a href="#" class="tab-link">
+          <i class="icon f7-icons">list_dash</i>
+          <!-- Label text -->
+          <span class="tabbar-label">Kategori</span>
+        </a>
+        <a href="#" class="tab-link">
+          <i class="icon f7-icons">cart<span class="badge color-red">5</span></i>
+          <!-- Label text -->
+          <span class="tabbar-label">Keranjang</span>
+        </a>
+        <a href="#" class="tab-link">
+          <i class="icon f7-icons">envelope_fill</i>
+          <!-- Label text -->
+          <span class="tabbar-label">Inbox</span>
+        </a>
+        <a href="/register-member/" class="tab-link">
+          <i class="icon f7-icons">person_alt_circle</i>
+          <!-- Label text -->
+          <span class="tabbar-label">Akun</span>
+        </a>
+      </div>
+    </div>
+    <!-- Scrollable page content-->
+    <div class="page-content">
+
+      <!-- swiper-init to initialize swiper automatically -->
+      <div class="swiper-container swiper-init">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+            <div class="swiper-slide">Slide 2</div>
+            <div class="swiper-slide">Slide 3</div>
+        </div>
+      </div>
+
+      <div class="block block-strong">
+        <p>Here is your blank Framework7 app. Let's see what we have here.</p>
+      </div>
+      <div class="block-title">Navigation</div>
+      <div class="list">
+        <ul>
+          <li>
+            <a href="/about/" class="item-content item-link">
+              <div class="item-inner">
+                <div class="item-title">About</div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="/form/" class="item-content item-link">
+              <div class="item-inner">
+                <div class="item-title">Form</div>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="block-title">Modals</div>
+      <div class="block block-strong">
+        <div class="row">
+          <div class="col-50">
+            <a href="#" class="button button-raised button-fill popup-open" data-popup="#my-popup">Popup</a>
+          </div>
+          <div class="col-50">
+            <a href="#" class="button button-raised button-fill login-screen-open" data-login-screen="#my-login-screen">Login Screen</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-title">Panels</div>
+      <div class="block block-strong">
+        <div class="row">
+          <div class="col-50">
+            <a href="#" class="button button-raised button-fill panel-open" data-panel="left">Left Panel</a>
+          </div>
+          <div class="col-50">
+            <a href="#" class="button button-raised button-fill panel-open" data-panel="right">Right Panel</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="list links-list">
+        <ul>
+          <li>
+            <a href="/dynamic-route/blog/45/post/125/?foo=bar#about">Dynamic (Component) Route</a>
+          </li>
+          <li>
+            <a href="/load-something-that-doesnt-exist/">Default Route (404)</a>
+          </li>
+          <li>
+            <a href="/request-and-load/user/123456/">Request Data & Load</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  export default {
+    // Lifecycle Hooks
+    beforeCreate() {
+      console.log('componentBeforeCreate', this)
+    },
+    created() {
+      console.log('componentCreated', this)
+    },
+    beforeMount() {
+      console.log('componentBeforeMount', this)
+    },
+    mounted() {
+      console.log('componentMounted', this);
+    },
+    beforeDestroy() {
+      console.log('componentBeforeDestroy', this);
+    },
+    destroyed() {
+      console.log('componentDestroyed', this);
+    },
+    // Component Data
+    data: function () {
+      // Must return an object
+      return {
+        name: 'Jimmy',
+        age: 25,
+        like: ['Tennis', 'Chess', 'Football'],
+      }
+    },
+    // Component Methods
+    methods: {
+      openAlert: function () {
+        var self = this;
+        self.$app.dialog.alert('Hello World');
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+      },
+      pageAfterIn: function(e, page) {
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
+  }
+</script>

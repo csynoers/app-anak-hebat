@@ -1,0 +1,68 @@
+<template>
+<div class="page" data-name="register-member">
+  <div class="navbar">
+    <div class="navbar-bg"></div>
+    <div class="navbar-inner sliding">
+      <div class="left">
+        <a href="#" class="link back">
+          <i class="icon icon-back"></i>
+          <span class="if-not-md">Back</span>
+        </a>
+      </div>
+      <div class="title">{{title}}</div>
+    </div>
+  </div>
+  <div class="page-content login-screen-content">
+    <div class="list">
+      <ul>
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Nama</div>
+            <div class="item-input-wrap">
+              <input type="text" name="username" placeholder="John Dhoe" value="">
+
+            </div>
+          </div>
+        </li>
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Email</div>
+            <div class="item-input-wrap">
+              <input type="text" name="username" placeholder="email@gmail.com" value="">
+
+            </div>
+          </div>
+        </li>
+        <li class="item-content item-input">
+          <div class="item-inner">
+            <div class="item-title item-label">Password</div>
+            <div class="item-input-wrap">
+              <input type="password" name="password" placeholder="********" value="">
+
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="list">
+      <ul>
+        <li>
+          <a href="#" class="item-link list-button col button button-round button-fill" >Daftar</a>
+
+        </li>
+      </ul>
+      <div class="block-footer">Some text about login information.<br>Click "Sign In" to close Login Screen</div>
+    </div>
+  </div>
+</div>
+</template>
+<script>
+export default {
+  data: function () {
+    // Must return an object
+    return {
+      title: 'Daftar Member'
+    }
+  }
+};
+</script>
