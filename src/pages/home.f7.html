@@ -241,7 +241,7 @@
             <div class="swiper-slide">
               <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
               <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
-              <p>${data.rows[index].titleLimit}</p>
+              <p><a href="/book/${data.rows[index].id}">${data.rows[index].titleLimit}</a></p>
               <p>${data.rows[index].price.idr.text}</p>
             </div>
           `);
