@@ -18,8 +18,8 @@ import App from '../app.f7.html';
 var app = new Framework7({
   root: '#app', // App root element
   component: App, // App main component
-  id: 'io.framework7.myapp', // App bundle ID
-  name: 'My App', // App name
+  id: 'com.anakhebatindonesia.m', // App bundle ID
+  name: 'Anak Hebat', // App name
   theme: 'auto', // Automatic theme detection
 
 
@@ -48,4 +48,3 @@ var app = new Framework7({
     },
   },
 });
-

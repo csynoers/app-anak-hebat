@@ -10,7 +10,7 @@
             <i class="icon material-icons if-md">menu</i>
           </a>
         </div>
-        <div class="title sliding">My App</div>
+        <div class="title sliding">Anak Hebat</div>
         <div class="right">
           <a href="#" class="link icon-only panel-open" data-panel="right">
             <i class="icon f7-icons if-not-md">menu</i>
@@ -18,7 +18,7 @@
           </a>
         </div>
         <div class="title-large">
-          <div class="title-large-text">My App</div>
+          <div class="title-large-text">Anak Hebat</div>
         </div>
       </div>
     </div>
@@ -57,17 +57,74 @@
     <div class="page-content">
 
       <!-- swiper-init to initialize swiper automatically -->
-      <div class="swiper-container swiper-init">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">Slide 1</div>
-            <div class="swiper-slide">Slide 2</div>
-            <div class="swiper-slide">Slide 3</div>
-        </div>
+      <div class="swiper-container swiper-main-slide">
+        <div class="swiper-wrapper" style="min-height: 150px !important;"></div>
+        <!-- Pagination, if required -->
+        <div class="swiper-pagination"></div>
       </div>
 
-      <div class="block block-strong">
-        <p>Here is your blank Framework7 app. Let's see what we have here.</p>
+      <div class="block">
+        <a href="" class="padding"><img src="https://via.placeholder.com/50.png?text=icon 1"></a>
+        <a href="" class="padding"><img src="https://via.placeholder.com/50.png?text=icon 2"></a>
+        <a href="" class="padding"><img src="https://via.placeholder.com/50.png?text=icon 3"></a>
+        <a href="" class="padding"><img src="https://via.placeholder.com/50.png?text=icon 4"></a>
+        <a href="" class="padding"><img src="https://via.placeholder.com/50.png?text=icon 5"></a>
+        <a href="" class="padding"><img src="https://via.placeholder.com/50.png?text=icon 6"></a>
+        <a href="" class="padding"><img src="https://via.placeholder.com/50.png?text=icon 7"></a>
+        <a href="" class="padding"><img src="https://via.placeholder.com/50.png?text=icon 8"></a>
       </div>
+
+      <!-- Static Navbar -->
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="left"></div>
+          <div class="title">New Release</div>
+          <div class="right">
+            <a class="link">
+              view all
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- swiper-init to initialize swiper automatically -->
+      <div class="swiper-container swiper-new-release">
+        <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+      </div>
+
+      <!-- Static Navbar -->
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="left"></div>
+          <div class="title">Coming Soon</div>
+          <div class="right">
+            <a class="link">
+              view all
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- swiper-init to initialize swiper automatically -->
+      <div class="swiper-container swiper-coming-soon">
+        <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+      </div>
+
+      <!-- Static Navbar -->
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="left"></div>
+          <div class="title">Recomended Book</div>
+          <div class="right">
+            <a class="link">
+              view all
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- swiper-init to initialize swiper automatically -->
+      <div class="swiper-container swiper-recomended-book">
+        <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+      </div>
+
       <div class="block-title">Navigation</div>
       <div class="list">
         <ul>
@@ -142,6 +199,128 @@
     },
     mounted() {
       console.log('componentMounted', this);
+
+      let $$ = this.$$;
+      let app = this.$app;
+
+      /* create data main slider */
+      app.request.getJSON('https://m.anakhebatindonesia.com/slide', function (data) {
+        let rows = [];
+        for (let index = 0; index < data.length; index++) {          
+          rows.push(`<div class="swiper-slide"><img data-src="${data[index].image.original}" class="swiper-lazy" width="100%"><div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div></div>`);
+        }
+        rows = rows.join('');
+        /* inject data slide */
+        $$('.swiper-main-slide > .swiper-wrapper').html(rows);
+
+        app.swiper.create('.swiper-main-slide', {
+          // Disable preloading of all images
+          preloadImages: false,
+          // Enable lazy loading
+          lazy: true,
+          loop: true,     
+          autoplay: {
+            delay: 2000,
+          },
+          slidesPerView: 1,
+          // speed: 400,
+          spaceBetween: 0,
+          pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+          },
+        });
+
+      });
+
+      /* create swiper new release */
+      app.request.getJSON('https://m.anakhebatindonesia.com/books?release=new-release', function (data) {
+        let rows = [];
+        for (let index = 0; index < data.rows.length; index++) {
+          rows.push(`
+            <div class="swiper-slide">
+              <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
+              <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
+              <p>${data.rows[index].titleLimit}</p>
+              <p>${data.rows[index].price.idr.text}</p>
+            </div>
+          `);
+          // console.log(data.rows[index])
+        }
+        rows = rows.join('');
+        $$('.swiper-new-release > .swiper-wrapper').html(rows);
+
+        app.swiper.create('.swiper-new-release', {
+          // Disable preloading of all images
+          preloadImages: false,
+          // Enable lazy loading
+          // loop: true,
+          lazy: true, 
+          slidesPerView: 3,
+          spaceBetween: 20,
+        });
+
+      });
+
+      /* create swiper coming soon */
+      app.request.getJSON('https://m.anakhebatindonesia.com/books?release=coming-soon', function (data) {
+        let rows = [];
+        for (let index = 0; index < data.rows.length; index++) {
+          rows.push(`
+            <div class="swiper-slide">
+              <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
+              <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
+              <p>${data.rows[index].titleLimit}</p>
+              <p>${data.rows[index].price.idr.text}</p>
+            </div>
+          `);
+          // console.log(data.rows[index])
+        }
+        rows = rows.join('');
+        $$('.swiper-coming-soon > .swiper-wrapper').html(rows);
+
+        app.swiper.create('.swiper-coming-soon', {
+          // Disable preloading of all images
+          preloadImages: false,
+          // Enable lazy loading
+          // loop: true,
+          lazy: true, 
+          slidesPerView: 3,
+          spaceBetween: 20,
+        });
+
+      });
+
+      /* create swiper recomended book */
+      app.request.getJSON('https://m.anakhebatindonesia.com/books?release=best-seller', function (data) {
+        let rows = [];
+        for (let index = 0; index < data.rows.length; index++) {
+          rows.push(`
+            <div class="swiper-slide">
+              <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
+              <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
+              <p>${data.rows[index].titleLimit}</p>
+              <p>${data.rows[index].price.idr.text}</p>
+            </div>
+          `);
+          // console.log(data.rows[index])
+        }
+        rows = rows.join('');
+        $$('.swiper-recomended-book > .swiper-wrapper').html(rows);
+
+        app.swiper.create('.swiper-recomended-book', {
+          // Disable preloading of all images
+          preloadImages: false,
+          // Enable lazy loading
+          // loop: true,
+          lazy: true, 
+          slidesPerView: 3,
+          spaceBetween: 20,
+        });
+
+      });
+
+
     },
     beforeDestroy() {
       console.log('componentBeforeDestroy', this);
@@ -156,6 +335,18 @@
         name: 'Jimmy',
         age: 25,
         like: ['Tennis', 'Chess', 'Football'],
+        // slide: [
+        //   {
+        //     image: `<div class="swiper-slide"><img src="https://via.placeholder.com/360x200.png?text=slide 1"></div>`,
+        //   },
+        //   {
+        //     image: `<div class="swiper-slide"><img src="https://via.placeholder.com/360x200.png?text=slide 2"></div>`,
+        //   },
+        //   {
+        //     image: `<div class="swiper-slide"><img src="https://via.placeholder.com/360x200.png?text=slide 3"></div>`,
+        //   },
+        // ],
+        
       }
     },
     // Component Methods
