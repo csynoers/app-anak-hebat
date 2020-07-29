@@ -78,51 +78,57 @@
       <div class="navbar">
         <div class="navbar-inner">
           <div class="left"></div>
-          <div class="title">New Release</div>
+          <div class="title"><small>New Release</small></div>
           <div class="right">
-            <a class="link">
-              view all
+            <a class="link" @click="releaseBook('new-release')">
+              <small>view all<i style="font-size: inherit;" class="icon f7-icons">chevron_right</i></small>
             </a>
           </div>
         </div>
       </div>
       <!-- swiper-init to initialize swiper automatically -->
-      <div class="swiper-container swiper-new-release">
-        <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+      <div class="block">
+        <div class="swiper-container swiper-new-release">
+          <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+        </div>
       </div>
 
       <!-- Static Navbar -->
       <div class="navbar">
         <div class="navbar-inner">
           <div class="left"></div>
-          <div class="title">Coming Soon</div>
+          <div class="title"><small>Coming Soon</small></div>
           <div class="right">
             <a class="link">
-              view all
+              <small>view all<i style="font-size: inherit;" class="icon f7-icons">chevron_right</i></small>
             </a>
           </div>
         </div>
       </div>
       <!-- swiper-init to initialize swiper automatically -->
-      <div class="swiper-container swiper-coming-soon">
-        <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+      <div class="block">
+        <div class="swiper-container swiper-coming-soon">
+          <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+        </div>
       </div>
 
       <!-- Static Navbar -->
       <div class="navbar">
         <div class="navbar-inner">
           <div class="left"></div>
-          <div class="title">Recomended Book</div>
+          <div class="title"><small>Recomended Book</small></div>
           <div class="right">
             <a class="link">
-              view all
+              <small>view all<i style="font-size: inherit;" class="icon f7-icons">chevron_right</i></small>
             </a>
           </div>
         </div>
       </div>
       <!-- swiper-init to initialize swiper automatically -->
-      <div class="swiper-container swiper-recomended-book">
-        <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+      <div class="block">
+        <div class="swiper-container swiper-recomended-book">
+          <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+        </div>
       </div>
 
       <div class="block-title">Navigation</div>
@@ -202,12 +208,18 @@
 
       let $$ = this.$$;
       let app = this.$app;
+      let router = this.$router;
 
       /* create data main slider */
       app.request.getJSON('https://m.anakhebatindonesia.com/slide', function (data) {
         let rows = [];
         for (let index = 0; index < data.length; index++) {          
-          rows.push(`<div class="swiper-slide"><img data-src="${data[index].image.original}" class="swiper-lazy" width="100%"><div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div></div>`);
+          rows.push(`
+            <div class="swiper-slide">
+              <img data-src="${data[index].image.original}" class="swiper-lazy" width="100%">
+              <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
+            </div>
+          `);
         }
         rows = rows.join('');
         /* inject data slide */
@@ -238,11 +250,17 @@
         let rows = [];
         for (let index = 0; index < data.rows.length; index++) {
           rows.push(`
-            <div class="swiper-slide">
+            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}">
               <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
               <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
-              <p><a href="/book/${data.rows[index].id}">${data.rows[index].titleLimit}</a></p>
-              <p>${data.rows[index].price.idr.text}</p>
+              <center>
+                <div class="book-title-wrap">
+                  ${data.rows[index].title}
+                </div>
+                <div class="text-currency-primary">
+                  <span class="text-currency-format">Rp</span>${data.rows[index].price.idr.text}
+                </div>
+              </center>
             </div>
           `);
           // console.log(data.rows[index])
@@ -257,9 +275,14 @@
           // loop: true,
           lazy: true, 
           slidesPerView: 3,
-          spaceBetween: 20,
+          spaceBetween: 10,
         });
 
+        // event to load detail buku;
+        $$('.swiper-href').on('click',function(e){
+          let dataHref = $$(this).data('href');
+          router.navigate(dataHref,{ transition: 'f7-flip' })
+        })
       });
 
       /* create swiper coming soon */
@@ -267,11 +290,17 @@
         let rows = [];
         for (let index = 0; index < data.rows.length; index++) {
           rows.push(`
-            <div class="swiper-slide">
+            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}">
               <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
               <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
-              <p>${data.rows[index].titleLimit}</p>
-              <p>${data.rows[index].price.idr.text}</p>
+              <center>
+                <div class="book-title-wrap">
+                  ${data.rows[index].title}
+                </div>
+                <div class="text-currency-primary">
+                  <span class="text-currency-format">Rp</span>${data.rows[index].price.idr.text}
+                </div>
+              </center>
             </div>
           `);
           // console.log(data.rows[index])
@@ -286,8 +315,14 @@
           // loop: true,
           lazy: true, 
           slidesPerView: 3,
-          spaceBetween: 20,
+          spaceBetween: 10,
         });
+
+        // event to load detail buku;
+        $$('.swiper-href').on('click',function(e){
+          let dataHref = $$(this).data('href');
+          router.navigate(dataHref,{ transition: 'f7-flip' })
+        })
 
       });
 
@@ -296,11 +331,17 @@
         let rows = [];
         for (let index = 0; index < data.rows.length; index++) {
           rows.push(`
-            <div class="swiper-slide">
+            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}">
               <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
               <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
-              <p>${data.rows[index].titleLimit}</p>
-              <p>${data.rows[index].price.idr.text}</p>
+              <center>
+                <div class="book-title-wrap">
+                  ${data.rows[index].title}
+                </div>
+                <div class="text-currency-primary">
+                  <span class="text-currency-format">Rp</span>${data.rows[index].price.idr.text}
+                </div>
+              </center>
             </div>
           `);
           // console.log(data.rows[index])
@@ -315,8 +356,14 @@
           // loop: true,
           lazy: true, 
           slidesPerView: 3,
-          spaceBetween: 20,
+          spaceBetween: 10,
         });
+
+        // event to load detail buku;
+        $$('.swiper-href').on('click',function(e){
+          let dataHref = $$(this).data('href');
+          router.navigate(dataHref,{ transition: 'f7-flip' })
+        })
 
       });
 
@@ -354,6 +401,40 @@
       openAlert: function () {
         var self = this;
         self.$app.dialog.alert('Hello World');
+      },
+      releaseBook: function (release) {
+        console.log('release : ',release);
+        let app = this.$app;
+        app.request.getJSON(`https://m.anakhebatindonesia.com/books?release=${release}`, function (data) {
+        let rows = [];
+        for (let index = 0; index < data.rows.length; index++) {
+          rows.push(`
+            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}">
+              <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
+              <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
+              <center>
+                <div class="book-title-wrap">
+                  ${data.rows[index].title}
+                </div>
+                <div class="text-currency-primary">
+                  <span class="text-currency-format">Rp</span>${data.rows[index].price.idr.text}
+                </div>
+              </center>
+            </div>
+          `);
+          // console.log(data.rows[index])
+        }
+        console.log('rows',rows);
+        // rows = rows.join('');
+        // $$('.swiper-recomended-book > .swiper-wrapper').html(rows);
+
+        // event to load detail buku;
+        // $$('.swiper-href').on('click',function(e){
+        //   let dataHref = $$(this).data('href');
+        //   router.navigate(dataHref,{ transition: 'f7-flip' })
+        // })
+
+      });
       },
     },
     // Page Events

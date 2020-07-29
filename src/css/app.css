@@ -4,3 +4,24 @@
 }
 
 /* Your app custom styles here */
+.swiper-slide-border {
+  border: 1px solid #ddd;
+  box-shadow: 0 0.0625rem 0.125rem 0 rgba(0,0,0,.1);
+  cursor: pointer;
+}
+.book-title-wrap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1;
+  margin: .5em .5em;
+}
+.text-currency-format {
+  font-size: .75rem;
+}
+.text-currency-primary {
+  color: #ee4d2d;
+  margin-bottom: .5em;
+}

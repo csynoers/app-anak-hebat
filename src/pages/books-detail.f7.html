@@ -9,15 +9,58 @@
             <span class="if-not-md">Back</span>
           </a>
         </div>
-        <div class="title">Component Page</div>
+        <div class="title">Nama Buku</div>
       </div>
     </div>
     <div class="page-content">
-      <div class="block block-strong">
+      <div class="block">
         <img src="https://cdn.framework7.io/placeholder/sports-1024x1024-1.jpg" alt="" width="100%">
-        <p>Component page is alos compiled with Template7, but it has much more functionality. In addition to Template7 page it has lifecycle hooks, events handling and data managment.</p>
-        <p>It is useful to use Component page when you need page-specific logic.</p>
-      </div>
+        <h3>Nama Buku</h3>
+        <div class="text-currency-primary"><span class="text-currency-format">Rp</span>90.000</div>
+        <table>
+          <tbody>
+            <tr>
+              <td width="30%">Judul</td>
+              <td>You Are Overthinking! Pada Dasarnya, Semua Akan Baik-Baik Saja</td>
+            </tr>
+            <tr>
+              <td>Nomor ISBN</td>
+              <td>978-623-244-206-1</td>
+            </tr>
+            <tr>
+              <td>Penerbit</td>
+              <td>Pengembangan Diri</td>
+            </tr>
+            <tr>
+              <td>Kategori</td>
+              <td>Self Help</td>
+            </tr>
+            <tr>
+              <td>Jenis Cover</td>
+              <td>Ivory (Soft Cover)</td>
+            </tr>
+            <tr>
+              <td>Kertas Isi</td>
+              <td>Bookpapper</td>
+            </tr>
+            <tr>
+              <td>Tebal Buku</td>
+              <td>220 Halaman</td>
+            </tr>
+            <tr>
+              <td>Berat Buku</td>
+              <td>200 gram</td>
+            </tr>
+            <tr>
+              <td>Dimensi</td>
+              <td>14 X 20</td>
+            </tr>
+            <tr>
+              <td>Lokasi Stok</td>
+              <td>Gudang Anak Hebat Indonesia</td>
+            </tr>
+          </tbody>
+        </table>
       <div class="block-title">Events Handling</div>
       <div class="block block-strong">
         <a href="#" class="button button-raised" @click="openAlert">Open Alert</a>
@@ -73,7 +116,7 @@
   export default {
     // Lifecycle Hooks
     beforeCreate() {
-      console.log('componentBeforeCreate', this)
+      console.log('componentBeforeCreate detail buku', this)
     },
     created() {
       console.log('componentCreated', this)
