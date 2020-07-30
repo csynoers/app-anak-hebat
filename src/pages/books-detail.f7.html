@@ -18,7 +18,6 @@
         <h3>Nama Buku</h3>
         <div class="text-currency-primary"><span class="text-currency-format">Rp</span>90.000</div>
 
-        <!-- detail buku -->
         <div class="list">
           <ul>
             <li>
@@ -27,7 +26,7 @@
                     <div class="item-title">
                       Nomor ISBN
                     </div>
-                    <div class="item-after">
+                    <div id="nomorISBN" class="item-after">
                       978-623-244-206-1
                     </div>
                 </div>
@@ -130,51 +129,7 @@
               </div>
             </li>
           </ul>
-        </div>
-        <!-- .end detail buku -->
-        
-      <div class="block-title">Events Handling</div>
-      <div class="block block-strong">
-        <a href="#" class="button button-raised" @click="openAlert">Open Alert</a>
-      </div>
-      <div class="block-title">Page Component Data</div>
-      <div class="block block-strong">
-        <p>Hello! My name is {{name}}. I am {{age}} years old.</p>
-        <p>I like to play:</p>
-        <ul>
-          {{#each like}}
-          <li>{{this}}</li>
-          {{/each}}
-        </ul>
-      </div>
-      <div class="block-title">Extended Context</div>
-      <div class="block block-strong">
-        <p>Component page context as Template7 page context is also extended with some additional variables.</p>
-        <h4>$route</h4>
-        <p>Contains properties of the current route:</p>
-        <ul style="padding-left:25px">
-          <li><b>$route.url</b>: {{$route.url}}</li>
-          <li><b>$route.path</b>: {{$route.path}}</li>
-          <li><b>$route.params</b>: {{js 'return JSON.stringify(this.$route.params)'}}</li>
-          <li><b>$route.hash</b>: {{$route.hash}}</li>
-          <li><b>$route.query</b>: {{js 'return JSON.stringify(this.$route.query)'}}</li>
-        </ul>
-
-        <h4>$root</h4>
-        <p>Root data & methods:</p>
-        <ul style="padding-left:25px">
-          <li><b>$root.user.firstName</b>: {{$root.user.firstName}}</li>
-          <li><b>$root.user.lastName</b>: {{$root.user.lastName}}</li>
-          <li><a @click="$root.helloWorld(1)">$root.helloWorld()</a></li>
-        </ul>
-
-        <h4>$theme</h4>
-        <p>Currently active theme:</p>
-        <ul style="padding-left:25px">
-          <li><b>$theme.ios</b>: {{$theme.ios}}</li>
-          <li><b>$theme.md</b>: {{$theme.md}}</li>
-          <li><b>$theme.aurora</b>: {{$theme.aurora}}</li>
-        </ul>
+        </div>       
       </div>
     </div>
   </div>
@@ -198,6 +153,18 @@
     },
     mounted() {
       console.log('componentMounted', this);
+      console.log('bookId',this.$route.params.bookId);
+
+      let $$ = this.$$;
+      let app = this.$app;
+      let router = this.$router;
+      let bookId = this.$route.params.bookId;
+
+      /* get detail buku */
+      app.request.getJSON(`https://m.anakhebatindonesia.com/books/${bookId}`, function (data) {
+        $$('#nomorISBN').text(data.data.isbn);
+        console.log('data detail buku : ', data);
+      });
     },
     beforeDestroy() {
       console.log('componentBeforeDestroy', this);
