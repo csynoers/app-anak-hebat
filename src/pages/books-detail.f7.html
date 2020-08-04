@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" data-name="detail-buku">
     <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner sliding">
@@ -9,135 +9,41 @@
             <span class="if-not-md">Back</span>
           </a>
         </div>
-        <div class="title">Nama Buku</div>
+        <div class="title" id="titleDetailBuku">Nama Buku</div>
+        <div class="right">
+          <a href="#" class="link icon-only panel-open" data-panel="right">
+            <i class="icon f7-icons">cart</i>
+          </a>
+        </div>
       </div>
     </div>
-    <div class="page-content">
-      <div class="block">
-        <img src="https://cdn.framework7.io/placeholder/sports-1024x1024-1.jpg" alt="" width="100%">
-        <h3>Nama Buku</h3>
-        <div class="text-currency-primary"><span class="text-currency-format">Rp</span>90.000</div>
 
-        <div class="list">
-          <ul>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">
-                      Nomor ISBN
-                    </div>
-                    <div id="nomorISBN" class="item-after">
-                      978-623-244-206-1
-                    </div>
-                </div>
+    <!-- Fixed Toolbar -->
+    <div class="toolbar toolbar-bottom">
+      <div class="toolbar-inner">
+        <div class="row" style="width: 100%;">
+          <div class="col-50">
+            <div class="stepper stepper-init stepper-fillXXX color-redXXX margin-left margin-top-half">
+              <div class="stepper-button-minus"></div>
+              <div class="stepper-input-wrap">
+                <input type="text" value="1" min="1" max="100" step="1" readonlyXXX>
               </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">
-                      Penerbit
-                    </div>
-                    <div class="item-after">
-                      Pengembangan Diri
-                    </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">
-                      Kategori
-                    </div>
-                    <div class="item-after">
-                      Self Help
-                    </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">
-                      Jenis Cover
-                    </div>
-                    <div class="item-after">
-                      Ivory 210 gram
-                    </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">
-                      Kertas Isi
-                    </div>
-                    <div class="item-after">
-                      Bookpapper
-                    </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">
-                      Tebal Buku
-                    </div>
-                    <div class="item-after">
-                      276 Halaman
-                    </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">
-                      Berat Buku
-                    </div>
-                    <div class="item-after">
-                      300 gram
-                    </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">
-                      Dimensi
-                    </div>
-                    <div class="item-after">
-                      14 X 20
-                    </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">
-                      Lokasi Stok
-                    </div>
-                    <div class="item-after">
-                      Gudang Anak Hebat Indonesia
-                    </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>       
+              <div class="stepper-button-plus"></div>
+            </div>
+          </div>
+          <div class="col-50 bg-color-primary">
+            <a href="/" class="link text-color-white"><i class="icon f7-icons">cart_badge_plus</i> Beli Buku</a>
+          </div>
+        </div>
       </div>
-    </div>
+    </div>    
+    <div class="page-content" id="contentDetailBuku"></div>
   </div>
 </template>
 <style>
-  p {
+  /* p {
     margin: 10px 0;
-  }
+  } */
 </style>
 <script>
   export default {
@@ -159,12 +65,157 @@
       let app = this.$app;
       let router = this.$router;
       let bookId = this.$route.params.bookId;
+      app.preloader.show();
 
       /* get detail buku */
       app.request.getJSON(`https://m.anakhebatindonesia.com/books/${bookId}`, function (data) {
-        $$('#nomorISBN').text(data.data.isbn);
+        $$('#titleDetailBuku').text(data.data.title);
+
+        $$('#contentDetailBuku').html(`
+          <div class="block">
+            <div id="imgSource">
+              <img data-src="${data.data.image.origin}" class="lazy lazy-fade-in" alt="" width="100%">
+            </div>
+            <h3 class="title">${data.data.title}</h3>
+            <div class="text-currency-primary"><span class="text-currency-format">Rp</span>${data.data.price.idr.text}</div>
+
+            <div class="list">
+              <ul>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          Nomor ISBN
+                        </div>
+                        <div id="nomorISBN" class="item-after">
+                          ${data.data.isbn}
+                        </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          Penerbit
+                        </div>
+                        <div class="item-after" id="penerbit">
+                          Pengembangan Diri
+                        </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          Kategori
+                        </div>
+                        <div class="item-after">
+                          Self Help
+                        </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          Jenis Cover
+                        </div>
+                        <div class="item-after">
+                          ${data.data.jenis_cover}
+                        </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          Kertas Isi
+                        </div>
+                        <div class="item-after">
+                          ${data.data.kertas_isi}
+                        </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          Tebal Buku
+                        </div>
+                        <div class="item-after">
+                          ${data.data.tebal} Halaman
+                        </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          Berat Buku
+                        </div>
+                        <div class="item-after">
+                          ${data.data.weight.gram} gram
+                        </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          Dimensi
+                        </div>
+                        <div class="item-after">
+                          ${data.data.ukuran}
+                        </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          Lokasi Stok
+                        </div>
+                        <div class="item-after">
+                          ${data.data.stok}
+                        </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div class="block-headerXXX">
+                <strong>Sinopsis :</strong>
+              </div>
+              <div class="text-align-justify">
+                ${data.data.sinopsis}
+              </div>
+            </div>
+            <div>
+              <div class="block-headerXXX">
+                <strong>Keunggulan :</strong>
+              </div>
+              <div class="text-align-justify">
+                ${data.data.keunggulan}
+              </div>
+            </div>
+            <hr>                 
+          </div>        
+        `);
+        app.lazy.create($$('#imgSource > img.lazy'))
+        
         console.log('data detail buku : ', data);
+        app.preloader.hide();
       });
+      
     },
     beforeDestroy() {
       console.log('componentBeforeDestroy', this);

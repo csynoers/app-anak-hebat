@@ -80,7 +80,7 @@
           <div class="left"></div>
           <div class="title"><small>New Release</small></div>
           <div class="right">
-            <a class="link" @click="releaseBook('new-release')">
+            <a class="link" @click="releaseBook('/book/release/new-release')">
               <small>view all<i style="font-size: inherit;" class="icon f7-icons">chevron_right</i></small>
             </a>
           </div>
@@ -404,37 +404,12 @@
       },
       releaseBook: function (release) {
         console.log('release : ',release);
-        let app = this.$app;
-        app.request.getJSON(`https://m.anakhebatindonesia.com/books?release=${release}`, function (data) {
-        let rows = [];
-        for (let index = 0; index < data.rows.length; index++) {
-          rows.push(`
-            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}">
-              <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
-              <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
-              <center>
-                <div class="book-title-wrap">
-                  ${data.rows[index].title}
-                </div>
-                <div class="text-currency-primary">
-                  <span class="text-currency-format">Rp</span>${data.rows[index].price.idr.text}
-                </div>
-              </center>
-            </div>
-          `);
-          // console.log(data.rows[index])
-        }
-        console.log('rows',rows);
-        // rows = rows.join('');
-        // $$('.swiper-recomended-book > .swiper-wrapper').html(rows);
-
-        // event to load detail buku;
-        // $$('.swiper-href').on('click',function(e){
-        //   let dataHref = $$(this).data('href');
-        //   router.navigate(dataHref,{ transition: 'f7-flip' })
-        // })
-
-      });
+        let router = this.$router;
+        // let app = this.$app;
+        // let app = this.$app;
+        // app.request.getJSON(`https://m.anakhebatindonesia.com/books?release=${release}`, function (data) {
+        let dataHref = release;
+        router.navigate(dataHref,{ transition: 'f7-flip' });
       },
     },
     // Page Events
