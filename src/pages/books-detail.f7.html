@@ -69,6 +69,12 @@
 
       /* get detail buku */
       app.request.getJSON(`https://m.anakhebatindonesia.com/books/${bookId}`, function (data) {
+        let penerbit = [];
+        data.data.penerbit.forEach(function(a){
+          penerbit.push(`<a href="/penerbit/${a.id}">${a.title}</a>`);
+        });
+        
+
         $$('#titleDetailBuku').text(data.data.title);
 
         $$('#contentDetailBuku').html(`
@@ -100,7 +106,7 @@
                           Penerbit
                         </div>
                         <div class="item-after" id="penerbit">
-                          Pengembangan Diri
+                          
                         </div>
                     </div>
                   </div>
