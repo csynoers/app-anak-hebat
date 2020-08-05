@@ -6,6 +6,7 @@ import RegisterMember from '../pages/register-member.f7.html';
 
 import BooksDetail from '../pages/books-detail.f7.html';
 import BooksRelease from '../pages/books-release.f7.html';
+import PenerbitDetail from '../pages/penerbit-detail.f7.html';
 import DynamicRoutePage from '../pages/dynamic-route.f7.html';
 import RequestAndLoad from '../pages/request-and-load.f7.html';
 import NotFoundPage from '../pages/404.f7.html';
@@ -22,6 +23,10 @@ var routes = [
   {
     path: '/book/release/:bookRelease',
     component: BooksRelease,
+  },
+  {
+    path: '/penerbit/:penerbitId',
+    component: PenerbitDetail,
   },
   {
     path: '/about/',
