@@ -73,7 +73,9 @@
         data.data.penerbit.forEach(function(a){
           penerbit.push(`<a href="/penerbit/${a.id}">${a.title}</a>`);
         });
-        
+
+        /* implode data penerbit */
+        penerbit = penerbit.join(', ');
 
         $$('#titleDetailBuku').text(data.data.title);
 
@@ -106,7 +108,7 @@
                           Penerbit
                         </div>
                         <div class="item-after" id="penerbit">
-                          
+                          ${penerbit}
                         </div>
                     </div>
                   </div>
