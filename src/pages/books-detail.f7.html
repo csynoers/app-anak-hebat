@@ -69,13 +69,27 @@
 
       /* get detail buku */
       app.request.getJSON(`https://m.anakhebatindonesia.com/books/${bookId}`, function (data) {
+
+        /* implode data penerbit */
         let penerbit = [];
         data.data.penerbit.forEach(function(a){
           penerbit.push(`<a href="/penerbit/${a.id}">${a.title}</a>`);
         });
-
-        /* implode data penerbit */
         penerbit = penerbit.join(', ');
+        
+        /* implode data kategori */
+        let kategori= [];
+        data.data.kategori.forEach(function(a){
+          kategori.push(`<a href="/kategori/${a.id}">${a.title}</a>`);
+        });
+        kategori= kategori.join(', ');
+
+        /* implode data authors */
+        let authors= [];
+        data.data.authors.forEach(function(a){
+          authors.push(`<a href="/authors/${a.id}">${a.title}</a>`);
+        });
+        authors= authors.join(', ');
 
         $$('#titleDetailBuku').text(data.data.title);
 
@@ -85,6 +99,7 @@
               <img data-src="${data.data.image.origin}" class="lazy lazy-fade-in" alt="" width="100%">
             </div>
             <h3 class="title">${data.data.title}</h3>
+            <p>Author : ${authors}</p>
             <div class="text-currency-primary"><span class="text-currency-format">Rp</span>${data.data.price.idr.text}</div>
 
             <div class="list">
@@ -120,7 +135,7 @@
                           Kategori
                         </div>
                         <div class="item-after">
-                          Self Help
+                          ${kategori}
                         </div>
                     </div>
                   </div>
