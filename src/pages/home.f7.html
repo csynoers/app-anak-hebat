@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Scrollable page content-->
     <div class="page-content">
       
@@ -99,64 +99,6 @@
         <div class="swiper-container swiper-recomended-book">
           <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
         </div>
-      </div>
-
-      <div class="block-title">Navigation</div>
-      <div class="list">
-        <ul>
-          <li>
-            <a href="/about/" class="item-content item-link">
-              <div class="item-inner">
-                <div class="item-title">About</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/form/" class="item-content item-link">
-              <div class="item-inner">
-                <div class="item-title">Form</div>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="block-title">Modals</div>
-      <div class="block block-strong">
-        <div class="row">
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill popup-open" data-popup="#my-popup">Popup</a>
-          </div>
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill login-screen-open" data-login-screen="#my-login-screen">Login Screen</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="block-title">Panels</div>
-      <div class="block block-strong">
-        <div class="row">
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill panel-open" data-panel="left">Left Panel</a>
-          </div>
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill panel-open" data-panel="right">Right Panel</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="list links-list">
-        <ul>
-          <li>
-            <a href="/dynamic-route/blog/45/post/125/?foo=bar#about">Dynamic (Component) Route</a>
-          </li>
-          <li>
-            <a href="/load-something-that-doesnt-exist/">Default Route (404)</a>
-          </li>
-          <li>
-            <a href="/request-and-load/user/123456/">Request Data & Load</a>
-          </li>
-        </ul>
       </div>
     </div>
   </div>
@@ -251,7 +193,7 @@
         // event to load detail buku;
         $$('.swiper-href').on('click',function(e){
           let dataHref = $$(this).data('href');
-          router.navigate(dataHref,{ transition: 'f7-flip' })
+          router.navigate(dataHref,{ transition: 'f7-push' })
         })
       });
 
@@ -291,7 +233,7 @@
         // event to load detail buku;
         $$('.swiper-href').on('click',function(e){
           let dataHref = $$(this).data('href');
-          router.navigate(dataHref,{ transition: 'f7-flip' })
+          router.navigate(dataHref,{ transition: 'f7-push' })
         })
 
       });
@@ -332,7 +274,7 @@
         // event to load detail buku;
         $$('.swiper-href').on('click',function(e){
           let dataHref = $$(this).data('href');
-          router.navigate(dataHref,{ transition: 'f7-flip' })
+          router.navigate(dataHref,{ transition: 'f7-push' })
         })
 
       });
@@ -379,7 +321,7 @@
         // let app = this.$app;
         // app.request.getJSON(`https://m.anakhebatindonesia.com/books?release=${release}`, function (data) {
         let dataHref = release;
-        router.navigate(dataHref,{ transition: 'f7-flip' });
+        router.navigate(dataHref,{ transition: 'f7-fade' });
       },
     },
     // Page Events
