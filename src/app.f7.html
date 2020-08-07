@@ -36,7 +36,64 @@
     </div>
 
     <!-- Your main view, should have "view-main" class -->
-    <div class="view view-main view-init safe-areas" data-url="/"></div>
+    <!-- <div class="view view-main view-init safe-areas" data-url="/"></div> -->
+        <!-- Views/Tabs container -->
+    <div class="views tabs safe-areas">
+      <!-- Toolbar-->
+      <div class="toolbar tabbar tabbar-labels toolbar-bottom toolbar-main">
+        <div class="toolbar-inner">
+          <a href="#view-home" class="tab-link tab-link-active">
+            <i class="icon f7-icons">house</i>
+            <!-- Label text -->
+            <span class="tabbar-label">Home</span>
+          </a>
+          <a href="#view-kategori" class="tab-link">
+            <i class="icon f7-icons">list_dash</i>
+            <!-- Label text -->
+            <span class="tabbar-label">Kategori</span>
+          </a>
+          <a href="#view-cart" class="tab-link">
+            <i class="icon f7-icons">cart<span class="badge color-red">5</span></i>
+            <!-- Label text -->
+            <span class="tabbar-label">Keranjang</span>
+          </a>
+          <a href="#view-inbox" class="tab-link">
+            <i class="icon f7-icons">envelope_fill</i>
+            <!-- Label text -->
+            <span class="tabbar-label">Inbox</span>
+          </a>
+          <a href="#view-akun" class="tab-link">
+            <i class="icon f7-icons">person_alt_circle</i>
+            <!-- Label text -->
+            <span class="tabbar-label">Akun</span>
+          </a>
+        </div>
+      </div>
+      <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
+      <div id="view-home" class="view view-main view-init tab tab-active" data-url="/">
+        <!-- Home page will be loaded here dynamically from / route -->
+      </div>
+
+      <!-- Kategori View -->
+      <div id="view-kategori" class="view view-init tab" data-name="kategori" data-url="/kategori/">
+        <!-- Catalog page will be loaded here dynamically from /catalog/ route -->
+      </div>
+
+      <!-- Kategori View -->
+      <div id="view-kategori" class="view view-init tab" data-name="kategori" data-url="/kategori/">
+        <!-- Catalog page will be loaded here dynamically from /catalog/ route -->
+      </div>
+
+      <!-- Kategori View -->
+      <div id="view-kategori" class="view view-init tab" data-name="kategori" data-url="/kategori/">
+        <!-- Catalog page will be loaded here dynamically from /catalog/ route -->
+      </div>
+
+      <!-- Kategori View -->
+      <div id="view-kategori" class="view view-init tab" data-name="kategori" data-url="/kategori/">
+        <!-- Catalog page will be loaded here dynamically from /catalog/ route -->
+      </div>
+    </div>
 
 
     <!-- Popup -->

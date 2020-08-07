@@ -49,7 +49,7 @@
   export default {
     // Lifecycle Hooks
     beforeCreate() {
-      console.log('componentBeforeCreate detail buku', this)
+      console.log('componentBeforeCreate', this)
     },
     created() {
       console.log('componentCreated', this)
@@ -58,6 +58,7 @@
       console.log('componentBeforeMount', this)
     },
     mounted() {
+
       console.log('componentMounted', this);
       console.log('bookId',this.$route.params.bookId);
 
@@ -274,6 +275,8 @@
         console.log('pageBeforeIn', page);
       },
       pageAfterIn: function(e, page) {
+        let app = this.$app;
+        app.toolbar.hide('.toolbar-main');
         console.log('pageAfterIn', page);
       },
       pageBeforeOut: function(e, page) {
