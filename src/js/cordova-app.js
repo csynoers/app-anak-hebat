@@ -84,7 +84,17 @@ var cordovaApp = {
         e.preventDefault();
         return false;
       }
+
+      if (f7.views.main.name == "home") {
+        f7.dialog.confirm('Yakin keluar dari aplikasi?','Anak Hebat', function () {
+          navigator.app.exitApp();
+        });
+        e.preventDefault();
+        return false;
+      }
+
     }, false);
+    
   },
   /*
   This method does the following:

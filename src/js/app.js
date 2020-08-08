@@ -47,4 +47,5 @@ var app = new Framework7({
       }
     },
   },
+  pushState: true
 });
