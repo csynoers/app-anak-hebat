@@ -1,9 +1,9 @@
 {
-  "name": "my-app",
+  "name": "anak-hebat",
   "private": true,
   "version": "1.0.0",
-  "description": "My App",
-  "repository": "",
+  "description": "Anak Hebat",
+  "repository": "https://github.com/csynoers/app-anak-hebat",
   "license": "UNLICENSED",
   "scripts": {
     "start": "npm run dev",
