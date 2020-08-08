@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" data-page="release-books">
     <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner sliding">
@@ -9,65 +9,16 @@
             <span class="if-not-md">Back</span>
           </a>
         </div>
-        <div class="title">Component Page</div>
+        <div class="title">{{title}}</div>
       </div>
     </div>
-    <div class="page-content">
-      <div class="block block-strong">
-        <p>Component page is alos compiled with Template7, but it has much more functionality. In addition to Template7 page it has lifecycle hooks, events handling and data managment.</p>
-        <p>It is useful to use Component page when you need page-specific logic.</p>
-      </div>
-      <div class="block-title">Events Handling</div>
-      <div class="block block-strong">
-        <a href="#" class="button button-raised" @click="openAlert">Open Alert</a>
-      </div>
-      <div class="block-title">Page Component Data</div>
-      <div class="block block-strong">
-        <p>Hello! My name is {{name}}. I am {{age}} years old.</p>
-        <p>I like to play:</p>
-        <ul>
-          {{#each like}}
-          <li>{{this}}</li>
-          {{/each}}
-        </ul>
-      </div>
-      <div class="block-title">Extended Context</div>
-      <div class="block block-strong">
-        <p>Component page context as Template7 page context is also extended with some additional variables.</p>
-        <h4>$route</h4>
-        <p>Contains properties of the current route:</p>
-        <ul style="padding-left:25px">
-          <li><b>$route.url</b>: {{$route.url}}</li>
-          <li><b>$route.path</b>: {{$route.path}}</li>
-          <li><b>$route.params</b>: {{js 'return JSON.stringify(this.$route.params)'}}</li>
-          <li><b>$route.hash</b>: {{$route.hash}}</li>
-          <li><b>$route.query</b>: {{js 'return JSON.stringify(this.$route.query)'}}</li>
-        </ul>
-
-        <h4>$root</h4>
-        <p>Root data & methods:</p>
-        <ul style="padding-left:25px">
-          <li><b>$root.user.firstName</b>: {{$root.user.firstName}}</li>
-          <li><b>$root.user.lastName</b>: {{$root.user.lastName}}</li>
-          <li><a @click="$root.helloWorld()">$root.helloWorld()</a></li>
-        </ul>
-
-        <h4>$theme</h4>
-        <p>Currently active theme:</p>
-        <ul style="padding-left:25px">
-          <li><b>$theme.ios</b>: {{$theme.ios}}</li>
-          <li><b>$theme.md</b>: {{$theme.md}}</li>
-          <li><b>$theme.aurora</b>: {{$theme.aurora}}</li>
-        </ul>
-      </div>
+    <div class="page-content infinite-scroll-content" id="contentReleaseBooks">
+      <div class="row no-gap"></div>
+      <div class="preloader infinite-scroll-preloader" data-page="2"></div>
     </div>
   </div>
 </template>
-<style>
-  p {
-    margin: 10px 0;
-  }
-</style>
+
 <script>
   export default {
     // Lifecycle Hooks
@@ -81,7 +32,86 @@
       console.log('componentBeforeMount', this)
     },
     mounted() {
-      console.log('componentMounted', this);
+      
+      let $$ = this.$$;
+      let app = this.$app;
+      let router = this.$router;
+      let releaseSlug = this.$route.params.bookRelease;
+      
+      /* selector el */
+      let elContentReleaseBooks = $$('#contentReleaseBooks');
+      let elContentRows = elContentReleaseBooks.find('.row');
+      
+      app.preloader.show();
+      /* Ajax Request */
+      app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { release : releaseSlug, limit : 10 }, function (json) {
+        json.rows.forEach(function(d){
+          elContentRows.append(`
+            <div class="col-50 book" data-href="/book/${d.id}">
+              <div class="card card-outline">
+                <div class="card-content">
+                  <img data-src="${d.image.thumbnail}" class="lazy lazy-fade-in" alt="" width="100%">
+                  <center>
+                    <div class="book-title-wrap">
+                      ${d.title}
+                    </div>
+                    <div class="text-currency-primary">
+                      <span class="text-currency-format">Rp</span>${d.price.idr.text}
+                    </div>
+                  </center>
+                </div>
+              </div>
+            </div>          
+          `);
+          app.lazy.create(elContentRows.find('img.lazy'));
+          // event to load detail buku;
+          elContentRows.find('.book').on('click',function(e){
+            let dataHref = $$(this).data('href');
+            router.navigate(dataHref,{ transition: 'f7-fade' })
+          })
+        });
+      });
+      app.preloader.hide();
+
+      $$('.infinite-scroll-content').on('infinite', function () {
+        let page = $$('.infinite-scroll-preloader').data('page');
+        app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { release : releaseSlug, limit : 10, page : page }, function (json) {
+          console.log(json.rows.length)
+          if ( json.rows.length > 0 ) {
+            let nextPage = (page*1)+1;
+            // console.log(nextPage)
+            $$('.infinite-scroll-preloader').attr('data-page',nextPage);
+            json.rows.forEach(function(d){
+              elContentRows.append(`
+                <div class="col-50 book" data-href="/book/${d.id}">
+                  <div class="card card-outline">
+                    <div class="card-content">
+                      <img data-src="${d.image.thumbnail}" class="lazy lazy-fade-in" alt="" width="100%">
+                      <center>
+                        <div class="book-title-wrap">
+                          ${d.title}
+                        </div>
+                        <div class="text-currency-primary">
+                          <span class="text-currency-format">Rp</span>${d.price.idr.text}
+                        </div>
+                      </center>
+                    </div>
+                  </div>
+                </div>          
+              `);
+              app.lazy.create(elContentRows.find('img.lazy'));
+              // event to load detail buku;
+              elContentRows.find('.book').on('click',function(e){
+                let dataHref = $$(this).data('href');
+                router.navigate(dataHref,{ transition: 'f7-fade' })
+              })
+            });
+          } else {
+            $$('.infinite-scroll-preloader').remove();
+          }
+        });
+        // console.log($$('.infinite-scroll-preloader').data('page'));
+      });
     },
     beforeDestroy() {
       console.log('componentBeforeDestroy', this);
@@ -93,16 +123,18 @@
     data: function () {
       // Must return an object
       return {
-        name: 'Jimmy',
-        age: 25,
-        like: ['Tennis', 'Chess', 'Football'],
+        title: this.getTitle(this.$route.params.bookRelease),
       }
     },
     // Component Methods
     methods: {
-      openAlert: function () {
-        var self = this;
-        self.$app.dialog.alert('Hello World');
+      getTitle: function(releaseSlug) {
+        let title = {};
+        title['new-release'] = 'New Release';
+        title['coming-soon'] = 'Coming Soon';
+        title['best-seller'] = 'Recomended Book';
+
+        return title[releaseSlug];
       },
     },
     // Page Events
@@ -117,6 +149,9 @@
         console.log('pageBeforeIn', page);
       },
       pageAfterIn: function(e, page) {
+        this.$$(document).on('click','.pager ul li a',function(e){
+          e.preventDefault();
+        })
         console.log('pageAfterIn', page);
       },
       pageBeforeOut: function(e, page) {

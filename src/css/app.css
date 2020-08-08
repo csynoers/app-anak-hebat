@@ -25,3 +25,14 @@
   color: #ee4d2d;
   margin-bottom: .5em;
 }
+.pagination {
+  display: inline-flex;
+  list-style: none;
+}
+.pagination li{
+  padding: 0.5em 1em;
+}
+.pagination .active{
+  background-color: lightskyblue;
+  border-radius: 0.1em;
+}
