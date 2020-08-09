@@ -17,6 +17,7 @@
   -webkit-line-clamp: 2;
   line-height: 1;
   margin: .5em .5em;
+  height: 30px;
 }
 .text-currency-format {
   font-size: .75rem;

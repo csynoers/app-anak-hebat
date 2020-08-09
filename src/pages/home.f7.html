@@ -98,6 +98,25 @@
           <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
         </div>
       </div>
+
+      <!-- Static Navbar -->
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="left"></div>
+          <div class="title"><small>Artikel Terbaru</small></div>
+          <div class="right">
+            <a class="link" @click="allArticles('/news')">
+              <small>Lihat semua artikel<i style="font-size: inherit;" class="icon f7-icons">chevron_right</i></small>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- swiper-init to initialize swiper automatically -->
+      <div class="block">
+        <div class="swiper-container swiper-article">
+          <div class="swiper-wrapper" style="min-height: 150px!important;"></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -161,7 +180,7 @@
         for (let index = 0; index < data.rows.length; index++) {
           rows.push(`
             <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}">
-              <div style="min-height:168px">
+              <div style="min-height:146px">
                 <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
                 <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:-75px;margin-left:-50px"></div>
               </div>
@@ -202,8 +221,8 @@
         let rows = [];
         for (let index = 0; index < data.rows.length; index++) {
           rows.push(`
-            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}" style="min-height:173px">
-              <div style="min-height:168px">
+            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}" style="min-height:225px">
+              <div style="min-height:146px">
                 <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
                 <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:-75px;margin-left:-50px"></div>
               </div>  
@@ -245,8 +264,8 @@
         let rows = [];
         for (let index = 0; index < data.rows.length; index++) {
           rows.push(`
-            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}" style="min-height:173px">
-              <div style="min-height:168px">
+            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}" style="min-height:225px">
+              <div style="min-height:146px">
                 <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
                 <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:-75px;margin-left:-50px"></div>
               </div>
@@ -266,6 +285,50 @@
         $$('.swiper-recomended-book > .swiper-wrapper').html(rows);
 
         app.swiper.create('.swiper-recomended-book', {
+          // Disable preloading of all images
+          preloadImages: false,
+          // Enable lazy loading
+          // loop: true,
+          lazy: true, 
+          slidesPerView: 3,
+          spaceBetween: 10,
+        });
+
+        // event to load detail buku;
+        $$('.swiper-href').on('click',function(e){
+          let dataHref = $$(this).data('href');
+          router.navigate(dataHref,{ transition: 'f7-push' })
+        })
+
+      });
+
+      /* create swiper articles */
+      let getDateDMY = this.getDateDMY;
+      app.request.getJSON('https://m.anakhebatindonesia.com/news', function (data) {
+        let rows = [];
+        data.rows.forEach(function(d){
+          d.create_at = getDateDMY(d.create_at);
+          rows.push(`
+            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/news/${d.id}" style="min-height:170px">
+              <div style="height:102px;overflow: hidden;">
+                <img data-src="${d.image.thumbnail}" onerror="this.src='static/error-322.png'" class="swiper-lazy" style="height: inherit;">
+                <div class="swiper-lazy-preloader" style="width:50px;height:50px;margin-top:-50px;margin-left:-25px"></div>
+              </div>
+              <center>
+                <div class="book-title-wrap">
+                  ${d.title}
+                </div>
+                <div class="text-color-gray">
+                  ${d.create_at}
+                </div>
+              </center>
+            </div>
+          `);
+        });
+        rows = rows.join('');
+        $$('.swiper-article > .swiper-wrapper').html(rows);
+
+        app.swiper.create('.swiper-article', {
           // Disable preloading of all images
           preloadImages: false,
           // Enable lazy loading
@@ -312,6 +375,17 @@
         let dataHref = release;
         router.navigate(dataHref,{ transition: 'f7-fade' });
       },
+      allArticles: function (dataHref) {
+        let router = this.$router;
+        router.navigate(dataHref,{ transition: 'f7-fade' });
+      },
+      getDateDMY: function(dateValue) {
+        var mydate = new Date(dateValue);
+        var month = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"][mydate.getMonth()];
+        var str = mydate.getDay() + ' ' +	month + ' ' + mydate.getFullYear();
+        return str;
+      }
     },
     // Page Events
     on: {
