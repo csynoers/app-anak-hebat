@@ -161,8 +161,10 @@
         for (let index = 0; index < data.rows.length; index++) {
           rows.push(`
             <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}">
-              <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
-              <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
+              <div style="min-height:168px">
+                <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
+                <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:-75px;margin-left:-50px"></div>
+              </div>
               <center>
                 <div class="book-title-wrap">
                   ${data.rows[index].title}
@@ -200,9 +202,11 @@
         let rows = [];
         for (let index = 0; index < data.rows.length; index++) {
           rows.push(`
-            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}">
-              <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
-              <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
+            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}" style="min-height:173px">
+              <div style="min-height:168px">
+                <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
+                <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:-75px;margin-left:-50px"></div>
+              </div>  
               <center>
                 <div class="book-title-wrap">
                   ${data.rows[index].title}
@@ -241,9 +245,11 @@
         let rows = [];
         for (let index = 0; index < data.rows.length; index++) {
           rows.push(`
-            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}">
-              <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
-              <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:5px;margin-left:-50px"></div>
+            <div class="swiper-slide swiper-slide-border swiper-href" data-href="/book/${data.rows[index].id}" style="min-height:173px">
+              <div style="min-height:168px">
+                <img data-src="${data.rows[index].image.thumbnail}" class="swiper-lazy" width="100%">
+                <div class="swiper-lazy-preloader" style="width:100px;height:100px;margin-top:-75px;margin-left:-50px"></div>
+              </div>
               <center>
                 <div class="book-title-wrap">
                   ${data.rows[index].title}
@@ -291,19 +297,7 @@
       return {
         name: 'Jimmy',
         age: 25,
-        like: ['Tennis', 'Chess', 'Football'],
-        // slide: [
-        //   {
-        //     image: `<div class="swiper-slide"><img src="https://via.placeholder.com/360x200.png?text=slide 1"></div>`,
-        //   },
-        //   {
-        //     image: `<div class="swiper-slide"><img src="https://via.placeholder.com/360x200.png?text=slide 2"></div>`,
-        //   },
-        //   {
-        //     image: `<div class="swiper-slide"><img src="https://via.placeholder.com/360x200.png?text=slide 3"></div>`,
-        //   },
-        // ],
-        
+        like: ['Tennis', 'Chess', 'Football'],        
       }
     },
     // Component Methods
@@ -315,9 +309,6 @@
       releaseBook: function (release) {
         console.log('release : ',release);
         let router = this.$router;
-        // let app = this.$app;
-        // let app = this.$app;
-        // app.request.getJSON(`https://m.anakhebatindonesia.com/books?release=${release}`, function (data) {
         let dataHref = release;
         router.navigate(dataHref,{ transition: 'f7-fade' });
       },
