@@ -56,7 +56,7 @@
         $$('#contentDetailNews').html(`
           <div class="block">
             <div id="imgSource">
-              <img data-src="${data.data.image.origin}" class="lazy lazy-fade-in" alt="" width="100%">
+              <img data-src="${data.data.image.origin}" onerror="this.src='static/error-482.png'" class="lazy lazy-fade-in" alt="" width="100%">
             </div>
             <h3 class="title">${data.data.title}</h3>
             <p><span class="material-icons size-22" style="font-size:13px">access_time</span> <span style="font-size:14px">${getDateDMY(data.data.create_at)}</span></p>

@@ -1,5 +1,5 @@
 <template>
-  <div class="page" data-page="release-books">
+  <div class="page" data-page="news-detail">
     <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner sliding">
@@ -12,13 +12,42 @@
         <div class="title">{{title}}</div>
       </div>
     </div>
-    <div class="page-content infinite-scroll-content" id="contentReleaseBooks">
+    <div class="page-content infinite-scroll-content hide-navbar-on-scroll" id="contentNews">
       <div class="row no-gap"></div>
-      <div class="preloader infinite-scroll-preloader" data-page="2"></div>
+      <div class="row-infinite-scrool no-gap" data-page="2"></div>
+      <div class="preloader infinite-scroll-preloader"></div>
     </div>
   </div>
 </template>
-
+<style>
+  .demo-card-header-pic {
+    cursor: pointer;
+  }
+  .demo-card-header-pic .card-header {
+    height: 40vw;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+  }
+  .card-header h4{
+    background-color: #007aff59;
+    box-shadow: 1px 0px 10px 0px black;
+    width: 100%;
+  }
+  .demo-card-header-pic .card-content-padding .date{
+    color: #8e8e93;
+  }
+  .demo-card-header-pic .card-content-padding{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 7em;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-height: 1.5;
+    margin-bottom: 2em;
+  }
+</style>
 <script>
   export default {
     // Lifecycle Hooks
@@ -39,78 +68,84 @@
       let releaseSlug = this.$route.params.bookRelease;
       
       /* selector el */
-      let elContentReleaseBooks = $$('#contentReleaseBooks');
-      let elContentRows = elContentReleaseBooks.find('.row');
+      let elContentNews = $$('#contentNews');
+      let elContentRows = elContentNews.find('.row');
       
       app.preloader.show();
       /* Ajax Request */
-      app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { release : releaseSlug, limit : 10 }, function (json) {
+      let getDateDMY = this.getDateDMY;
+      app.request.getJSON(`https://m.anakhebatindonesia.com/news`, function (json) {
         json.rows.forEach(function(d){
           elContentRows.append(`
-            <div class="col-50 book" data-href="/book/${d.id}">
-              <div class="card card-outline">
-                <div class="card-content">
-                  <img data-src="${d.image.thumbnail}" class="lazy lazy-fade-in" alt="" width="100%">
-                  <center>
-                    <div class="book-title-wrap">
-                      ${d.title}
-                    </div>
-                    <div class="text-currency-primary">
-                      <span class="text-currency-format">Rp</span>${d.price.idr.text}
-                    </div>
-                  </center>
-                </div>
+            <div class="card demo-card-header-pic" data-href="/news/${d.id}">
+              <div data-background="${d.image.origin}" class="card-header align-items-flex-end lazy lazy-fade-in"><h4 class="padding">${d.title}</h4></div>
+              <div class="card-content card-content-padding text-align-justify">
+                <p class="date"><span class="material-icons size-22" style="font-size:13px">access_time</span> <span style="font-size:14px">${getDateDMY(d.create_at)}</span></p>
+                <p>${d.content}</p>
               </div>
-            </div>          
+            </div>         
           `);
-          app.lazy.create(elContentRows.find('img.lazy'));
+          app.lazy.create(elContentRows.find('.lazy'));
           // event to load detail buku;
-          elContentRows.find('.book').on('click',function(e){
+          elContentRows.find('.demo-card-header-pic').on('click',function(e){
             let dataHref = $$(this).data('href');
-            router.navigate(dataHref,{ transition: 'f7-fade' })
+            router.navigate(dataHref,{ transition: 'f7-push' })
           })
         });
       });
       app.preloader.hide();
 
+      // Loading flag
+      var allowInfinite = true;
+
+      let elContentRowsInfiniteScroll = elContentNews.find('.row-infinite-scrool');
       $$('.infinite-scroll-content').on('infinite', function () {
-        let page = $$('.infinite-scroll-preloader').data('page');
-        app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { release : releaseSlug, limit : 10, page : page }, function (json) {
-          console.log(json.rows.length)
-          if ( json.rows.length > 0 ) {
-            let nextPage = (page*1)+1;
-            // console.log(nextPage)
-            $$('.infinite-scroll-preloader').attr('data-page',nextPage);
-            json.rows.forEach(function(d){
-              elContentRows.append(`
-                <div class="col-50 book" data-href="/book/${d.id}">
-                  <div class="card card-outline">
-                    <div class="card-content">
-                      <img data-src="${d.image.thumbnail}" class="lazy lazy-fade-in" alt="" width="100%">
-                      <center>
-                        <div class="book-title-wrap">
-                          ${d.title}
-                        </div>
-                        <div class="text-currency-primary">
-                          <span class="text-currency-format">Rp</span>${d.price.idr.text}
-                        </div>
-                      </center>
-                    </div>
-                  </div>
-                </div>          
-              `);
-              app.lazy.create(elContentRows.find('img.lazy'));
-              // event to load detail buku;
-              elContentRows.find('.book').on('click',function(e){
-                let dataHref = $$(this).data('href');
-                router.navigate(dataHref,{ transition: 'f7-fade' })
-              })
-            });
-          } else {
+        // Exit, if loading in progress
+        if (!allowInfinite) return;
+
+        // Set loading flag
+        allowInfinite = false;
+
+        let page = parseInt(elContentRowsInfiniteScroll.data('page'));
+        let nextPage = page+1;
+
+        console.log('page news : ', page);
+        console.log('next page news : ', nextPage);
+
+        app.request.getJSON(`https://m.anakhebatindonesia.com/news`, { page : page }, function (json) {
+          // Reset loading flag
+          allowInfinite = true;
+
+          console.log('rows length : ', json.rows.length);
+          if (json.rows.length < 1) {
+            // Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
+            app.infiniteScroll.destroy('.infinite-scroll-content');
+            // Remove preloader
             $$('.infinite-scroll-preloader').remove();
+            return;
           }
+
+          json.rows.forEach(function(d){
+            elContentRowsInfiniteScroll.append(`
+              <div class="card demo-card-header-pic" data-href="/news/${d.id}">
+                <div data-background="${d.image.origin}" class="card-header align-items-flex-end lazy lazy-fade-in"><h4 class="padding">${d.title}</h4></div>
+                <div class="card-content card-content-padding text-align-justify">
+                  <p class="date"><span class="material-icons size-22" style="font-size:13px">access_time</span> <span style="font-size:14px">${getDateDMY(d.create_at)}</span></p>
+                  <p>${d.content}</p>
+                </div>
+              </div>         
+            `);
+            elContentRowsInfiniteScroll.attr('data-page',nextPage);
+
+            app.lazy.create(elContentRowsInfiniteScroll.find('.lazy'));
+            // event to load detail news;
+            elContentRowsInfiniteScroll.find('.demo-card-header-pic').on('click',function(e){
+              let dataHref = $$(this).data('href');
+              router.navigate(dataHref,{ transition: 'f7-push' })
+            })
+          });
         });
-        // console.log($$('.infinite-scroll-preloader').data('page'));
+
       });
     },
     beforeDestroy() {
@@ -123,7 +158,7 @@
     data: function () {
       // Must return an object
       return {
-        title: this.getTitle(this.$route.params.bookRelease),
+        title: 'Artikel'
       }
     },
     // Component Methods
@@ -136,6 +171,13 @@
 
         return title[releaseSlug];
       },
+      getDateDMY: function(dateValue) {
+        var mydate = new Date(dateValue);
+        var month = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"][mydate.getMonth()];
+        var str = mydate.getDay() + ' ' +	month + ' ' + mydate.getFullYear();
+        return str;
+      }
     },
     // Page Events
     on: {
@@ -152,6 +194,8 @@
         this.$$(document).on('click','.pager ul li a',function(e){
           e.preventDefault();
         })
+        let app = this.$app;
+        app.toolbar.hide('.toolbar-main');
         console.log('pageAfterIn', page);
       },
       pageBeforeOut: function(e, page) {
