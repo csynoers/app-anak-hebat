@@ -5,6 +5,7 @@ import AboutPage from '../pages/about.f7.html';
 import FormPage from '../pages/form.f7.html';
 import RegisterMember from '../pages/register-member.f7.html';
 
+import BooksCategory from '../pages/books-category.f7.html';
 import BooksDetail from '../pages/books-detail.f7.html';
 import BooksRelease from '../pages/books-release.f7.html';
 import PenerbitDetail from '../pages/penerbit-detail.f7.html';
@@ -22,6 +23,10 @@ var routes = [
   {
     path: '/kategori/',
     component: KategoriPage,
+  },
+  {
+    path: '/category/:categoryId',
+    component: BooksCategory,
   },
   {
     path: '/book/:bookId',

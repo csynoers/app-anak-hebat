@@ -1,5 +1,5 @@
 <template>
-  <div class="page" data-page="release-books">
+  <div class="page" data-name="books-category">
     <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner sliding">
@@ -9,16 +9,20 @@
             <span class="if-not-md">Back</span>
           </a>
         </div>
-        <div class="title">{{title}}</div>
+        <div class="title">{{this.$route.hash}}</div>
       </div>
     </div>
-    <div class="page-content infinite-scroll-content" id="contentReleaseBooks">
+    <div class="page-content infinite-scroll-content" data-page="2">
       <div class="row no-gap"></div>
-      <div class="preloader infinite-scroll-preloader" data-page="2"></div>
+      <div class="preloader infinite-scroll-preloader"></div>
     </div>
   </div>
 </template>
-
+<style>
+  .book img {
+    min-height: 230px;
+  }
+</style>
 <script>
   export default {
     // Lifecycle Hooks
@@ -36,17 +40,17 @@
       let $$ = this.$$;
       let app = this.$app;
       let router = this.$router;
-      let releaseSlug = this.$route.params.bookRelease;
+      let page = $$('.page[data-name=books-category]');
+      let pageContent = page.find('.page-content');
+      let categoryId = this.$route.params.categoryId;
       
       /* selector el */
-      let elContentReleaseBooks = $$('#contentReleaseBooks');
-      let elContentRows = elContentReleaseBooks.find('.row');
-      
+      let pageContentRow = pageContent.find('.row');
       app.preloader.show();
       /* Ajax Request */
-      app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { release : releaseSlug, limit : 10 }, function (json) {
+      app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { c : categoryId, limit : 10 }, function (json) {
         json.rows.forEach(function(d){
-          elContentRows.append(`
+          pageContentRow.append(`
             <div class="col-50 book" data-href="/book/${d.id}">
               <div class="card card-outline">
                 <div class="card-content">
@@ -63,9 +67,9 @@
               </div>
             </div>          
           `);
-          app.lazy.create(elContentRows.find('img.lazy'));
+          app.lazy.create(pageContentRow.find('.lazy'));
           // event to load detail buku;
-          elContentRows.find('.book').on('click',function(e){
+          pageContentRow.find('.book').on('click',function(e){
             let dataHref = $$(this).data('href');
             router.navigate(dataHref,{ transition: 'f7-fade' })
           })
@@ -73,44 +77,59 @@
       });
       app.preloader.hide();
 
+      // Loading flag
+      var allowInfinite = true;
       $$('.infinite-scroll-content').on('infinite', function () {
-        let page = $$('.infinite-scroll-preloader').data('page');
-        app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { release : releaseSlug, limit : 10, page : page }, function (json) {
-          console.log(json.rows.length)
-          if ( json.rows.length > 0 ) {
-            let nextPage = (page*1)+1;
-            // console.log(nextPage)
-            $$('.infinite-scroll-preloader').attr('data-page',nextPage);
-            json.rows.forEach(function(d){
-              elContentRows.append(`
-                <div class="col-50 book" data-href="/book/${d.id}">
-                  <div class="card card-outline">
-                    <div class="card-content">
-                      <img data-src="${d.image.thumbnail}" class="lazy lazy-fade-in" alt="" width="100%">
-                      <center>
-                        <div class="book-title-wrap">
-                          ${d.title}
-                        </div>
-                        <div class="text-currency-primary">
-                          <span class="text-currency-format">Rp</span>${d.price.idr.text}
-                        </div>
-                      </center>
-                    </div>
-                  </div>
-                </div>          
-              `);
-              app.lazy.create(elContentRows.find('img.lazy'));
-              // event to load detail buku;
-              elContentRows.find('.book').on('click',function(e){
-                let dataHref = $$(this).data('href');
-                router.navigate(dataHref,{ transition: 'f7-fade' })
-              })
-            });
-          } else {
+        // Exit, if loading in progress
+        if (!allowInfinite) return;
+
+        // Set loading flag
+        allowInfinite = false;
+
+        let page = parseInt(pageContent.data('page'));
+        let nextPage = page+1;
+
+        console.log('page news : ', page);
+        console.log('next page news : ', nextPage);
+
+        app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { c : categoryId, limit : 10, page : page }, function (json) {
+          // Reset loading flag
+          allowInfinite = true;
+
+          if ( !json.rows.length || json.rows.length < 1) {
+            // Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
+            app.infiniteScroll.destroy('.infinite-scroll-content');
+            // Remove preloader
             $$('.infinite-scroll-preloader').remove();
+            return;
           }
+          json.rows.forEach(function(d){
+            pageContentRow.append(`
+              <div class="col-50 book" data-href="/book/${d.id}">
+                <div class="card card-outline">
+                  <div class="card-content">
+                    <img data-src="${d.image.thumbnail}" class="lazy lazy-fade-in" alt="" width="100%">
+                    <center>
+                      <div class="book-title-wrap">
+                        ${d.title}
+                      </div>
+                      <div class="text-currency-primary">
+                        <span class="text-currency-format">Rp</span>${d.price.idr.text}
+                      </div>
+                    </center>
+                  </div>
+                </div>
+              </div>          
+            `);
+            app.lazy.create(pageContentRow.find('.lazy'));
+            // event to load detail buku;
+            pageContentRow.find('.book').on('click',function(e){
+              let dataHref = $$(this).data('href');
+              router.navigate(dataHref,{ transition: 'f7-fade' })
+            })
+          });
+          pageContent.attr('data-page',nextPage);
         });
-        // console.log($$('.infinite-scroll-preloader').data('page'));
       });
     },
     beforeDestroy() {

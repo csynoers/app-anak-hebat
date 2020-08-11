@@ -34,14 +34,13 @@
       let page = $$('.page[data-name="kategori"]');
 
       /* request data kategori */
-      let pageContent = $$('.page[data-name="kategori"]').find('#listKategori');
-      console.log(pageContent);
+      let pageContent = page.find('#listKategori');
       app.request.getJSON(`https://m.anakhebatindonesia.com/kategori`, function (data) {
         data.forEach(function(d){
           let sub = [];
           d.rows.forEach(function(e){
             sub.push(`
-              <li><a href="/category/${e.id}">${e.title}</a></li>
+              <li><a href="/category/${e.id}#${e.title}">${e.title}</a></li>
             `);
           });
           sub = sub.join('');
