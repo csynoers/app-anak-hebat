@@ -1,5 +1,5 @@
 <template>
-  <div class="page" data-name="detail-buku">
+  <div class="page" data-name="detail-penerbit">
     <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner sliding">
@@ -9,30 +9,15 @@
             <span class="if-not-md">Back</span>
           </a>
         </div>
-        <div class="title" id="titleDetailBuku">Nama Buku</div>
+        <div class="title">{{this.$route.hash}}</div>
+        <!-- <div class="right">
+          <a href="#" class="link icon-only panel-open" data-panel="right">
+            <i class="icon f7-icons">cart</i>
+          </a>
+        </div> -->
       </div>
-    </div>
-
-    <!-- Fixed Toolbar -->
-    <div class="toolbar toolbar-bottom">
-      <div class="toolbar-inner">
-        <div class="row" style="width: 100%;">
-          <div class="col-50">
-            <div class="stepper stepper-init stepper-fillXXX color-redXXX margin-left margin-top-half">
-              <div class="stepper-button-minus"></div>
-              <div class="stepper-input-wrap">
-                <input type="text" value="1" min="1" max="100" step="1" readonlyXXX>
-              </div>
-              <div class="stepper-button-plus"></div>
-            </div>
-          </div>
-          <div class="col-50 bg-color-primary">
-            <a href="/" class="link text-color-white"><i class="icon f7-icons">cart_badge_plus</i> Beli Buku</a>
-          </div>
-        </div>
-      </div>
-    </div>    
-    <div class="page-content" id="contentDetailBuku"></div>
+    </div>   
+    <div class="page-content"></div>
   </div>
 </template>
 <style>
@@ -44,7 +29,7 @@
   export default {
     // Lifecycle Hooks
     beforeCreate() {
-      console.log('componentBeforeCreate detail buku', this)
+      console.log('componentBeforeCreate', this)
     },
     created() {
       console.log('componentCreated', this)
@@ -53,182 +38,34 @@
       console.log('componentBeforeMount', this)
     },
     mounted() {
+
       console.log('componentMounted', this);
-      console.log('bookId',this.$route.params.bookId);
 
       let $$ = this.$$;
       let app = this.$app;
       let router = this.$router;
-      let bookId = this.$route.params.bookId;
+      let penerbitId = this.$route.params.penerbitId;
+      let page = $$('.page[data-name="detail-penerbit"]');
+      let pageContent = page.find('.page-content')
+
       app.preloader.show();
-
       /* get detail buku */
-      app.request.getJSON(`https://m.anakhebatindonesia.com/books/${bookId}`, function (data) {
-
-        /* implode data penerbit */
-        let penerbit = [];
-        data.data.penerbit.forEach(function(a){
-          penerbit.push(`<a href="/penerbit/${a.id}">${a.title}</a>`);
-        });
-        penerbit = penerbit.join(', ');
-        
-        /* implode data kategori */
-        let kategori= [];
-        data.data.kategori.forEach(function(a){
-          kategori.push(`<a href="/kategori/${a.id}">${a.title}</a>`);
-        });
-        kategori= kategori.join(', ');
-
-        /* implode data authors */
-        let authors= [];
-        data.data.authors.forEach(function(a){
-          authors.push(`<a href="/authors/${a.id}">${a.title}</a>`);
-        });
-        authors= authors.join(', ');
-
-        $$('#titleDetailBuku').text(data.data.title);
-
-        $$('#contentDetailBuku').html(`
+      app.request.getJSON(`https://m.anakhebatindonesia.com/penerbit/${penerbitId}`, function (data) {
+        pageContent.html(`
           <div class="block">
-            <div id="imgSource">
-              <img data-src="${data.data.image.origin}" class="lazy lazy-fade-in" alt="" width="100%">
+            <div>
+              <img data-src="${data.data.image.origin}" onerror="this.src='static/error-482.png'" class="lazy lazy-fade-in" alt="" width="100%">
             </div>
             <h3 class="title">${data.data.title}</h3>
-            <p>Author : ${authors}</p>
-            <div class="text-currency-primary"><span class="text-currency-format">Rp</span>${data.data.price.idr.text}</div>
-
-            <div class="list">
-              <ul>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">
-                          Nomor ISBN
-                        </div>
-                        <div id="nomorISBN" class="item-after">
-                          ${data.data.isbn}
-                        </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">
-                          Penerbit
-                        </div>
-                        <div class="item-after" id="penerbit">
-                          ${penerbit}
-                        </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">
-                          Kategori
-                        </div>
-                        <div class="item-after">
-                          ${kategori}
-                        </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">
-                          Jenis Cover
-                        </div>
-                        <div class="item-after">
-                          ${data.data.jenis_cover}
-                        </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">
-                          Kertas Isi
-                        </div>
-                        <div class="item-after">
-                          ${data.data.kertas_isi}
-                        </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">
-                          Tebal Buku
-                        </div>
-                        <div class="item-after">
-                          ${data.data.tebal} Halaman
-                        </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">
-                          Berat Buku
-                        </div>
-                        <div class="item-after">
-                          ${data.data.weight.gram} gram
-                        </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">
-                          Dimensi
-                        </div>
-                        <div class="item-after">
-                          ${data.data.ukuran}
-                        </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">
-                          Lokasi Stok
-                        </div>
-                        <div class="item-after">
-                          ${data.data.stok}
-                        </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
             <div>
-              <div class="block-headerXXX">
-                <strong>Sinopsis :</strong>
-              </div>
               <div class="text-align-justify">
-                ${data.data.sinopsis}
-              </div>
-            </div>
-            <div>
-              <div class="block-headerXXX">
-                <strong>Keunggulan :</strong>
-              </div>
-              <div class="text-align-justify">
-                ${data.data.keunggulan}
+                ${data.data.content}
               </div>
             </div>
             <hr>                 
           </div>        
         `);
-        app.lazy.create($$('#imgSource > img.lazy'))
+        app.lazy.create(pageContent.find('.lazy'))
         
         console.log('data detail buku : ', data);
         app.preloader.hide();
@@ -256,6 +93,13 @@
         var self = this;
         self.$app.dialog.alert(data);
       },
+      getDateDMY: function(dateValue) {
+        var mydate = new Date(dateValue);
+        var month = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"][mydate.getMonth()];
+        var str = mydate.getDay() + ' ' +	month + ' ' + mydate.getFullYear();
+        return str;
+      }
     },
     // Page Events
     on: {
@@ -269,6 +113,8 @@
         console.log('pageBeforeIn', page);
       },
       pageAfterIn: function(e, page) {
+        let app = this.$app;
+        app.toolbar.hide('.toolbar-main');
         console.log('pageAfterIn', page);
       },
       pageBeforeOut: function(e, page) {
