@@ -1,0 +1,168 @@
+<template>
+  <div class="page" data-page="release-books">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Back</span>
+          </a>
+        </div>
+        <div class="title">{{title}}</div>
+      </div>
+    </div>
+    <div class="page-content infinite-scroll-content" id="contentReleaseBooks">
+      <div class="row no-gap"></div>
+      <div class="preloader infinite-scroll-preloader" data-page="2"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    // Lifecycle Hooks
+    beforeCreate() {
+      console.log('componentBeforeCreate', this)
+    },
+    created() {
+      console.log('componentCreated', this)
+    },
+    beforeMount() {
+      console.log('componentBeforeMount', this)
+    },
+    mounted() {
+      
+      let $$ = this.$$;
+      let app = this.$app;
+      let router = this.$router;
+      let releaseSlug = this.$route.params.bookRelease;
+      
+      /* selector el */
+      let elContentReleaseBooks = $$('#contentReleaseBooks');
+      let elContentRows = elContentReleaseBooks.find('.row');
+      
+      app.preloader.show();
+      /* Ajax Request */
+      app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { release : releaseSlug, limit : 10 }, function (json) {
+        json.rows.forEach(function(d){
+          elContentRows.append(`
+            <div class="col-50 book" data-href="/book/${d.id}">
+              <div class="card card-outline">
+                <div class="card-content">
+                  <img data-src="${d.image.thumbnail}" class="lazy lazy-fade-in" alt="" width="100%">
+                  <center>
+                    <div class="book-title-wrap">
+                      ${d.title}
+                    </div>
+                    <div class="text-currency-primary">
+                      <span class="text-currency-format">Rp</span>${d.price.idr.text}
+                    </div>
+                  </center>
+                </div>
+              </div>
+            </div>          
+          `);
+          app.lazy.create(elContentRows.find('img.lazy'));
+          // event to load detail buku;
+          elContentRows.find('.book').on('click',function(e){
+            let dataHref = $$(this).data('href');
+            router.navigate(dataHref,{ transition: 'f7-fade' })
+          })
+        });
+      });
+      app.preloader.hide();
+
+      $$('.infinite-scroll-content').on('infinite', function () {
+        let page = $$('.infinite-scroll-preloader').data('page');
+        app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { release : releaseSlug, limit : 10, page : page }, function (json) {
+          console.log(json.rows.length)
+          if ( json.rows.length > 0 ) {
+            let nextPage = (page*1)+1;
+            // console.log(nextPage)
+            $$('.infinite-scroll-preloader').attr('data-page',nextPage);
+            json.rows.forEach(function(d){
+              elContentRows.append(`
+                <div class="col-50 book" data-href="/book/${d.id}">
+                  <div class="card card-outline">
+                    <div class="card-content">
+                      <img data-src="${d.image.thumbnail}" class="lazy lazy-fade-in" alt="" width="100%">
+                      <center>
+                        <div class="book-title-wrap">
+                          ${d.title}
+                        </div>
+                        <div class="text-currency-primary">
+                          <span class="text-currency-format">Rp</span>${d.price.idr.text}
+                        </div>
+                      </center>
+                    </div>
+                  </div>
+                </div>          
+              `);
+              app.lazy.create(elContentRows.find('img.lazy'));
+              // event to load detail buku;
+              elContentRows.find('.book').on('click',function(e){
+                let dataHref = $$(this).data('href');
+                router.navigate(dataHref,{ transition: 'f7-fade' })
+              })
+            });
+          } else {
+            $$('.infinite-scroll-preloader').remove();
+          }
+        });
+        // console.log($$('.infinite-scroll-preloader').data('page'));
+      });
+    },
+    beforeDestroy() {
+      console.log('componentBeforeDestroy', this);
+    },
+    destroyed() {
+      console.log('componentDestroyed', this);
+    },
+    // Component Data
+    data: function () {
+      // Must return an object
+      return {
+        title: this.getTitle(this.$route.params.bookRelease),
+      }
+    },
+    // Component Methods
+    methods: {
+      getTitle: function(releaseSlug) {
+        let title = {};
+        title['new-release'] = 'New Release';
+        title['coming-soon'] = 'Coming Soon';
+        title['best-seller'] = 'Recomended Book';
+
+        return title[releaseSlug];
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+      },
+      pageAfterIn: function(e, page) {
+        this.$$(document).on('click','.pager ul li a',function(e){
+          e.preventDefault();
+        })
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
+  }
+</script>

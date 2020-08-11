@@ -1,0 +1,117 @@
+<template>
+<div class="page" data-name="kategori">
+  <div class="navbar">
+    <div class="navbar-bg"></div>
+    <div class="navbar-inner sliding">
+      <div class="title">Kategori</div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="list accordion-list">
+      <ul id="listKategori">
+      </ul>
+    </div>
+  </div>
+</div>
+</template>
+<script>
+  // http://localhost:8080/kategori
+  export default {
+    // Lifecycle Hooks
+    beforeCreate() {
+      console.log('componentBeforeCreate', this)
+    },
+    created() {
+      console.log('componentCreated', this)
+    },
+    beforeMount() {
+      console.log('componentBeforeMount', this)
+    },
+    mounted() {
+      console.log('componentMounted', this);
+      let $$ = this.$$;
+      let app = this.$app;
+      let page = $$('.page[data-name="kategori"]');
+
+      /* request data kategori */
+      let pageContent = $$('.page[data-name="kategori"]').find('#listKategori');
+      console.log(pageContent);
+      app.request.getJSON(`https://m.anakhebatindonesia.com/kategori`, function (data) {
+        data.forEach(function(d){
+          let sub = [];
+          d.rows.forEach(function(e){
+            sub.push(`
+              <li><a href="/category/${e.id}">${e.title}</a></li>
+            `);
+          });
+          sub = sub.join('');
+
+          pageContent.append(`
+            <li class="accordion-item">
+              <a href="#" class="item-content item-link">
+                <div class="item-inner">
+                  <div class="item-title">${d.title}</div>
+                </div>
+              </a>
+              <div class="accordion-item-content">
+                <div class="block">
+                  <div class="list links-list">
+                    <ul>
+                      ${sub}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+          `);
+        });
+      })
+    },
+    beforeDestroy() {
+      console.log('componentBeforeDestroy', this);
+    },
+    destroyed() {
+      console.log('componentDestroyed', this);
+    },
+    // Component Data
+    data: function () {
+      // Must return an object
+      return {
+        name: 'Jimmy',
+        age: 25,
+        like: ['Tennis', 'Chess', 'Football'],
+      }
+    },
+    // Component Methods
+    methods: {
+      openAlert: function () {
+        var self = this;
+        self.$app.dialog.alert('Hello World');
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+      },
+      pageAfterIn: function(e, page) {
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
+  }
+</script>
