@@ -88,7 +88,7 @@
         /* implode data authors */
         let authors= [];
         data.data.authors.forEach(function(a){
-          authors.push(`<a href="/authors/${a.id}">${a.title}</a>`);
+          authors.push(`<a href="/authors/${a.id}#${a.title}">${a.title}</a>`);
         });
         authors= authors.join(', ');
 
