@@ -81,7 +81,7 @@
         /* implode data kategori */
         let kategori= [];
         data.data.kategori.forEach(function(a){
-          kategori.push(`<a href="/kategori/${a.id}">${a.title}</a>`);
+          kategori.push(`<a href="/category/${a.id}#${a.title}">${a.title}</a>`);
         });
         kategori= kategori.join(', ');
 
