@@ -4,6 +4,7 @@ import KategoriPage from '../pages/kategori.f7.html';
 import AboutPage from '../pages/about.f7.html';
 import FormPage from '../pages/form.f7.html';
 import RegisterMember from '../pages/register-member.f7.html';
+import StaticPage from '../pages/static-page.f7.html';
 
 import BooksCategory from '../pages/books-category.f7.html';
 import BooksDetail from '../pages/books-detail.f7.html';
@@ -20,6 +21,10 @@ var routes = [
   {
     path: '/',
     component: HomePage,
+  },
+  {
+    path: '/page/:pageName',
+    component: StaticPage,
   },
   {
     path: '/kategori/',
