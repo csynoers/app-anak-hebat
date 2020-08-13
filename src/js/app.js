@@ -22,7 +22,8 @@ var app = new Framework7({
   name: 'Anak Hebat', // App name
   theme: 'auto', // Automatic theme detection
 
-
+  cache: true, // enable caching true || false
+  cacheDuration: 1000 * 10 * 60 ,/* set caching expire time to 0 */ 
 
   // App routes
   routes: routes,
