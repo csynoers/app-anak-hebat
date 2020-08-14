@@ -108,6 +108,32 @@
           });
           
           break;
+
+        case 'bantuan':
+          app.request.getJSON(`https://m.anakhebatindonesia.com/contact`, function (data) {
+            pageContent.html(`
+              <div class="block text-align-justify">
+                <h3>
+                  Apakah ada yang ingin anda tanyakan mengenai kami? atau apakah dan menemui permasalahan dalam bebelanja?
+                </h3>
+                Jangan ragu untuk menghubungi kami, melalui kontak di bawah ini :
+              </div>
+              <div class="card">
+                <div class="card-header">Alamat <i class="icon f7-icons">placemark</i></div>
+                <div class="card-content card-content-padding">${data.data.content_1}</div>
+              </div>
+              <div class="card">
+                <div class="card-header">Nomor kontak <i class="icon f7-icons">phone_circle</i></div>
+                <div class="card-content card-content-padding">${data.data.content_2}</div>
+              </div>
+              <div class="card">
+                <div class="card-header">E-mail <i class="icon f7-icons">envelope</i></div>
+                <div class="card-content card-content-padding">${data.data.content_3}</div>
+              </div>
+            `);
+          });
+          
+          break;
       
         default:
           break;
