@@ -351,7 +351,32 @@
         })
 
       });
+      /* localforage.setDriver([
+        localforage.INDEXEDDB,
+        localforage.WEBSQL,
+        localforage.LOCALSTORAGE
+        ]).then(function() {
+        var key = 'STORE_KEY';
+        // var value = 'What we save offline';
+        var value = 'asdf';
+        value[0] = 65
+        // var value = undefined;
+        var UNKNOWN_KEY = 'unknown_key';
 
+        localforage.setItem(key, value, function() {
+          console.log('Using:' + localforage.driver());
+          console.log('Saved: ' + value);
+
+          localforage.getItem(key).then(function(readValue) {
+            console.log('Read: ', readValue);
+          });
+
+          // Since this key hasn't been set yet, we'll get a null value
+          localforage.getItem(UNKNOWN_KEY, function(err, readValue) {
+            console.log('Result of reading ' + UNKNOWN_KEY, readValue);
+          });
+        });
+      }); */
 
     },
     beforeDestroy() {

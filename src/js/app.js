@@ -1,5 +1,6 @@
 import $$ from 'dom7';
 import Framework7 from 'framework7/framework7.esm.bundle.js';
+import localForage from "localforage"
 
 // Import F7 Styles
 import 'framework7/css/framework7.bundle.css';
@@ -46,6 +47,7 @@ var app = new Framework7({
         // Init cordova APIs (see cordova-app.js)
         cordovaApp.init(f7);
       }
+      console.log('localforage is: ', localForage);
     },
   },
   pushState: true
