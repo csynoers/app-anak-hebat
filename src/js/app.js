@@ -47,8 +47,13 @@ var app = new Framework7({
         // Init cordova APIs (see cordova-app.js)
         cordovaApp.init(f7);
       }
-      console.log('localforage is: ', localForage);
+      // return {'aaaaaa':'fsdfsdfsdf'}
+      // console.log('this APP.JS: ', this);
+      // console.log('localforage is: ', localForage);
     },
   },
-  pushState: true
+  pushState: true,
 });
+
+app.localforage = localForage;
+// console.log(app)

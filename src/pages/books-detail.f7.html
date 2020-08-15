@@ -26,13 +26,13 @@
             <div class="stepper stepper-init stepper-fillXXX color-redXXX margin-left margin-top-half">
               <div class="stepper-button-minus"></div>
               <div class="stepper-input-wrap">
-                <input type="text" value="1" min="1" max="100" step="1" readonlyXXX>
+                <input id="addChartQty" type="text" value="1" min="1" max="100" step="1" readonlyXXX>
               </div>
               <div class="stepper-button-plus"></div>
             </div>
           </div>
           <div class="col-50 bg-color-primary">
-            <a href="/keranjang/add" class="link text-color-white"><i class="icon f7-icons">cart_badge_plus</i> Beli Buku</a>
+            <a @click="dbSet()" id="addChart" href="#" class="link text-color-white"><i class="icon f7-icons">cart_badge_plus</i> Beli Buku</a>
           </div>
         </div>
       </div>
@@ -48,19 +48,18 @@
 <script>
   export default {
     // Lifecycle Hooks
-    beforeCreate() {
-      console.log('componentBeforeCreate', this)
-    },
-    created() {
-      console.log('componentCreated', this)
-    },
-    beforeMount() {
-      console.log('componentBeforeMount', this)
-    },
+    // beforeCreate() {
+    //   console.log('componentBeforeCreate', this)
+    // },
+    // created() {
+    //   console.log('componentCreated', this)
+    // },
+    // beforeMount() {
+    //   console.log('componentBeforeMount', this)
+    // },
     mounted() {
-
+      console.log('page : detail buku');
       console.log('componentMounted', this);
-      console.log('bookId',this.$route.params.bookId);
 
       let $$ = this.$$;
       let app = this.$app;
@@ -235,18 +234,23 @@
           </div>        
         `);
         app.lazy.create($$('#imgSource > img.lazy'))
-        
-        console.log('data detail buku : ', data);
+
         app.preloader.hide();
       });
-      
+      app.localforage.keys().then(function(keys) {
+    // An array of all the key names.
+    console.log(keys);
+}).catch(function(err) {
+    // This code runs if there were any errors
+    console.log(err);
+});
     },
-    beforeDestroy() {
-      console.log('componentBeforeDestroy', this);
-    },
-    destroyed() {
-      console.log('componentDestroyed', this);
-    },
+    // beforeDestroy() {
+    //   console.log('componentBeforeDestroy', this);
+    // },
+    // destroyed() {
+    //   console.log('componentDestroyed', this);
+    // },
     // Component Data
     data: function () {
       // Must return an object
@@ -262,32 +266,75 @@
         var self = this;
         self.$app.dialog.alert(data);
       },
+      dbSet: function() {
+        let app = this.$app;
+        let bookId = this.$route.params.bookId;
+        let addChartQty = this.$$('#addChartQty').val();
+
+        app.localforage.getItem('carts').then(function(value) {
+            // This code runs once the value has been loaded
+            // from the offline store.
+            if(value.rowsId.indexOf(bookId) != -1)
+            {  
+              // element found => modification qty =(qty+addChartQty)
+              //Find index of specific object using findIndex method.    
+              let objIndex = value.rowsData.findIndex((obj => obj.id == bookId));
+
+              //Log object to Console.
+              console.log("Before update: ", value.rowsData[objIndex]);
+
+              //Update object's name property.
+              value.rowsData[objIndex].qty = value.rowsData[objIndex].qty+parseInt(addChartQty);
+
+              //Log object to console again.
+              console.log("After update: ", value.rowsData[objIndex])
+              // value.rowsData[bookId].qty = value.rowsData[bookId].qty+parseInt(addChartQty);
+            } else {
+              // element not found
+              value.rowsId.push(bookId);
+              value.rowsData.push({id:parseInt(bookId),qty:parseInt(addChartQty)})
+            }
+
+            // console.log('getItem success : ',value);
+            app.localforage.setItem('carts', value);
+
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            // first store data
+            app.localforage.setItem('carts', {
+              rowsId : [bookId],
+              rowsData : [{id: parseInt(bookId), qty: parseInt(addChartQty)}],
+            });
+            console.log('getItem error: ',err)
+        });
+        
+      }
     },
     // Page Events
     on: {
-      pageMounted: function(e, page) {
-        console.log('pageMounted', page);
-      },
-      pageInit: function(e, page) {
-        console.log('pageInit', page);
-      },
-      pageBeforeIn: function(e, page) {
-        console.log('pageBeforeIn', page);
-      },
+      // pageMounted: function(e, page) {
+      //   console.log('pageMounted', page);
+      // },
+      // pageInit: function(e, page) {
+      //   console.log('pageInit', page);
+      // },
+      // pageBeforeIn: function(e, page) {
+      //   console.log('pageBeforeIn', page);
+      // },
       pageAfterIn: function(e, page) {
         let app = this.$app;
         app.toolbar.hide('.toolbar-main');
         console.log('pageAfterIn', page);
       },
-      pageBeforeOut: function(e, page) {
-        console.log('pageBeforeOut', page);
-      },
-      pageAfterOut: function(e, page) {
-        console.log('pageAfterOut', page);
-      },
-      pageBeforeRemove: function(e, page) {
-        console.log('pageBeforeRemove', page);
-      },
+      // pageBeforeOut: function(e, page) {
+      //   console.log('pageBeforeOut', page);
+      // },
+      // pageAfterOut: function(e, page) {
+      //   console.log('pageAfterOut', page);
+      // },
+      // pageBeforeRemove: function(e, page) {
+      //   console.log('pageBeforeRemove', page);
+      // },
     }
   }
 </script>
