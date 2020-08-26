@@ -50,31 +50,36 @@
           // This code runs once the value has been loaded
           // from the offline store.
           // console.log(value);
-          pageContentBlockTitle.css({"display":"none"});
-          value.rowsData.forEach(function(a,b){
-            app.request.getJSON(`https://m.anakhebatindonesia.com/books/${a.id}`, function (data) {
-              pageContentUl.append(`
-                <li class="item-content">
-                  <div class="item-media"><img src="${data.data.image.thumbnail}" width="44"/></div>
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">${data.data.title}</div>
-                    </div>
-                    <div class="stepper stepper-small stepper-init">
-                      <div class="stepper-button-minus"></div>
-                      <div class="stepper-input-wrap">
-                        <input type="text" value="${a.qty}" min="0" max="100" step="1" readonly>
+          if ( value.rowsData ) {
+            value.rowsData.forEach(function(a,b){
+              app.request.getJSON(`https://m.anakhebatindonesia.com/books/${a.id}`, function (data) {
+                pageContentUl.append(`
+                  <li class="item-content">
+                    <div class="item-media"><img src="${data.data.image.thumbnail}" width="44"/></div>
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">${data.data.title}</div>
                       </div>
-                      <div class="stepper-button-plus"></div>
+                      <div class="stepper stepper-small stepper-init">
+                        <div class="stepper-button-minus"></div>
+                        <div class="stepper-input-wrap">
+                          <input type="text" value="${a.qty}" min="0" max="100" step="1" readonly>
+                        </div>
+                        <div class="stepper-button-plus"></div>
+                      </div>
                     </div>
-                  </div>
-                </li>              
-              `);
-              console.log(data.data)
-            })
-            // console.log('a',a)
-            // console.log('b',b)
-          });
+                  </li>              
+                `);
+                console.log(data.data)
+              })
+              // console.log('a',a)
+              // console.log('b',b)
+            });
+            
+            pageContentBlockTitle.css({"display":"none"});
+          } else {
+            
+          }
       }).catch(function(err) {
           // This code runs if there were any errors
           console.log(err);
