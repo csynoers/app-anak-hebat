@@ -24,7 +24,7 @@ var routes = [
     component: HomePage,
   },
   {
-    path: '/keranjang/belanja',
+    path: '/keranjang/',
     component: CartsPage,
   },
   {

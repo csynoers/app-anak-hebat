@@ -203,24 +203,24 @@
       },
       pageBeforeIn: function(e, page) {
         console.log('pageBeforeIn->', page);
-        // let $$ = this.$$;
-        // let app = this.$app;
-        // let cartLabel = $$('.cart-label');
-        // app.localforage.getItem('carts').then(function(value) {
-        //     // This code runs once the value has been loaded
-        //     // from the offline store.
-        //     if ( value.rowsData ) {
-        //       let cartRows = value.rowsData.length;
-        //       cartLabel.text(cartRows);
-        //       cartLabel.css({"display" : "inline-flex"});
-        //       console.log(cartRows)
-        //     }
+        let $$ = this.$$;
+        let app = this.$app;
+        let cartLabel = $$('.cart-label');
+        app.localforage.getItem('carts').then(function(value) {
+            // This code runs once the value has been loaded
+            // from the offline store.
+            if ( value.rowsData ) {
+              let cartRows = value.rowsData.length;
+              cartLabel.text(cartRows);
+              cartLabel.css({"display" : "inline-flex"});
+              console.log(cartRows)
+            }
             
-        //     // console.log();
-        // }).catch(function(err) {
-        //     // This code runs if there were any errors
-        //     console.log(err);
-        // });
+            // console.log();
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
       },
       pageAfterIn: function(e, page) {
         let app = this.$app;

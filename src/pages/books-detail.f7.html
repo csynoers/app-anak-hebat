@@ -67,6 +67,12 @@
       let bookId = this.$route.params.bookId;
       app.preloader.show();
 
+      app.toast.create({
+        text: 'I\'m on center',
+        position: 'center',
+        closeTimeout: 2000,
+      });
+      
       /* get detail buku */
       app.request.getJSON(`https://m.anakhebatindonesia.com/books/${bookId}`, function (data) {
 
@@ -294,7 +300,14 @@
               value.rowsId.push(bookId);
               value.rowsData.push({id:parseInt(bookId),qty:parseInt(addChartQty)})
             }
-
+            var toast = app.toast.create({
+              text: 'Hello, how are you?',
+              on: {
+                opened: function () {
+                  console.log('Toast opened')
+                }
+              }
+            })
             // console.log('getItem success : ',value);
             app.localforage.setItem('carts', value);
 
