@@ -25,6 +25,7 @@
 </style>
 <script>
   export default {
+    
     // Lifecycle Hooks
     beforeCreate() {
       console.log('componentBeforeCreate', this)
@@ -172,6 +173,8 @@
         this.$$(document).on('click','.pager ul li a',function(e){
           e.preventDefault();
         })
+        let app = this.$app;
+        app.toolbar.hide('.toolbar-main');
         console.log('pageAfterIn', page);
       },
       pageBeforeOut: function(e, page) {

@@ -3,6 +3,12 @@
   <div class="navbar">
     <div class="navbar-bg"></div>
     <div class="navbar-inner sliding">
+      <div class="left">
+        <a href="#" class="link back">
+          <i class="icon icon-back"></i>
+          <span class="if-not-md">Back</span>
+        </a>
+      </div>
       <div class="title">Kategori</div>
     </div>
   </div>
@@ -19,19 +25,22 @@
   export default {
     // Lifecycle Hooks
     beforeCreate() {
-      console.log('componentBeforeCreate', this)
+      console.log('componentBeforeCreateKategori', this)
     },
     created() {
-      console.log('componentCreated', this)
+      console.log('componentCreatedKategori', this)
     },
     beforeMount() {
-      console.log('componentBeforeMount', this)
+      console.log('componentBeforeMountKategori', this)
     },
     mounted() {
-      console.log('componentMounted', this);
+      console.log('componentMountedKategori', this);
       let $$ = this.$$;
       let app = this.$app;
       let page = $$('.page[data-name="kategori"]');
+
+      // hide toolbar main
+      $$('.toolbar-main').hide();
 
       /* request data kategori */
       let pageContent = page.find('#listKategori');
@@ -67,10 +76,13 @@
       })
     },
     beforeDestroy() {
-      console.log('componentBeforeDestroy', this);
+      console.log('componentBeforeDestroyKategori', this);
     },
     destroyed() {
-      console.log('componentDestroyed', this);
+      let $$ = this.$$;
+      // hide toolbar main
+      $$('.toolbar-main').show();
+      console.log('componentDestroyedKategori', this);
     },
     // Component Data
     data: function () {
@@ -91,25 +103,27 @@
     // Page Events
     on: {
       pageMounted: function(e, page) {
-        console.log('pageMounted', page);
+        console.log('pageMountedKategori', page);
       },
       pageInit: function(e, page) {
-        console.log('pageInit', page);
+        console.log('pageInitKategori', page);
       },
       pageBeforeIn: function(e, page) {
-        console.log('pageBeforeIn', page);
+        console.log('pageBeforeInKategori', page);
       },
       pageAfterIn: function(e, page) {
-        console.log('pageAfterIn', page);
+        // let app = this.$app;
+        // app.toolbar.hide('.toolbar-main');
+        console.log('pageAfterInKategori', page);
       },
       pageBeforeOut: function(e, page) {
-        console.log('pageBeforeOut', page);
+        console.log('pageBeforeOutKategori', page);
       },
       pageAfterOut: function(e, page) {
-        console.log('pageAfterOut', page);
+        console.log('pageAfterOutKategori', page);
       },
       pageBeforeRemove: function(e, page) {
-        console.log('pageBeforeRemove', page);
+        console.log('pageBeforeRemoveKategori', page);
       },
     }
   }

@@ -48,6 +48,14 @@
       let page = $$('.page[data-name="static-page"]');
       let pageContent = page.find('.page-content')
 
+      /* jika ini halaman join reseller sembunyikan tombol kembali */
+      if ( pageName == 'join-reseller' ) {
+        page.find('.back').hide()
+      } else {
+        /* jika halaman ini bukan join reseller sembunyikan toolbar utama */
+        $$('.toolbar-main').hide()
+      }
+
       app.preloader.show();
       switch ( pageName ) {
         case 'faq':
@@ -86,7 +94,7 @@
           /* get detail buku */
           app.request.getJSON(`https://m.anakhebatindonesia.com/profil/1`, function (data) {
             pageContent.html(`
-              <div class="toolbar tabbar toolbar-bottom" style="position:fixed">
+              <div class="toolbar tabbar toolbar-top" style="position:fixed">
                 <div class="toolbar-inner">
                   <a href="#tab-1" class="tab-link tab-link-active">Indonesia</a>
                   <a href="#tab-2" class="tab-link">English</a>
@@ -145,6 +153,11 @@
       console.log('componentBeforeDestroy', this);
     },
     destroyed() {
+      let $$ = this.$$;
+      /* jika halaman ini bukan join reseller ketika meninggalkan halaman ini tampilkan kembali toolbar utama */
+      if (this.$route.params.pageName != 'join-reseller')
+        $$('.toolbar-main').show()
+
       console.log('componentDestroyed', this);
     },
     // Component Data
@@ -182,9 +195,9 @@
         console.log('pageBeforeIn', page);
       },
       pageAfterIn: function(e, page) {
-        let app = this.$app;
-        app.toolbar.hide('.toolbar-main');
-        console.log('pageAfterIn', page);
+        // let app = this.$app;
+        // app.toolbar.hide('.toolbar-main');
+        // console.log('pageAfterIn', page);
       },
       pageBeforeOut: function(e, page) {
         console.log('pageBeforeOut', page);
