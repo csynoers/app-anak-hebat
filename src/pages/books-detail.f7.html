@@ -11,8 +11,8 @@
         </div>
         <div class="title" id="titleDetailBuku">Nama Buku</div>
         <div class="right">
-          <a href="#" class="link icon-only panel-open" data-panel="right">
-            <i class="icon f7-icons">cart</i>
+          <a href="/keranjang/#view-keranjang" class="link icon-only">
+            <i class="icon f7-icons">cart<span class="badge color-red cart-label" style="display: none;">0</span></i>
           </a>
         </div>
       </div>
@@ -48,15 +48,6 @@
 <script>
   export default {
     // Lifecycle Hooks
-    // beforeCreate() {
-    //   console.log('componentBeforeCreate', this)
-    // },
-    // created() {
-    //   console.log('componentCreated', this)
-    // },
-    // beforeMount() {
-    //   console.log('componentBeforeMount', this)
-    // },
     mounted() {
       console.log('page : detail buku');
       console.log('componentMounted', this);
@@ -67,10 +58,22 @@
       let bookId = this.$route.params.bookId;
       app.preloader.show();
 
-      app.toast.create({
-        text: 'I\'m on center',
-        position: 'center',
-        closeTimeout: 2000,
+      /* cart label */
+      let cartLabel = $$('.cart-label');
+      app.localforage.getItem('carts').then(function(value) {
+          // This code runs once the value has been loaded
+          // from the offline store.
+          if ( value.rowsData ) {
+            let cartRows = value.rowsData.length;
+            cartLabel.text(cartRows);
+            cartLabel.css({"display" : "inline-flex"});
+            console.log(cartRows)
+          }
+          
+          // console.log();
+      }).catch(function(err) {
+          // This code runs if there were any errors
+          console.log(err);
       });
       
       /* get detail buku */
@@ -243,13 +246,6 @@
 
         app.preloader.hide();
       });
-      app.localforage.keys().then(function(keys) {
-    // An array of all the key names.
-    console.log(keys);
-}).catch(function(err) {
-    // This code runs if there were any errors
-    console.log(err);
-});
     },
     // beforeDestroy() {
     //   console.log('componentBeforeDestroy', this);
@@ -273,15 +269,19 @@
         self.$app.dialog.alert(data);
       },
       dbSet: function() {
+        let $$ = this.$$;
         let app = this.$app;
         let bookId = this.$route.params.bookId;
-        let addChartQty = this.$$('#addChartQty').val();
+        let addChartQty = $$('#addChartQty').val();
+        let cartLabel = $$('.cart-label').eq(1);
 
         app.localforage.getItem('carts').then(function(value) {
             // This code runs once the value has been loaded
             // from the offline store.
             if(value.rowsId.indexOf(bookId) != -1)
             {  
+              console.log('second update cart data');
+
               // element found => modification qty =(qty+addChartQty)
               //Find index of specific object using findIndex method.    
               let objIndex = value.rowsData.findIndex((obj => obj.id == bookId));
@@ -296,58 +296,156 @@
               console.log("After update: ", value.rowsData[objIndex])
               // value.rowsData[bookId].qty = value.rowsData[bookId].qty+parseInt(addChartQty);
             } else {
+              console.log('second store cart data');
               // element not found
               value.rowsId.push(bookId);
-              value.rowsData.push({id:parseInt(bookId),qty:parseInt(addChartQty)})
+              value.rowsData.push({id:parseInt(bookId),qty:parseInt(addChartQty)});
+
+              // cart labeled
+              cartLabel.text(value.rowsData.length);
+              cartLabel.css({"display" : "inline-flex"});
             }
-            var toast = app.toast.create({
-              text: 'Hello, how are you?',
-              on: {
-                opened: function () {
-                  console.log('Toast opened')
-                }
-              }
-            })
+            
             // console.log('getItem success : ',value);
             app.localforage.setItem('carts', value);
 
-        }).catch(function(err) {
-            // This code runs if there were any errors
-            // first store data
-            app.localforage.setItem('carts', {
+            // Create toast with icon
+            var toastIcon = app.toast.create({
+              icon: app.theme === 'ios' ? '<i class="f7-icons">checkmark_circle</i>' : '<i class="material-icons">check_circle_outline</i>',
+              text: 'Ditambahkan ke keranjang',
+              position: 'center',
+              closeTimeout: 2000,
+            });
+            
+            // Get data
+            let data = {
               rowsId : [bookId],
               rowsData : [{id: parseInt(bookId), qty: parseInt(addChartQty)}],
+            };
+
+            var cart = cartLabel;
+            var imgtodrag = $$(document).find('#imgSource').find('img').eq(0);
+            // console.log(imgtodrag.eq(0))
+            // var imgtodrag = $$(this).parent('.item').find("img").eq(0);
+            if (imgtodrag) {
+              // query selector
+              let getImg = document.querySelectorAll('#imgSource img')[0];
+              let getImgClone = getImg.cloneNode(true);
+              // console.log($$(getImgClone));
+              var imgclone = $$(getImgClone);
+              imgclone.addClass('img-clone');
+              imgclone.offset({
+                top: imgtodrag.offset().top,
+                left: imgtodrag.offset().left
+              })
+              imgclone.css({
+                'opacity': '0.5',
+                'position': 'absolute',
+                'height': '150px',
+                'width': '150px',
+                'z-index': '9999'
+              })
+              imgclone.appendTo($$('body'))
+              imgclone.animate({
+                'top': cart.offset().top - 10,
+                // 'left': cart.offset().left - 10,
+                'right': -10,
+                'width': 75,
+                'height': 75
+              }, 1000, 'easeInOutExpo');
+
+              imgclone.animate({
+                'width': 0,
+                'height': 0
+              });
+
+              setTimeout(function () {
+                $$('.img-clone').remove();
+                // toast call
+                toastIcon.open();
+              }, 1300);
+          }
+
+        }).catch(function(err) {
+          // This code runs if there were any errors
+
+          // Create toast with icon
+          var toastIcon = app.toast.create({
+            icon: app.theme === 'ios' ? '<i class="f7-icons">checkmark_circle</i>' : '<i class="material-icons">check_circle_outline</i>',
+            text: 'Dimasukkan ke keranjang',
+            position: 'center',
+            closeTimeout: 2000,
+          });
+          
+          // Get data
+          let data = {
+            rowsId : [bookId],
+            rowsData : [{id: parseInt(bookId), qty: parseInt(addChartQty)}],
+          };
+
+          // first store data
+          app.localforage.setItem('carts', data);
+
+          var cart = cartLabel;
+          var imgtodrag = $$(document).find('#imgSource').find('img').eq(0);
+          // console.log(imgtodrag.eq(0))
+          // var imgtodrag = $$(this).parent('.item').find("img").eq(0);
+          if (imgtodrag) {
+            // query selector
+            let getImg = document.querySelectorAll('#imgSource img')[0];
+            let getImgClone = getImg.cloneNode(true);
+            // console.log($$(getImgClone));
+            var imgclone = $$(getImgClone);
+            imgclone.addClass('img-clone');
+            imgclone.offset({
+              top: imgtodrag.offset().top,
+              left: imgtodrag.offset().left
+            })
+            imgclone.css({
+              'opacity': '0.5',
+              'position': 'absolute',
+              'height': '150px',
+              'width': '150px',
+              'z-index': '9999'
+            })
+            imgclone.appendTo($$('body'))
+            imgclone.animate({
+              'top': cart.offset().top - 10,
+              // 'left': cart.offset().left - 10,
+              'right': -10,
+              'width': 75,
+              'height': 75
+            }, 1000, 'easeInOutExpo');
+
+            imgclone.animate({
+              'width': 0,
+              'height': 0
             });
-            console.log('getItem error: ',err)
+
+            setTimeout(function () {
+              $$('.img-clone').remove();
+              // toast call
+              toastIcon.open();
+            }, 1300);
+          }
+
+          // cart labeled
+          cartLabel.text(1);
+          cartLabel.css({"display" : "inline-flex"});
+
+          console.log('first store cart data');
+          // console.log('getItem error: ',err)
         });
         
       }
     },
     // Page Events
     on: {
-      // pageMounted: function(e, page) {
-      //   console.log('pageMounted', page);
-      // },
-      // pageInit: function(e, page) {
-      //   console.log('pageInit', page);
-      // },
-      // pageBeforeIn: function(e, page) {
-      //   console.log('pageBeforeIn', page);
-      // },
       pageAfterIn: function(e, page) {
         let app = this.$app;
         app.toolbar.hide('.toolbar-main');
         console.log('pageAfterIn', page);
       },
-      // pageBeforeOut: function(e, page) {
-      //   console.log('pageBeforeOut', page);
-      // },
-      // pageAfterOut: function(e, page) {
-      //   console.log('pageAfterOut', page);
-      // },
-      // pageBeforeRemove: function(e, page) {
-      //   console.log('pageBeforeRemove', page);
-      // },
     }
   }
 </script>

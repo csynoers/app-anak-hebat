@@ -170,9 +170,6 @@
           firstName: 'John',
           lastName: 'Doe',
         },
-        // Login screen demo data
-        username: '',
-        password: '',
 
       };
     },
@@ -193,16 +190,11 @@
           this.$f7.loginScreen.close();
         });
       }
+      
     },
     on: {
-      pageMounted: function(e, page) {
-        console.log('pageMounted->', page);
-      },
-      pageInit: function(e, page) {
-        console.log('pageInit->', page);
-      },
       pageBeforeIn: function(e, page) {
-        console.log('pageBeforeIn->', page);
+        console.log('pageBeforeIn->', page );
         let $$ = this.$$;
         let app = this.$app;
         let cartLabel = $$('.cart-label');
@@ -221,19 +213,6 @@
             // This code runs if there were any errors
             console.log(err);
         });
-      },
-      pageAfterIn: function(e, page) {
-        let app = this.$app;
-        console.log('pageAfterIn->', page);
-      },
-      pageBeforeOut: function(e, page) {
-        console.log('pageBeforeOut->', page);
-      },
-      pageAfterOut: function(e, page) {
-        console.log('pageAfterOut->', page);
-      },
-      pageBeforeRemove: function(e, page) {
-        console.log('pageBeforeRemove->', page);
       },
     }
   }
