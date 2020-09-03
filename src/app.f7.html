@@ -85,12 +85,12 @@
       </div>
 
       <!-- inbox View -->
-      <div id="view-inbox" class="view view-init tab" data-name="inbox" data-url="/inbox/">
+      <div id="view-inbox" class="view  tab" data-name="inbox" data-url="/inbox/">
         <!-- inbox page will be loaded here dynamically from /inbox/ route -->
       </div>
 
       <!-- akun View -->
-      <div id="view-akun" class="view view-init tab" data-name="akun" data-url="/akun/">
+      <div id="view-akun" class="view tab" data-name="akun" data-url="/akun/">
         <!-- akun page will be loaded here dynamically from /akun/ route -->
       </div>
     </div>
@@ -192,28 +192,5 @@
       }
       
     },
-    on: {
-      pageBeforeIn: function(e, page) {
-        console.log('pageBeforeIn->', page );
-        let $$ = this.$$;
-        let app = this.$app;
-        let cartLabel = $$('.cart-label');
-        app.localforage.getItem('carts').then(function(value) {
-            // This code runs once the value has been loaded
-            // from the offline store.
-            if ( value.rowsData ) {
-              let cartRows = value.rowsData.length;
-              cartLabel.text(cartRows);
-              cartLabel.css({"display" : "inline-flex"});
-              console.log(cartRows)
-            }
-            
-            // console.log();
-        }).catch(function(err) {
-            // This code runs if there were any errors
-            console.log(err);
-        });
-      },
-    }
   }
 </script>

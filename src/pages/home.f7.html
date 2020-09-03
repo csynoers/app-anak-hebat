@@ -129,17 +129,8 @@
 <script>
   export default {
     // Lifecycle Hooks
-    beforeCreate() {
-      console.log('componentBeforeCreate', this)
-    },
-    created() {
-      console.log('componentCreated', this)
-    },
-    beforeMount() {
-      console.log('componentBeforeMount', this)
-    },
     mounted() {
-      console.log('componentMounted', this);
+      console.log('# HOME PAGE --------------------------------------------------------------------');
 
       let $$ = this.$$;
       let app = this.$app;
@@ -416,31 +407,39 @@
         "July", "August", "September", "October", "November", "December"][mydate.getMonth()];
         var str = mydate.getDay() + ' ' +	month + ' ' + mydate.getFullYear();
         return str;
+      },
+      toolbarBottomShow: function() {
+        let $$ = this.$$;
+        $$('.toolbar-main').show();
+      },
+      labelCartToolbarBottom: function() {
+        let $$ = this.$$;
+        let app = this.$app;
+        let cartLabel = $$('.cart-label');
+        app.localforage.getItem('carts').then(function(value) {
+            // This code runs once the value has been loaded
+            // from the offline store.
+            if ( value.rowsData ) {
+              let cartRows = value.rowsData.length;
+              cartLabel.text(cartRows);
+              cartLabel.css({"display" : "inline-flex"});
+            }
+
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
       }
     },
     // Page Events
     on: {
       pageMounted: function(e, page) {
-        console.log('pageMounted', page);
+        this.labelCartToolbarBottom();
       },
-      pageInit: function(e, page) {
-        console.log('pageInit', page);
-      },
-      pageBeforeIn: function(e, page) {
-        console.log('pageBeforeIn', page);
-      },
-      pageAfterIn: function(e, page) {
-        console.log('pageAfterIn home', page);
-      },
-      pageBeforeOut: function(e, page) {
-        console.log('pageBeforeOut', page);
-      },
-      pageAfterOut: function(e, page) {
-        console.log('pageAfterOut', page);
-      },
-      pageBeforeRemove: function(e, page) {
-        console.log('pageBeforeRemove', page);
-      },
+      pageBeforeIn: function() {
+        this.labelCartToolbarBottom();
+        this.toolbarBottomShow();
+      }
     }
   }
 </script>

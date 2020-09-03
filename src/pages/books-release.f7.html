@@ -26,14 +26,8 @@
 <script>
   export default {
     // Lifecycle Hooks
-    beforeCreate() {
-      console.log('componentBeforeCreate', this)
-    },
-    created() {
-      console.log('componentCreated', this)
-    },
     beforeMount() {
-      console.log('componentBeforeMount', this)
+      this.toolbarBottomHide();
     },
     mounted() {
       
@@ -160,6 +154,10 @@
 
         return title[releaseSlug];
       },
+      toolbarBottomHide: function() {
+        let $$ = this.$$;
+        $$('.toolbar-main').hide();
+      }
     },
     // Page Events
     on: {
