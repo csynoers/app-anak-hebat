@@ -30,6 +30,12 @@
     // Lifecycle Hooks
     mounted() {
       console.log('# CART PAGE --------------------------------------------------------------------');
+
+      // this tab show
+      this.$$('#view-keranjang').on('tab:show',function(){
+        console.log('# CART SHOW',this)
+      })
+
       let $$ = this.$$;
       let route = this.$route;
       let app = this.$app;
@@ -39,8 +45,30 @@
       let pageContentUl = pageContent.find('ul');
 
       if ( route.hash ) {
-        if ( route.hash == 'view-keranjang' ) {
-          console.log()
+        if ( route.hash == 'from-book-details' ) {
+          console.log('CART FROM DETAIL')
+          
+          // if .toolbar-main has class tab link remove first before update link tab active
+          if ( $$('.toolbar-main .tab-link').hasClass('tab-link-active') ) {
+            // remove class
+            $$('.toolbar-main .tab-link').removeClass('tab-link-active');
+
+            // set new tab active
+            $$('.toolbar-main .tab-link').forEach(function(a,b){
+              if ( $$(a).attr('href') == '#view-keranjang' ) {
+                $$(a).addClass('tab-link-active');
+                $$('.toolbar-main .tab-link-highlight').css({
+                  "width": "20%",
+                  "transform": "translate3d(200%, 0px, 0px)"
+                });
+
+                // remove class #view home
+                $$('#view-home').removeClass('tab-active');
+                // add class #view-keranjang
+                $$('#view-keranjang').addClass('tab-active');
+              }
+            })
+          }
         }
       }
 
@@ -83,5 +111,22 @@
       });
       // app.request.getJSON(`https://m.anakhebatindonesia.com/books/${bookId}`, function (data) {
     },
+    // Component Methods
+    methods: {
+      toolbarBottomShow: function() {
+        let $$ = this.$$;
+        $$('.toolbar-main').show();
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        this.toolbarBottomShow();
+        // console.log(page)
+      },
+      pageBeforeIn: function(e, page) {
+        // console.log(page)
+      },
+    }
   }
 </script>

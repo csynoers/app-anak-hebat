@@ -429,16 +429,34 @@
             // This code runs if there were any errors
             console.log(err);
         });
+      },
+      refreshPage: function() {
+        // this tab show
+        let viewHome = this.$app;
+        this.$$('#view-home').on('tab:show',function(){
+          // $$(this).router.refreshPage();
+          console.log('# HOME SHOW',viewHome)
+          // viewHome.router.refreshPage();
+          // viewHome.router.navigate(viewHome.router.currentRoute.url, {
+          viewHome.router.navigate('/', {
+            reloadCurrent: true,
+            ignoreCache: true
+          });
+        })
       }
     },
     // Page Events
     on: {
       pageMounted: function(e, page) {
         this.labelCartToolbarBottom();
+        this.refreshPage()
       },
-      pageBeforeIn: function() {
+      pageBeforeIn: function(e, page) {
         this.labelCartToolbarBottom();
         this.toolbarBottomShow();
+      },
+      pageAfterIn: function(e, page) {
+        console.log('home',this)
       }
     }
   }
