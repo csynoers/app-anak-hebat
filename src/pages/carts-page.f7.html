@@ -46,7 +46,7 @@
 
       if ( route.hash ) {
         if ( route.hash == 'from-book-details' ) {
-          console.log('CART FROM DETAIL')
+          console.log('CART FROM DETAIL',this)
           
           // if .toolbar-main has class tab link remove first before update link tab active
           if ( $$('.toolbar-main .tab-link').hasClass('tab-link-active') ) {
@@ -78,6 +78,7 @@
           // console.log(value);
           if ( value.rowsData ) {
             value.rowsData.forEach(function(a,b){
+              pageContentUl.html('');
               app.request.getJSON(`https://m.anakhebatindonesia.com/books/${a.id}`, function (data) {
                 pageContentUl.append(`
                   <li class="item-content">

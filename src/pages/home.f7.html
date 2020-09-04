@@ -430,18 +430,17 @@
             console.log(err);
         });
       },
-      refreshPage: function() {
+      refreshPage: function(page) {
         // this tab show
-        let viewHome = this.$app;
+        // this.$$('#view-home').on('tab:show',function(){
+          // console.log('# HOME SHOW',page)
+          // page.router.clearPreviousHistory();
+        //   page.router.refreshPage();
+        // })
+        let router = this.$router;
         this.$$('#view-home').on('tab:show',function(){
-          // $$(this).router.refreshPage();
-          console.log('# HOME SHOW',viewHome)
-          // viewHome.router.refreshPage();
-          // viewHome.router.navigate(viewHome.router.currentRoute.url, {
-          viewHome.router.navigate('/', {
-            reloadCurrent: true,
-            ignoreCache: true
-          });
+          console.log('# HOME REFRESH',router)
+          router.navigate('/');
         })
       }
     },
@@ -449,14 +448,19 @@
     on: {
       pageMounted: function(e, page) {
         this.labelCartToolbarBottom();
-        this.refreshPage()
+        this.refreshPage(page);
+      },
+      pageInit: function(e, page) {
+        // this.refreshPage(page)
       },
       pageBeforeIn: function(e, page) {
         this.labelCartToolbarBottom();
         this.toolbarBottomShow();
+        this.refreshPage(page);
       },
       pageAfterIn: function(e, page) {
         console.log('home',this)
+        this.refreshPage(page);
       }
     }
   }
