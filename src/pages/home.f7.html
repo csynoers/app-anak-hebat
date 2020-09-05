@@ -368,7 +368,6 @@
           });
         });
       }); */
-
     },
     beforeDestroy() {
       console.log('componentBeforeDestroy', this);
@@ -433,34 +432,51 @@
       refreshPage: function(page) {
         // this tab show
         // this.$$('#view-home').on('tab:show',function(){
-          // console.log('# HOME SHOW',page)
-          // page.router.clearPreviousHistory();
-        //   page.router.refreshPage();
+        //   console.log('# HOME SHOW',page)
+        //   page.router.navigate('/', {
+        //     reloadAll : true,
+        //     // reloadCurrent: true,
+        //     // ignoreCache: true,
+        //   });
+        //   // page.router.clearPreviousHistory();
+        //   // page.router.refreshPage();
         // })
-        let router = this.$router;
+        // let router = this.$router;
         this.$$('#view-home').on('tab:show',function(){
-          console.log('# HOME REFRESH',router)
-          router.navigate('/');
+          console.log('# HOME REFRESH',page);
+          page.router.navigate('/', {
+            reloadCurrent: true,
+            ignoreCache: true,
+          });
         })
+        // this.$$('#view-home').on('tab:show',function(){
+        //   console.log('# HOME REFRESH',page)
+        //   var mainView = page.app.view.create('#view-home');
+        //   mainView.router.refreshPage(); 
+        // })
       }
     },
     // Page Events
     on: {
       pageMounted: function(e, page) {
+        // console.log('PAGE MOUNTED',page);
         this.labelCartToolbarBottom();
-        this.refreshPage(page);
+        // this.refreshPage(page);
       },
       pageInit: function(e, page) {
+        // console.log('PAGE INIT',page);
         // this.refreshPage(page)
       },
       pageBeforeIn: function(e, page) {
+        // console.log('PAGE BEFORE IN',page);
         this.labelCartToolbarBottom();
         this.toolbarBottomShow();
         this.refreshPage(page);
       },
       pageAfterIn: function(e, page) {
-        console.log('home',this)
-        this.refreshPage(page);
+        // console.log('PAGE AFTER IN',page);
+        // console.log('home',this)
+        // this.refreshPage(page);
       }
     }
   }

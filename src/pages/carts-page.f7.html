@@ -47,28 +47,10 @@
       if ( route.hash ) {
         if ( route.hash == 'from-book-details' ) {
           console.log('CART FROM DETAIL',this)
-          
-          // if .toolbar-main has class tab link remove first before update link tab active
-          if ( $$('.toolbar-main .tab-link').hasClass('tab-link-active') ) {
-            // remove class
-            $$('.toolbar-main .tab-link').removeClass('tab-link-active');
 
-            // set new tab active
-            $$('.toolbar-main .tab-link').forEach(function(a,b){
-              if ( $$(a).attr('href') == '#view-keranjang' ) {
-                $$(a).addClass('tab-link-active');
-                $$('.toolbar-main .tab-link-highlight').css({
-                  "width": "20%",
-                  "transform": "translate3d(200%, 0px, 0px)"
-                });
-
-                // remove class #view home
-                $$('#view-home').removeClass('tab-active');
-                // add class #view-keranjang
-                $$('#view-keranjang').addClass('tab-active');
-              }
-            })
-          }
+          // clear history
+          this.$router.clearPreviousHistory();
+          app.tab.show('#view-keranjang', '.link-tab-keranjang');
         }
       }
 
