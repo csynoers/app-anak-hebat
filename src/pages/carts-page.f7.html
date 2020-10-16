@@ -3,12 +3,12 @@
   <div class="navbar">
     <div class="navbar-bg"></div>
     <div class="navbar-inner sliding">
-      <!-- <div class="left">
+      <div class="left">
         <a href="#" class="link back">
           <i class="icon icon-back"></i>
           <span class="if-not-md">Back</span>
         </a>
-      </div> -->
+      </div>
       <div class="title">Keranjang Belanja</div>
     </div>
   </div>
@@ -96,15 +96,15 @@
     },
     // Component Methods
     methods: {
-      toolbarBottomShow: function() {
+      toolbarBottomHide: function() {
         let $$ = this.$$;
-        $$('.toolbar-main').show();
+        $$('.toolbar-main').hide();
       },
     },
     // Page Events
     on: {
       pageMounted: function(e, page) {
-        this.toolbarBottomShow();
+        this.toolbarBottomHide();
         // console.log(page)
       },
       pageBeforeIn: function(e, page) {
