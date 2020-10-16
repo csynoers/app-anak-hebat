@@ -1,11 +1,14 @@
 
 import HomePage from '../pages/home.f7.html';
+import FeedsPage from '../pages/feeds.f7.html';
 import KategoriPage from '../pages/kategori.f7.html';
 import AboutPage from '../pages/about.f7.html';
 import FormPage from '../pages/form.f7.html';
 import RegisterMember from '../pages/register-member.f7.html';
 import StaticPage from '../pages/static-page.f7.html';
 import CartsPage from '../pages/carts-page.f7.html';
+import InboxPage from '../pages/inbox.f7.html';
+import AccountPage from '../pages/account.f7.html';
 
 import BooksCategory from '../pages/books-category.f7.html';
 import BooksDetail from '../pages/books-detail.f7.html';
@@ -22,6 +25,18 @@ var routes = [
   {
     path: '/',
     component: HomePage,
+  },
+  {
+    path: '/feeds/',
+    component: FeedsPage,
+  },
+  {
+    path: '/inbox/',
+    component: InboxPage,
+  },
+  {
+    path: '/akun/',
+    component: AccountPage,
   },
   {
     path: '/keranjang/',

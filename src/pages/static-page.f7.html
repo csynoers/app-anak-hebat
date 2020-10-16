@@ -10,11 +10,11 @@
           </a>
         </div>
         <div class="title">{{this.$route.hash}}</div>
-        <!-- <div class="right">
-          <a href="#" class="link icon-only panel-open" data-panel="right">
-            <i class="icon f7-icons">cart</i>
+        <div class="right">
+          <a href="/keranjang/" class="link icon-only">
+            <i class="icon f7-icons">cart<span class="badge color-red cart-label"  >0</span></i>
           </a>
-        </div> -->
+        </div>
       </div>
     </div>   
     <div class="page-content"></div>
@@ -39,14 +39,32 @@
       let pageContent = page.find('.page-content')
 
       /* jika ini halaman join reseller sembunyikan tombol kembali */
-      if ( pageName == 'join-reseller' ) {
-        page.find('.back').hide()
-      } else {
+      // if ( pageName == 'join-reseller' ) {
+      //   page.find('.back').hide()
+      // } else {
         /* jika halaman ini bukan join reseller sembunyikan toolbar utama */
         $$('.toolbar-main').hide()
-      }
+      // }
+
+      /* cart label */
+      let cartLabel = $$('.cart-label');
+      app.localforage.getItem('carts').then(function(value) {
+          // This code runs once the value has been loaded
+          // from the offline store.
+          if ( value.rowsData ) {
+            let cartRows = value.rowsData.length;
+            cartLabel.text(cartRows);
+            cartLabel.css({"display" : "inline-flex"});
+          }
+          
+          // console.log();
+      }).catch(function(err) {
+          // This code runs if there were any errors
+          console.log(err);
+      });
 
       app.preloader.show();
+      console.log( pageName )
       switch ( pageName ) {
         case 'faq':
           /* get detail buku */
@@ -132,6 +150,104 @@
           });
           
           break;
+
+          case 'reward':
+            pageContent.html(`
+              <div class="toolbar tabbar toolbar-top" style="position:fixed">
+                <div class="toolbar-inner">
+                  <a href="#tab-1-reward" class="tab-link tab-link-active">Point Anda</a>
+                  <a href="#tab-2-reward" class="tab-link">Info Point Reward</a>
+                </div>
+              </div>
+              <div class="tabs" style="margin: -5em 0em -5em 0em !important;">
+                <div id="tab-1-reward" class="page-content tab tab-active">
+                  <div class="block text-align-center">
+                    <h2 style="height:100vh;padding-top:calc(100vh*0.35)">1000 pts</h2>
+                  </div>
+                </div>
+                <div id="tab-2-reward" class="page-content tab">
+                  <div class="block text-align-justify">
+                    <p>informasi point reward</p>
+                  </div>
+                </div>
+              </div>             
+            `);
+            break;
+          case 'cek-resi':
+            pageContent.html(`
+              <div class="list inset">
+                <ul>
+                  <li class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-input-wrap">
+                        <input type="text" placeholder="Masukan nomor resi pengiriman">
+                        <span class="input-clear-button"></span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-title item-label">Kurir</div>
+                      <div class="item-input-wrap input-dropdown-wrap">
+                        <select>
+                          <option value="Male">JNE</option>
+                          <option value="Female">TIKI</option>
+                          <option value="Female">POS</option>
+                        </select>
+                      </div>
+                    </div>
+                  </li>                  
+                  <li class="item-content">
+                    <button type="submit" class="col button button-fill">Lacak Paket</button>
+                  </li>
+                </ul>
+              </div>            
+            `);
+            break;
+          case 'cek-ongkir':
+            pageContent.html(`
+              <div class="toolbar tabbar toolbar-top" style="position:fixed">
+                <div class="toolbar-inner">
+                  <a href="#tab-1-reward" class="tab-link tab-link-active">Domestik</a>
+                  <a href="#tab-2-reward" class="tab-link">Internasional</a>
+                </div>
+              </div>
+              <div class="tabs" style="margin: -5em 0em -5em 0em !important;">
+                <div id="tab-1-reward" class="page-content tab tab-active">
+                  <div class="block">
+                    <div class="list inset">
+                      <ul>
+                        <li class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-input-wrap">
+                              <input type="text" placeholder="Kota tujuan pengiriman">
+                              <span class="input-clear-button"></span>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label">Berat (Gram)</div>
+                            <div class="item-input-wrap">
+                              <input type="number" placeholder="Berat kiriman">
+                            </div>
+                          </div>
+                        </li>                  
+                        <li class="item-content">
+                          <button type="submit" class="col button button-fill">Periksa Ongkir</button>
+                        </li>
+                      </ul>
+                    </div> 
+                  </div>
+                </div>
+                <div id="tab-2-reward" class="page-content tab">
+                  <div class="block text-align-justify">
+                    <p>informasi point reward</p>
+                  </div>
+                </div>
+              </div>             
+            `);
+            break;
       
         default:
           break;
@@ -142,8 +258,8 @@
     destroyed() {
       let $$ = this.$$;
       /* jika halaman ini bukan join reseller ketika meninggalkan halaman ini tampilkan kembali toolbar utama */
-      if (this.$route.params.pageName != 'join-reseller')
-        $$('.toolbar-main').show()
+      // if (this.$route.params.pageName != 'join-reseller')
+        // $$('.toolbar-main').show()
     },
     // Component Data
     data: function () {
