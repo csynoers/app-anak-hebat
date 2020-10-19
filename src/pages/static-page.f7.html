@@ -216,11 +216,12 @@
                 <div id="tab-1-reward" class="page-content tab tab-active">
                   <div class="block">
                     <div class="list inset">
+                    <form action="javascript:void(0)" id="formCekOngkir">
                       <ul>
                         <li class="item-content item-input">
                           <div class="item-inner">
                             <div class="item-input-wrap">
-                              <input id="autocomplete-dropdown-expand" type="text" placeholder="Kota tujuan pengiriman">
+                              <input name="city" id="autocomplete-dropdown-expand" type="text" placeholder="Kota tujuan pengiriman" required>
                               <span class="input-clear-button"></span>
                             </div>
                           </div>
@@ -229,7 +230,7 @@
                           <div class="item-inner">
                             <div class="item-title item-label">Berat (Gram)</div>
                             <div class="item-input-wrap">
-                              <input type="number" placeholder="Berat kiriman">
+                              <input name="weight" id="inputWeight" type="number" placeholder="Berat kiriman" value="1000" required>
                             </div>
                           </div>
                         </li>                  
@@ -237,6 +238,7 @@
                           <button type="submit" class="col button button-fill">Periksa Ongkir</button>
                         </li>
                       </ul>
+                    </form>
                     </div> 
                   </div>
                 </div>
@@ -250,21 +252,53 @@
             var autocompleteDropdownExpand = app.autocomplete.create({
               inputEl: '#autocomplete-dropdown-expand',
               openIn: 'dropdown',
-              expandInput: true, // expand input
+              typeahead: true,
+              /* If we set valueProperty to "id" then input value on select will be set according to this property */
+              // valueProperty: 'id', //object's "value" property name
+              // textProperty: 'id', //object's "text" property name
+              // limit: 20, //limit to 20 results
+              // expandInput: true, // expand input
               source: function (query, render) {
                 var results = [];
                 if (query.length === 0) {
                   render(results);
                   return;
                 }
-                // Find matched items
-                for (var i = 0; i < fruits.length; i++) {
-                  if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
-                }
-                // Render items by passing array with result items
-                render(results);
+                console.log('query',query)
+                app.request({
+                  url: 'static/cities.json',
+                  method: 'GET',
+                  dataType: 'json',
+                  //send "query" to server. Useful in case you generate response dynamically
+                  data: {
+                    query: query
+                  },
+                  success: function (data) {
+                    // console.log(data)
+                    // Find matched items
+                    for (var i = 0; i < data.length; i++) {
+                      // console.log(data[i].city_name.toLowerCase())
+                      if (data[i].city_name.toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(data[i].city_name);
+                    }
+                    // console.log(results)
+                    // Render items by passing array with result items
+                    render(results);
+                  }
+                });
               }
             });
+
+            $$('#formCekOngkir').on('submit',function(e){
+              console.log('city',document.getElementById("autocomplete-dropdown-expand").value)
+              console.log('weight',document.getElementById("inputWeight").value)
+            })
+            // $$('#formCekOngkir').on('formajax:success', function (e) {
+              // console.log(e)
+              // var xhr = e.detail.xhr; // actual XHR object
+
+              // var data = e.detail.data; // Ajax response from action file
+              // do something with response data
+            // });
             break;
           case 'penawaran-khusus':
           // app.preloader.show();
