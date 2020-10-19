@@ -248,6 +248,39 @@
               </div>             
             `);
             break;
+          case 'penawaran-khusus':
+          // app.preloader.show();
+          pageContent.html(`<div class="row no-gap"></div>`);
+      /* Ajax Request */
+      app.request.getJSON(`https://m.anakhebatindonesia.com/books`, { limit : 10 }, function (json) {
+        json.rows.forEach(function(d){
+          pageContent.find('.row').append(`
+            <div class="col-50 book" data-href="/book/${d.id}">
+              <div class="card card-outline">
+                <div class="card-content">
+                  <img data-src="${d.image.thumbnail}" class="lazy lazy-fade-in" alt="" width="100%">
+                  <center>
+                    <div class="book-title-wrap">
+                      ${d.title}
+                    </div>
+                    <div class="text-currency-primary">
+                      <span class="text-currency-format">Rp</span>${d.price.idr.text}
+                    </div>
+                  </center>
+                </div>
+              </div>
+            </div>          
+          `);
+          app.lazy.create(pageContent.find('.lazy'));
+          // event to load detail buku;
+          pageContent.find('.book').on('click',function(e){
+            let dataHref = $$(this).data('href');
+            router.navigate(dataHref,{ transition: 'f7-fade' })
+          })
+        });
+      });
+      // app.preloader.hide();
+            break;
       
         default:
           break;
