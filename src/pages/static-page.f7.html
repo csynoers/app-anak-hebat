@@ -220,7 +220,7 @@
                         <li class="item-content item-input">
                           <div class="item-inner">
                             <div class="item-input-wrap">
-                              <input type="text" placeholder="Kota tujuan pengiriman">
+                              <input id="autocomplete-dropdown-expand" type="text" placeholder="Kota tujuan pengiriman">
                               <span class="input-clear-button"></span>
                             </div>
                           </div>
@@ -247,6 +247,24 @@
                 </div>
               </div>             
             `);
+            var autocompleteDropdownExpand = app.autocomplete.create({
+              inputEl: '#autocomplete-dropdown-expand',
+              openIn: 'dropdown',
+              expandInput: true, // expand input
+              source: function (query, render) {
+                var results = [];
+                if (query.length === 0) {
+                  render(results);
+                  return;
+                }
+                // Find matched items
+                for (var i = 0; i < fruits.length; i++) {
+                  if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+                }
+                // Render items by passing array with result items
+                render(results);
+              }
+            });
             break;
           case 'penawaran-khusus':
           // app.preloader.show();
