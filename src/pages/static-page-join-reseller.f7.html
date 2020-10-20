@@ -1,0 +1,92 @@
+<template>
+  <div class="page" data-name="static-page-join-reseller">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <!-- <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Back</span>
+          </a>
+        </div> -->
+        <div class="title">Join Reseller</div>
+        <div class="right">
+          <a href="/keranjang/" class="link icon-only">
+            <i class="icon f7-icons">cart<span class="badge color-red cart-label"  >0</span></i>
+          </a>
+        </div>
+      </div>
+    </div>   
+    <div class="page-content"></div>
+  </div>
+</template>
+<style>
+  /* p {
+    margin: 10px 0;
+  } */
+</style>
+<script>
+  export default {
+    // Lifecycle Hooks
+    mounted() {
+      console.log('# STATIC PAGE ------------------------------------------------------------------');
+
+      let $$ = this.$$;
+      let app = this.$app;
+      let router = this.$router;
+      let pageName = this.$route.params.pageName;
+      let page = $$('.page[data-name="static-page-join-reseller"]');
+      let pageContent = page.find('.page-content');
+
+      console.log( pageName );
+
+      
+      // $$('.toolbar-main').hide()
+
+      /* cart label */
+      let cartLabel = $$('.cart-label');
+      app.localforage.getItem('carts').then(function(value) {
+          // This code runs once the value has been loaded
+          // from the offline store.
+          if ( value.rowsData ) {
+            let cartRows = value.rowsData.length;
+            cartLabel.text(cartRows);
+            cartLabel.css({"display" : "inline-flex"});
+          }
+          
+          // console.log();
+      }).catch(function(err) {
+          // This code runs if there were any errors
+          console.log(err);
+      });
+
+      app.preloader.show();
+
+      // get content join reseller
+      app.request.getJSON(`https://m.anakhebatindonesia.com/profil/1`, function (data) {
+        pageContent.html(`
+          <div class="toolbar tabbar toolbar-top" style="position:fixed">
+            <div class="toolbar-inner">
+              <a href="#tab-1" class="tab-link tab-link-active">Indonesia</a>
+              <a href="#tab-2" class="tab-link">English</a>
+            </div>
+          </div>
+          <div class="tabs" style="margin: -5em 0em -5em 0em !important;">
+            <div id="tab-1" class="page-content tab tab-active">
+              <div class="block text-align-justify">
+                <p>${data.data.content.in}</p>
+              </div>
+            </div>
+            <div id="tab-2" class="page-content tab">
+              <div class="block text-align-justify">
+                <p>${data.data.content.us}</p>
+              </div>
+            </div>
+          </div>       
+        `);
+        app.preloader.hide();
+      });
+      
+    },
+  }
+</script>

@@ -6,6 +6,7 @@ import AboutPage from '../pages/about.f7.html';
 import FormPage from '../pages/form.f7.html';
 import RegisterMember from '../pages/register-member.f7.html';
 import StaticPage from '../pages/static-page.f7.html';
+import StaticPageJoinReseller from '../pages/static-page-join-reseller.f7.html';
 import CartsPage from '../pages/carts-page.f7.html';
 import InboxPage from '../pages/inbox.f7.html';
 import AccountPage from '../pages/account.f7.html';
@@ -45,6 +46,11 @@ var routes = [
   {
     path: '/page/:pageName',
     component: StaticPage,
+  },
+  // static page
+  {
+    path: '/join-reseller/',
+    component: StaticPageJoinReseller,
   },
   {
     path: '/kategori/',
