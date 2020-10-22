@@ -248,7 +248,7 @@
                   </div>
                 </div>
               </div>
-              <div id="listCouriers"></div>
+              <div id="listCouriers" class="block"></div>
               <div class="row text-align-center">
                 <div class="col-100">
                   <div class="preloader" style="display:none"></div>
@@ -333,17 +333,21 @@
                       let listCouriersByCity = [];
                       cost.forEach(function(itemCost,indexCost){
                         let title = `${itemCost.code} ${itemCost.service} (${itemCost.etd}) - IDR ${itemCost.value}`;
-                        listCouriersByCity.push(`<li title="${title}"><div class="item-content"><div class="item-inner"><div class="item-title">${title} </div></div></div></li>`);
+                        listCouriersByCity.push(`<tr><td class="label-cell">${title}</td></tr>`);
                       })
                       listCouriersByCity = listCouriersByCity.join('');
                       let listCouriersByCityHTML = `
-                      <div class="list">
-                        <div class="list-group">
-                          <ul>
-                            <li class="list-group-title">Hasil pengecekan ke <b class="padding-horizontal-half">${item.city_name}</b> @ <b class="padding-horizontal-half">${getInput.weight}</b> Gram</li>
+                      <div class="data-table">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th class="label-cell">Hasil pengecekan ke <b class="padding-horizontal-half">${item.city_name}</b> @ <b class="padding-horizontal-half">${getInput.weight}</b> Gram</th>
+                            </tr>
+                          </thead>
+                          <tbody>
                             ${listCouriersByCity}
-                          </ul>
-                        </div>
+                          </tbody>
+                        </table>
                       </div>`;
                       pageContent.find('#listCouriers').append(listCouriersByCityHTML);
                       app.preloader.hide();
