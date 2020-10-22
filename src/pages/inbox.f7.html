@@ -1,14 +1,15 @@
 <template>
-  <div class="page" data-name="feeds-page">
+  <div class="page" data-name="inbox-page">
     <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner sliding">
         <div class="left">
-          <a href="#">
-            <img class="padding-left" src="static/icons/icon.png" alt="">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Back</span>
           </a>
         </div>
-        <div class="title">Instagram Feeds</div>
+        <div class="title">Inbox</div>
         <div class="right">
           <a href="/keranjang/" class="link icon-only tab-link">
             <i class="icon f7-icons">cart<span class="badge color-red cart-label" style="display: none;">0</span></i>
@@ -16,7 +17,120 @@
         </div>
       </div>
     </div>
+    <div class="toolbar messagebar">
+      <div class="toolbar-inner">
+        <div class="messagebar-area">
+          <textarea class="resizable" placeholder="Message"></textarea>
+        </div><a class="link send-link" href="#">Send</a>
+      </div>
+    </div>
     <div class="page-content">
+      <div class="messages">
+        <!-- Messages title -->
+        <div class="messages-title"><b>Sunday, Feb 9,</b> 12:58</div>
+        <!-- Full layout sent message -->
+        <div class="message message-sent">
+          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg);"></div>
+          <div class="message-content">
+            <div class="message-name">John Doe</div>
+            <div class="message-header">Message header</div>
+            <div class="message-bubble">
+              <div class="message-text-header">Text header</div>
+              <div class="message-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+              <div class="message-text-footer">Text footer</div>
+            </div>
+            <div class="message-footer">Message footer</div>
+          </div>
+        </div>
+        <!-- Full layout received message -->
+        <div class="message message-received">
+          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg);"></div>
+          <div class="message-content">
+            <div class="message-name">John Doe</div>
+            <div class="message-header">Message header</div>
+            <div class="message-bubble">
+              <div class="message-text-header">Text header</div>
+              <div class="message-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+              <div class="message-text-footer">Text footer</div>
+            </div>
+            <div class="message-footer">Message footer</div>
+          </div>
+        </div>
+        <!-- Messages -->
+        <div class="message message-sent">
+          <div class="message-content">
+            <div class="message-bubble">
+              <div class="message-text">Hi, Kate</div>
+            </div>
+          </div>
+        </div>
+        <div class="message message-sent">
+          <div class="message-content">
+            <div class="message-bubble">
+              <div class="message-text">How are you?</div>
+            </div>
+          </div>
+        </div>
+        <div class="message message-received">
+          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg);"></div>
+          <div class="message-content">
+            <div class="message-name">Kate</div>
+            <div class="message-bubble">
+              <div class="message-text">Hi, I am good!</div>
+            </div>
+          </div>
+        </div>
+        <div class="message message-received">
+          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg);"></div>
+          <div class="message-content">
+            <div class="message-name">Blue Ninja</div>
+            <div class="message-bubble">
+              <div class="message-text">Hi there, I am also fine, thanks! And how are you?</div>
+            </div>
+          </div>
+        </div>
+        <div class="message message-sent">
+          <div class="message-content">
+            <div class="message-bubble">
+              <div class="message-text">Hey, Blue Ninja! Glad to see you ;)</div>
+            </div>
+          </div>
+        </div>
+        <div class="message message-sent">
+          <div class="message-content">
+            <div class="message-bubble">
+              <div class="message-text">Hey, look, cutest kitten ever!</div>
+            </div>
+          </div>
+        </div>
+        <div class="message message-received">
+          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg);"></div>
+          <div class="message-content">
+            <div class="message-name">Kate</div>
+            <div class="message-bubble">
+              <div class="message-text">Nice!</div>
+            </div>
+          </div>
+        </div>
+        <div class="message message-received">
+          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg);"></div>
+          <div class="message-content">
+            <div class="message-name">Kate</div>
+            <div class="message-bubble">
+              <div class="message-text">Like it very much!</div>
+            </div>
+          </div>
+        </div>
+        <div class="message message-received">
+          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg);"></div>
+          <div class="message-content">
+            <div class="message-name">Blue Ninja</div>
+            <div class="message-bubble">
+              <div class="message-text">Awesome!</div>
+            </div>
+          </div>
+        </div>
+      </div>      
     </div>
   </div>
   </template>
@@ -44,32 +158,20 @@
         console.log('componentBeforeMount', this)
       },
       mounted() {
+        console.log('# INBOX MOUNTED --------------------------------------------------------------');
+
         let $$ = this.$$;
         let app = this.$app;
         let router = this.$router;
         let pageName = this.$route.params.pageName;
-        let page = $$('.page[data-name="feeds-page"]');
+        let page = $$('.page[data-name="inbox-page"]');
         let pageContent = page.find('.page-content');
   
-        /* cart label */
-        let cartLabel = $$('.cart-label');
-        app.localforage.getItem('carts').then(function(value) {
-            // This code runs once the value has been loaded
-            // from the offline store.
-            if ( value.rowsData ) {
-              let cartRows = value.rowsData.length;
-              cartLabel.text(cartRows);
-              cartLabel.css({"display" : "inline-flex"});
-            }
-            
-            // console.log();
-        }).catch(function(err) {
-            // This code runs if there were any errors
-            console.log(err);
-        });
+        // update count label cart 
+        this.updateCountLabelCart();
   
         // get content join reseller
-        let findHashtags = this.findHashtags;
+       /*  let findHashtags = this.findHashtags;
         app.request.getJSON(`https://www.instagram.com/anakhebat_buku/?__a=1`, function (data) {
           data.graphql.user.edge_owner_to_timeline_media.edges.forEach(function(item,index){
             let d = {
@@ -96,7 +198,7 @@
             </div>          
             `);
           });
-        });
+        }); */
       },
       beforeDestroy() {
         console.log('componentBeforeDestroy', this);
@@ -119,20 +221,37 @@
           var self = this;
           self.$app.dialog.alert('Hello World');
         },
-        findHashtags: function (searchText) {
-          var regexp = /\B\#\w\w+\b/g
-          let result = searchText.match(regexp);
-          if (result) {
-              return result;
-          } else {
-              return false;
-          }
+        updateCountLabelCart: function () {
+          let $$ = this.$$;
+          let app = this.$app;
+
+          let cartLabel = $$('.cart-label');
+
+          app.localforage.getItem('carts').then(function(value) {
+              // This code runs once the value has been loaded
+              // from the offline store.
+              if ( value.rowsData ) {
+                let cartRows = value.rowsData.length;
+                cartLabel.text(cartRows);
+                cartLabel.css({"display" : "inline-flex"});
+              }
+              
+              // console.log();
+          }).catch(function(err) {
+              // This code runs if there were any errors
+              console.log(err);
+          });
+        },
+        toolbarBottomHide: function() {
+          let $$ = this.$$;
+          $$('.toolbar-main').hide();
         },
       },
       // Page Events
       on: {
         pageMounted: function(e, page) {
           console.log('pageMounted', page);
+          this.toolbarBottomHide();
         },
         pageInit: function(e, page) {
           console.log('pageInit', page);
