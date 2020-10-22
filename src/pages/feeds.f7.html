@@ -12,63 +12,12 @@
     </div>
   </div>
   <div class="page-content">
-    <div class="card demo-card-header-pic">
-      <div style="background-image:url(https://cdn.framework7.io/placeholder/nature-1000x600-3.jpg)" class="card-header align-items-flex-end"></div>
-      <div class="card-content card-content-padding">
-        <p class="date">Posted on January 21, 2015</p>
-        <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...<br><a href="">#bukubestseller</a> <a href="">#bestseller</a> <a href="">#bestseller2020</a> <a href="">#anakhebatindonesia</a> <a href="">#anakhebatbuku</a></p>
-      </div>
-      <!-- <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div> -->
-    </div>
-    
-    <div class="card demo-card-header-pic">
-      <div style="background-image:url(https://cdn.framework7.io/placeholder/people-1000x600-6.jpg)" class="card-header align-items-flex-end"></div>
-      <div class="card-content card-content-padding">
-        <p class="date">Posted on January 21, 2015</p>
-        <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...<br><a href="">#bukubestseller</a> <a href="">#bestseller</a> <a href="">#bestseller2020</a> <a href="">#anakhebatindonesia</a> <a href="">#anakhebatbuku</a></p>
-      </div>
-      <!-- <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div> -->
-    </div>
-    <div class="card demo-card-header-pic">
-      <div style="background-image:url(https://cdn.framework7.io/placeholder/nature-1000x600-3.jpg)" class="card-header align-items-flex-end"></div>
-      <div class="card-content card-content-padding">
-        <p class="date">Posted on January 21, 2015</p>
-        <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...<br><a href="">#bukubestseller</a> <a href="">#bestseller</a> <a href="">#bestseller2020</a> <a href="">#anakhebatindonesia</a> <a href="">#anakhebatbuku</a></p>
-      </div>
-      <!-- <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div> -->
-    </div>
-    
-    <div class="card demo-card-header-pic">
-      <div style="background-image:url(https://cdn.framework7.io/placeholder/people-1000x600-6.jpg)" class="card-header align-items-flex-end"></div>
-      <div class="card-content card-content-padding">
-        <p class="date">Posted on January 21, 2015</p>
-        <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...<br><a href="">#bukubestseller</a> <a href="">#bestseller</a> <a href="">#bestseller2020</a> <a href="">#anakhebatindonesia</a> <a href="">#anakhebatbuku</a></p>
-      </div>
-      <!-- <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div> -->
-    </div>
-    <div class="card demo-card-header-pic">
-      <div style="background-image:url(https://cdn.framework7.io/placeholder/nature-1000x600-3.jpg)" class="card-header align-items-flex-end"></div>
-      <div class="card-content card-content-padding">
-        <p class="date">Posted on January 21, 2015</p>
-        <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...<br><a href="">#bukubestseller</a> <a href="">#bestseller</a> <a href="">#bestseller2020</a> <a href="">#anakhebatindonesia</a> <a href="">#anakhebatbuku</a></p>
-      </div>
-      <!-- <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div> -->
-    </div>
-    
-    <div class="card demo-card-header-pic">
-      <div style="background-image:url(https://cdn.framework7.io/placeholder/people-1000x600-6.jpg)" class="card-header align-items-flex-end"></div>
-      <div class="card-content card-content-padding">
-        <p class="date">Posted on January 21, 2015</p>
-        <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...<br><a href="">#bukubestseller</a> <a href="">#bestseller</a> <a href="">#bestseller2020</a> <a href="">#anakhebatindonesia</a> <a href="">#anakhebatbuku</a></p>
-      </div>
-      <!-- <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div> -->
-    </div>
   </div>
 </div>
 </template>
 <style>
   .demo-card-header-pic .card-header {
-    height: 50vw;
+    height: 100vw;
     background-size: cover;
     background-position: center;
     color: #fff;
@@ -78,4 +27,126 @@
   }
 </style>
 <script>
+  export default {
+    // Lifecycle Hooks
+    beforeCreate() {
+      console.log('componentBeforeCreate', this)
+    },
+    created() {
+      console.log('componentCreated', this)
+    },
+    beforeMount() {
+      console.log('componentBeforeMount', this)
+    },
+    mounted() {
+      let $$ = this.$$;
+      let app = this.$app;
+      let router = this.$router;
+      let pageName = this.$route.params.pageName;
+      let page = $$('.page[data-name="feeds-page"]');
+      let pageContent = page.find('.page-content');
+
+      /* cart label */
+      let cartLabel = $$('.cart-label');
+      app.localforage.getItem('carts').then(function(value) {
+          // This code runs once the value has been loaded
+          // from the offline store.
+          if ( value.rowsData ) {
+            let cartRows = value.rowsData.length;
+            cartLabel.text(cartRows);
+            cartLabel.css({"display" : "inline-flex"});
+          }
+          
+          // console.log();
+      }).catch(function(err) {
+          // This code runs if there were any errors
+          console.log(err);
+      });
+
+      // get content join reseller
+      let findHashtags = this.findHashtags;
+      app.request.getJSON(`https://www.instagram.com/anakhebat_buku/?__a=1`, function (data) {
+        data.graphql.user.edge_owner_to_timeline_media.edges.forEach(function(item,index){
+          let d = {
+            src : item.node.thumbnail_resources[3].src,
+            caption : item.node.edge_media_to_caption.edges[0].node.text
+          };
+
+          // console.log(item);
+          if ( findHashtags(d.caption) ) {
+            findHashtags(d.caption).forEach(function(itemHasTag,indexHasTag){
+              let linkAssign = `https://www.instagram.com/explore/tags/${itemHasTag.substring(1)}`;
+              d.caption = d.caption.replace(itemHasTag,`<a class="link external" href="${linkAssign}">${itemHasTag}</a>`);
+              // console.log(d.caption)
+            })
+          }
+          pageContent.append(`
+          <div class="card demo-card-header-pic">
+            <div style="background-image:url(${d.src})" class="card-header align-items-flex-end"></div>
+            <div class="card-content card-content-padding">
+              <!--<p class="date">Posted on January 21, 2015</p>-->
+              <p>${d.caption}</p>
+            </div>
+            <!-- <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div> -->
+          </div>          
+          `);
+        });
+      });
+    },
+    beforeDestroy() {
+      console.log('componentBeforeDestroy', this);
+    },
+    destroyed() {
+      console.log('componentDestroyed', this);
+    },
+    // Component Data
+    data: function () {
+      // Must return an object
+      return {
+        name: 'Jimmy',
+        age: 25,
+        like: ['Tennis', 'Chess', 'Football'],
+      }
+    },
+    // Component Methods
+    methods: {
+      openAlert: function () {
+        var self = this;
+        self.$app.dialog.alert('Hello World');
+      },
+      findHashtags: function (searchText) {
+        var regexp = /\B\#\w\w+\b/g
+        let result = searchText.match(regexp);
+        if (result) {
+            return result;
+        } else {
+            return false;
+        }
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+      },
+      pageAfterIn: function(e, page) {
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
+  }
 </script>
