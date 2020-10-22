@@ -1,89 +1,157 @@
 <template>
-<div class="page" data-name="inbox-page">
-  <div class="navbar">
-    <div class="navbar-bg"></div>
-    <div class="navbar-inner sliding">
-      <div class="title">Inbox</div>
-      <div class="right">
-        <a href="/keranjang/" class="link icon-only tab-link">
-          <i class="icon f7-icons">cart<span class="badge color-red cart-label" style="display: none;">0</span></i>
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="page-content">
-    <div class="block-title">Belum ada pesan</div>
-    <div class="card">
-      <div class="card-content">
-        <div class="list media-list">
-          <ul>
-          </ul>
+  <div class="page" data-name="feeds-page">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#">
+            <img class="padding-left" src="static/icons/icon.png" alt="">
+          </a>
+        </div>
+        <div class="title">Instagram Feeds</div>
+        <div class="right">
+          <a href="/keranjang/" class="link icon-only tab-link">
+            <i class="icon f7-icons">cart<span class="badge color-red cart-label" style="display: none;">0</span></i>
+          </a>
         </div>
       </div>
     </div>
+    <div class="page-content">
+    </div>
   </div>
-</div>
-</template>
-<script>
-  export default {
-    // Lifecycle Hooks
-    beforeCreate() {
-      console.log('componentBeforeCreate', this)
-    },
-    created() {
-      console.log('componentCreated', this)
-    },
-    beforeMount() {
-      console.log('componentBeforeMount', this)
-    },
-    mounted() {
-      console.log('componentMounted', this);
-    },
-    beforeDestroy() {
-      console.log('componentBeforeDestroy', this);
-    },
-    destroyed() {
-      console.log('componentDestroyed', this);
-    },
-    // Component Data
-    data: function () {
-      // Must return an object
-      return {
-        name: 'Jimmy',
-        age: 25,
-        like: ['Tennis', 'Chess', 'Football'],
-      }
-    },
-    // Component Methods
-    methods: {
-      openAlert: function () {
-        var self = this;
-        self.$app.dialog.alert('Hello World');
-      },
-    },
-    // Page Events
-    on: {
-      pageMounted: function(e, page) {
-        console.log('pageMounted', page);
-      },
-      pageInit: function(e, page) {
-        console.log('pageInit', page);
-      },
-      pageBeforeIn: function(e, page) {
-        console.log('pageBeforeIn', page);
-      },
-      pageAfterIn: function(e, page) {
-        console.log('pageAfterIn', page);
-      },
-      pageBeforeOut: function(e, page) {
-        console.log('pageBeforeOut', page);
-      },
-      pageAfterOut: function(e, page) {
-        console.log('pageAfterOut', page);
-      },
-      pageBeforeRemove: function(e, page) {
-        console.log('pageBeforeRemove', page);
-      },
+  </template>
+  <style>
+    .demo-card-header-pic .card-header {
+      height: 100vw;
+      background-size: cover;
+      background-position: center;
+      color: #fff;
     }
-  }
-</script>
+    .demo-card-header-pic .card-content-padding .date{
+      color: #8e8e93;
+    }
+  </style>
+  <script>
+    export default {
+      // Lifecycle Hooks
+      beforeCreate() {
+        console.log('componentBeforeCreate', this)
+      },
+      created() {
+        console.log('componentCreated', this)
+      },
+      beforeMount() {
+        console.log('componentBeforeMount', this)
+      },
+      mounted() {
+        let $$ = this.$$;
+        let app = this.$app;
+        let router = this.$router;
+        let pageName = this.$route.params.pageName;
+        let page = $$('.page[data-name="feeds-page"]');
+        let pageContent = page.find('.page-content');
+  
+        /* cart label */
+        let cartLabel = $$('.cart-label');
+        app.localforage.getItem('carts').then(function(value) {
+            // This code runs once the value has been loaded
+            // from the offline store.
+            if ( value.rowsData ) {
+              let cartRows = value.rowsData.length;
+              cartLabel.text(cartRows);
+              cartLabel.css({"display" : "inline-flex"});
+            }
+            
+            // console.log();
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
+  
+        // get content join reseller
+        let findHashtags = this.findHashtags;
+        app.request.getJSON(`https://www.instagram.com/anakhebat_buku/?__a=1`, function (data) {
+          data.graphql.user.edge_owner_to_timeline_media.edges.forEach(function(item,index){
+            let d = {
+              src : item.node.thumbnail_resources[3].src,
+              caption : item.node.edge_media_to_caption.edges[0].node.text
+            };
+  
+            // console.log(item);
+            if ( findHashtags(d.caption) ) {
+              findHashtags(d.caption).forEach(function(itemHasTag,indexHasTag){
+                let linkAssign = `https://www.instagram.com/explore/tags/${itemHasTag.substring(1)}`;
+                d.caption = d.caption.replace(itemHasTag,`<a class="link external" href="${linkAssign}">${itemHasTag}</a>`);
+                // console.log(d.caption)
+              })
+            }
+            pageContent.append(`
+            <div class="card demo-card-header-pic">
+              <div style="background-image:url(${d.src})" class="card-header align-items-flex-end"></div>
+              <div class="card-content card-content-padding">
+                <!--<p class="date">Posted on January 21, 2015</p>-->
+                <p>${d.caption}</p>
+              </div>
+              <!-- <div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div> -->
+            </div>          
+            `);
+          });
+        });
+      },
+      beforeDestroy() {
+        console.log('componentBeforeDestroy', this);
+      },
+      destroyed() {
+        console.log('componentDestroyed', this);
+      },
+      // Component Data
+      data: function () {
+        // Must return an object
+        return {
+          name: 'Jimmy',
+          age: 25,
+          like: ['Tennis', 'Chess', 'Football'],
+        }
+      },
+      // Component Methods
+      methods: {
+        openAlert: function () {
+          var self = this;
+          self.$app.dialog.alert('Hello World');
+        },
+        findHashtags: function (searchText) {
+          var regexp = /\B\#\w\w+\b/g
+          let result = searchText.match(regexp);
+          if (result) {
+              return result;
+          } else {
+              return false;
+          }
+        },
+      },
+      // Page Events
+      on: {
+        pageMounted: function(e, page) {
+          console.log('pageMounted', page);
+        },
+        pageInit: function(e, page) {
+          console.log('pageInit', page);
+        },
+        pageBeforeIn: function(e, page) {
+          console.log('pageBeforeIn', page);
+        },
+        pageAfterIn: function(e, page) {
+          console.log('pageAfterIn', page);
+        },
+        pageBeforeOut: function(e, page) {
+          console.log('pageBeforeOut', page);
+        },
+        pageAfterOut: function(e, page) {
+          console.log('pageAfterOut', page);
+        },
+        pageBeforeRemove: function(e, page) {
+          console.log('pageBeforeRemove', page);
+        },
+      }
+    }
+  </script>
