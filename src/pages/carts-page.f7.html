@@ -32,9 +32,9 @@
       console.log('# CART PAGE --------------------------------------------------------------------');
 
       // this tab show
-      this.$$('#view-keranjang').on('tab:show',function(){
-        console.log('# CART SHOW',this)
-      })
+      // this.$$('#view-keranjang').on('tab:show',function(){
+      //   console.log('# CART SHOW',this)
+      // })
 
       let $$ = this.$$;
       let route = this.$route;
@@ -44,15 +44,15 @@
       let pageContentBlockTitle = page.find('.block-title');
       let pageContentUl = pageContent.find('ul');
 
-      if ( route.hash ) {
-        if ( route.hash == 'from-book-details' ) {
-          console.log('CART FROM DETAIL',this)
+      // if ( route.hash ) {
+      //   if ( route.hash == 'from-book-details' ) {
+      //     console.log('CART FROM DETAIL',this)
 
-          // clear history
-          this.$router.clearPreviousHistory();
-          app.tab.show('#view-keranjang', '.link-tab-keranjang');
-        }
-      }
+      //     // clear history
+      //     this.$router.clearPreviousHistory();
+      //     app.tab.show('#view-keranjang', '.link-tab-keranjang');
+      //   }
+      // }
 
       app.localforage.getItem('carts').then(function(value) {
           // This code runs once the value has been loaded
