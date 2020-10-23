@@ -48,22 +48,8 @@
       
       // $$('.toolbar-main').hide()
 
-      /* cart label */
-      let cartLabel = $$('.cart-label');
-      app.localforage.getItem('carts').then(function(value) {
-          // This code runs once the value has been loaded
-          // from the offline store.
-          if ( value.rowsData ) {
-            let cartRows = value.rowsData.length;
-            cartLabel.text(cartRows);
-            cartLabel.css({"display" : "inline-flex"});
-          }
-          
-          // console.log();
-      }).catch(function(err) {
-          // This code runs if there were any errors
-          console.log(err);
-      });
+      // update count label cart 
+      this.updateCountLabelCart();
 
       app.preloader.show();
 
@@ -93,5 +79,61 @@
       });
       
     },
+    // Component Methods
+    methods: {
+      toolbarBottomShow: function() {
+        let $$ = this.$$;
+        $$('.toolbar-main').show();
+      },
+      updateCountLabelCart: function () {
+        let $$ = this.$$;
+        let app = this.$app;
+
+        let cartLabel = $$('.cart-label');
+
+        app.localforage.getItem('carts').then(function(value) {
+            // This code runs once the value has been loaded
+            // from the offline store.
+            if ( value.rowsData ) {
+              let cartRows = value.rowsData.length;
+              cartLabel.text(cartRows);
+              cartLabel.css({"display" : "inline-flex"});
+            }
+            
+            // console.log();
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+
+        // show toolbar again when toolbar hide by other menu
+        this.toolbarBottomShow();
+
+      },
+      pageAfterIn: function(e, page) {
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
   }
 </script>
