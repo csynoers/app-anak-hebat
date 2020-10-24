@@ -1,0 +1,139 @@
+<template>
+  <div class="page" data-name="pesanan-page">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Back</span>
+          </a>
+        </div>
+        <div class="title">Pesanan Saya</div>
+      </div>
+    </div>
+    <div class="toolbar tabbar toolbar-top">
+      <div class="toolbar-inner">
+        <a href="#belum-bayar" class="tab-link tab-link-active">Belum Bayar</a>
+        <a href="#dikemas" class="tab-link">Dikemas</a>
+        <a href="#dikirim" class="tab-link">Dikirim</a>
+        <a href="#selesai" class="tab-link">Selesai</a>
+      </div>
+    </div>
+    <div class="tabs-swipeable-wrap">
+      <div class="tabs">
+        <div id="belum-bayar" class="page-content tab tab-active">
+          <div class="block">
+            <div class="row">
+              <a href="/pesanan/belum-bayar" class="col" style="display: grid;">
+                <img class="" src="static/icons/choices.svg" alt="" style="width: 30vw; margin-left:33vw;margin-top: 25vh;opacity: 0.5;">
+                <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Belum ada pesanan</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div id="dikemas" class="page-content tab">
+          <div class="block">
+            <div class="row">
+              <a href="/pesanan/belum-bayar" class="col" style="display: grid;">
+                <img class="" src="static/icons/choices.svg" alt="" style="width: 30vw; margin-left:33vw;margin-top: 25vh;opacity: 0.5;">
+                <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Belum ada pesanan</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div id="dikirim" class="page-content tab">
+          <div class="block">
+            <div class="row">
+              <a href="/pesanan/belum-bayar" class="col" style="display: grid;">
+                <img class="" src="static/icons/choices.svg" alt="" style="width: 30vw; margin-left:33vw;margin-top: 25vh;opacity: 0.5;">
+                <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Belum ada pesanan</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div id="selesai" class="page-content tab">
+          <div class="block">
+            <div class="row">
+              <a href="/pesanan/belum-bayar" class="col" style="display: grid;">
+                <img class="" src="static/icons/choices.svg" alt="" style="width: 30vw; margin-left:33vw;margin-top: 25vh;opacity: 0.5;">
+                <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Belum ada pesanan</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<style>
+  p {
+    margin: 10px 0;
+  }
+</style>
+<script>
+  export default {
+    // Lifecycle Hooks
+    beforeCreate() {
+      console.log('componentBeforeCreate', this)
+    },
+    created() {
+      console.log('componentCreated', this)
+    },
+    beforeMount() {
+      console.log('componentBeforeMount', this)
+    },
+    mounted() {
+      console.log('componentMounted', this);
+    },
+    beforeDestroy() {
+      console.log('componentBeforeDestroy', this);
+    },
+    destroyed() {
+      console.log('componentDestroyed', this);
+    },
+    // Component Data
+    data: function () {
+      // Must return an object
+      return {
+        name: 'Jimmy',
+        age: 25,
+        like: ['Tennis', 'Chess', 'Football'],
+      }
+    },
+    // Component Methods
+    methods: {
+      toolbarBottomHide: function() {
+        let $$ = this.$$;
+        $$('.toolbar-main').hide();
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+
+        // hide toolbar main in here
+        this.toolbarBottomHide();
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+      },
+      pageAfterIn: function(e, page) {
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
+  }
+</script>

@@ -10,6 +10,8 @@ import StaticPageJoinReseller from '../pages/static-page-join-reseller.f7.html';
 import CartsPage from '../pages/carts-page.f7.html';
 import InboxPage from '../pages/inbox.f7.html';
 import AccountPage from '../pages/account.f7.html';
+// import pesanan page
+import PesananPage from '../pages/pesanan.f7.html';
 
 import BooksCategory from '../pages/books-category.f7.html';
 import BooksDetail from '../pages/books-detail.f7.html';
@@ -38,6 +40,11 @@ var routes = [
   {
     path: '/akun/',
     component: AccountPage,
+  },
+  // pesanan
+  {
+    path: '/pesanan/:activTab',
+    component: PesananPage,
   },
   {
     path: '/keranjang/',
