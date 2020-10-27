@@ -9,7 +9,11 @@ import StaticPage from '../pages/static-page.f7.html';
 import StaticPageJoinReseller from '../pages/static-page-join-reseller.f7.html';
 import CartsPage from '../pages/carts-page.f7.html';
 import InboxPage from '../pages/inbox.f7.html';
+// import account page
 import AccountPage from '../pages/account.f7.html';
+import AccountProfilSayaPage from '../pages/account-profil-saya.f7.html';
+import AccountUbahPasswordPage from '../pages/account-ubah-password.f7.html';
+
 // import pesanan page
 import PesananPage from '../pages/pesanan.f7.html';
 
@@ -37,10 +41,20 @@ var routes = [
     path: '/inbox/',
     component: InboxPage,
   },
+  // accounts
   {
     path: '/akun/',
     component: AccountPage,
   },
+  {
+    path: '/account-profil-saya/',
+    component: AccountProfilSayaPage,
+  },
+  {
+    path: '/account-ubah-password/',
+    component: AccountUbahPasswordPage,
+  },
+
   // pesanan
   {
     path: '/pesanan/:activTab',
