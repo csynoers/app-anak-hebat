@@ -1,0 +1,178 @@
+<template>
+  <div class="page" data-name="account-alamat-saya-detail-page">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Back</span>
+          </a>
+        </div>
+        <div class="title"></div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="list no-hairlines-md">
+        <ul>
+          <li class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <input type="text" placeholder="Nama Lengkap" >
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+          <li class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <input type="tel" placeholder="No. Handphone">
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="list links-list">
+        <ul>
+          <li><a href="/account-alamat-saya/province">Provinsi</a></li>
+          <li><a href="#">Kota/Kabupaten</a></li>
+          <li><a href="#">Kecamatan</a></li>
+          <li><a href="#">Kode Pos</a></li>
+          <li><a href="#">Nama Jalan, Gedung, No. Rumah/Unit</a></li>
+          <li class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-input-wrap">
+                <input type="text" placeholder="Rincian Alamat Tambahan (Opsional)">
+                <span class="input-clear-button"></span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="padding" style="position: fixed;bottom: 0px;width: 90vw;">
+        <button class="button button-fill">KIRIM</button>
+      </div>
+    </div>
+  </div>
+</template>
+<style>
+  p {
+    margin: 10px 0;
+  }
+</style>
+<script>
+  export default {
+    // Lifecycle Hooks
+    beforeCreate() {
+      console.log('DETAIL ALAMAT => componentBeforeCreate', this)
+    },
+    created() {
+      console.log('DETAIL ALAMAT => componentCreated', this)
+    },
+    beforeMount() {
+      console.log('DETAIL ALAMAT => componentBeforeMount', this)
+    },
+    mounted() {
+      console.log('DETAIL ALAMAT => componentMounted', this);
+
+      let $$ = this.$$;
+      let app = this.$app;
+      let router = this.$router;
+      let pageAction = this.$route.params.action;
+      let page = $$('.page[data-name="account-alamat-saya-detail-page"]');
+      let pageContent = page.find('.page-content');
+
+      switch ( pageAction ) {
+        case 'add-new':
+          // set title page
+          page.find('.title').html('Alamat Baru');
+          this.$route.query['province'] = '';
+          break;
+
+        case 'province':
+          // set title page
+          page.find('.title').html('Provinsi');
+          this.$route.query['province'] = 'tes nama provinsi';
+          break;
+      
+        default:
+          break;
+      }
+      console.log(this)
+    },
+    beforeDestroy() {
+      console.log('DETAIL ALAMAT => componentBeforeDestroy', this);
+    },
+    destroyed() {
+      console.log('DETAIL ALAMAT => componentDestroyed', this);
+    },
+    // Component Data
+    data: function () {
+      // Must return an object
+      return {
+        address: {
+          province : {
+            id : "",
+            name : "",
+          },
+          city : {
+            id : "",
+            name : "",
+          },
+          sub_district : {
+            id : "",
+            name : "",
+          },
+          village : {
+            id : "",
+            name : "",
+          },
+          village : {
+            id : "",
+            name : "",
+          },
+          postal_code: ""
+        },
+        name: 'Jimmy',
+        age: 25,
+        like: ['Tennis', 'Chess', 'Football'],
+      }
+    },
+    // Component Methods
+    methods: {
+      toolbarBottomHide: function() {
+        let $$ = this.$$;
+        $$('.toolbar-main').hide();
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+
+        // hide toolbar main in here
+        this.toolbarBottomHide();
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+      },
+      pageAfterIn: function(e, page) {
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
+  }
+</script>

@@ -1,0 +1,104 @@
+<template>
+  <div class="page" data-name="account-profil-saya-page">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Back</span>
+          </a>
+        </div>
+        <div class="title">Alamat Saya</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div>
+        <div class="card">
+          <div class="card-content padding">
+            <!-- Card content -->
+            <p>JOGJASITE</p>
+            <p>Selatan RSUD, Jl. Ki Ageng Pemanahan Wirosaban No.30A, Sorosutan, Kec. Umbulharjo, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55162</p>
+          </div>
+        </div>
+      </div>
+      <div class="padding" >
+        <a class="button button-outline" href="/account-alamat-saya/add-new">
+          <span>Tambah Alamat Baru</span>
+          <i class="f7-icons icon" style="margin-top: 4px; float: right;">plus</i>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
+<style>
+  p {
+    margin: 10px 0;
+  }
+</style>
+<script>
+  export default {
+    // Lifecycle Hooks
+    beforeCreate() {
+      console.log('componentBeforeCreate', this)
+    },
+    created() {
+      console.log('componentCreated', this)
+    },
+    beforeMount() {
+      console.log('componentBeforeMount', this)
+    },
+    mounted() {
+      console.log('componentMounted', this);
+    },
+    beforeDestroy() {
+      console.log('componentBeforeDestroy', this);
+    },
+    destroyed() {
+      console.log('componentDestroyed', this);
+    },
+    // Component Data
+    data: function () {
+      // Must return an object
+      return {
+        name: 'Jimmy',
+        age: 25,
+        like: ['Tennis', 'Chess', 'Football'],
+      }
+    },
+    // Component Methods
+    methods: {
+      toolbarBottomHide: function() {
+        let $$ = this.$$;
+        $$('.toolbar-main').hide();
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+
+        // hide toolbar main in here
+        this.toolbarBottomHide();
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+      },
+      pageAfterIn: function(e, page) {
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
+  }
+</script>

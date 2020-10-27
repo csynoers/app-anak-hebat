@@ -13,6 +13,8 @@ import InboxPage from '../pages/inbox.f7.html';
 import AccountPage from '../pages/account.f7.html';
 import AccountProfilSayaPage from '../pages/account-profil-saya.f7.html';
 import AccountUbahPasswordPage from '../pages/account-ubah-password.f7.html';
+import AccountAlamatSayaPage from '../pages/account-alamat-saya.f7.html';
+import AccountAlamatSayaDetailPage from '../pages/account-alamat-saya-detail.f7.html';
 
 // import pesanan page
 import PesananPage from '../pages/pesanan.f7.html';
@@ -53,6 +55,14 @@ var routes = [
   {
     path: '/account-ubah-password/',
     component: AccountUbahPasswordPage,
+  },
+  {
+    path: '/account-alamat-saya/',
+    component: AccountAlamatSayaPage,
+  },
+  {
+    path: '/account-alamat-saya/:action',
+    component: AccountAlamatSayaDetailPage,
   },
 
   // pesanan
