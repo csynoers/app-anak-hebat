@@ -1,0 +1,134 @@
+<template>
+  <div class="page" data-name="static-page-point-reward">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Back</span>
+          </a>
+        </div>
+        <div class="title">Point Reward</div>
+        <div class="right">
+          <a href="/keranjang/" class="link icon-only">
+            <i class="icon f7-icons">cart<span class="badge color-red cart-label"  >0</span></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="toolbar tabbar toolbar-top">
+      <div class="toolbar-inner">
+        <a href="#tab-1" class="tab-link tab-link-active">Point Anda</a>
+        <a href="#tab-2" class="tab-link">Info Point Reward</a>
+      </div>
+    </div>
+    <div class="tabs-swipeable-wrap">
+      <div class="tabs">
+        <div id="tab-1" class="page-content tab tab-active">
+          <div class="block text-align-center">
+            <p>content tab 1</p>
+          </div>
+        </div>
+        <div id="tab-2" class="page-content tab">
+          <div class="block text-align-justify">
+            <p>content tab 2</p>
+          </div>
+        </div>
+      </div>
+    </div>   
+  </div>
+</template>
+<style></style>
+<script>
+  export default {
+    // Lifecycle Hooks
+    mounted() {
+      console.log('# STATIC PAGE ------------------------------------------------------------------');
+
+      let $$ = this.$$;
+      let app = this.$app;
+      let router = this.$router;
+      let page = $$('.page[data-name="static-page-point-reward"]');
+      let pageContent1 = page.find('#tab-1 p');
+      let pageContent2 = page.find('#tab-2 p');
+
+      // update count label cart 
+      this.updateCountLabelCart();
+
+      app.preloader.show();
+
+      app.localforage.getItem('users', function (d) {
+        if ( d ) {
+          pageContent1.html(`<h2 style="height:100vh;padding-top:calc(100vh*0.25)">${d.pointReward} pts</h2>`);
+        } else {
+          pageContent1.html(`<p style="height:100vh;padding-top:calc(100vh*0.25)">Maaf informasi point anda belum tersedia, silahkan Log In terlebih dahulu</p>`);
+        }
+      });
+
+      // get content info point reward
+      app.request.getJSON(`https://m.anakhebatindonesia.com/modul/19`, function (data) {
+        pageContent2.html(`${data.data.static_content}`);
+      })
+
+      app.preloader.hide();
+      
+    },
+    // Component Methods
+    methods: {
+      toolbarBottomHide: function() {
+        let $$ = this.$$;
+        $$('.toolbar-main').hide();
+      },
+      updateCountLabelCart: function () {
+        let $$ = this.$$;
+        let app = this.$app;
+
+        let cartLabel = $$('.cart-label');
+
+        app.localforage.getItem('carts').then(function(value) {
+            // This code runs once the value has been loaded
+            // from the offline store.
+            if ( value.rowsData ) {
+              let cartRows = value.rowsData.length;
+              cartLabel.text(cartRows);
+              cartLabel.css({"display" : "inline-flex"});
+            }
+            
+            // console.log();
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+
+        // hide toolbar in this page
+        this.toolbarBottomHide();
+
+      },
+      pageAfterIn: function(e, page) {
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
+  }
+</script>

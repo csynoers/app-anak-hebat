@@ -7,6 +7,7 @@ import FormPage from '../pages/form.f7.html';
 import RegisterMember from '../pages/register-member.f7.html';
 import StaticPage from '../pages/static-page.f7.html';
 import StaticPageJoinReseller from '../pages/static-page-join-reseller.f7.html';
+import StaticPagePointReward from '../pages/static-page-point-reward.f7.html';
 import CartsPage from '../pages/carts-page.f7.html';
 import InboxPage from '../pages/inbox.f7.html';
 // import account page
@@ -83,6 +84,11 @@ var routes = [
     path: '/join-reseller/',
     component: StaticPageJoinReseller,
   },
+  {
+    path: '/point-reward/',
+    component: StaticPagePointReward,
+  },
+
   {
     path: '/kategori/',
     component: KategoriPage,
