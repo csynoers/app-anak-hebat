@@ -94,7 +94,7 @@
           <li><a href="/account-profil-saya/" class="text-color-gray" style="font-size: 12px;">Profil Saya</a></li>
           <li><a href="/account-alamat-saya/" class="text-color-gray" style="font-size: 12px;">Alamat Saya</a></li>
           <li><a href="/account-ubah-password/" class="text-color-gray" style="font-size: 12px;">Ubah Password</a></li>
-          <li class="padding-horizontal padding"><button class="button button-fill color-red">LOGOUT</button></li>
+          <li class="padding-horizontal padding"><button class="button button-fill color-red" @click="logOut">LOGOUT</button></li>
         </ul>
       </div>
     </div>
@@ -107,7 +107,7 @@
               <div class="item-inner">
                 <div class="item-title item-floating-label">Email</div>
                 <div class="item-input-wrap">
-                  <input name="email" type="email" placeholder="email@gmail.com" required>
+                  <input name="email" type="email" placeholder="email@gmail.com" required autocomplete="off">
                   <span class="input-clear-button"></span>
                 </div>
               </div>
@@ -116,7 +116,7 @@
               <div class="item-inner">
                 <div class="item-title item-floating-label">Password</div>
                 <div class="item-input-wrap">
-                  <input name="password" type="password" placeholder="********" required>
+                  <input name="password" type="password" placeholder="********" required autocomplete="off">
                   <span class="input-clear-button"></span>
                 </div>
               </div>
@@ -244,7 +244,7 @@
 
         self.$app.localforage.getItem('users', function (err, value) {
           // if err is non-null, we got an error. otherwise, value is the value
-          if (err) {
+          if (err===null) {
             $$('#navbarUserLogInPage, #pageUserLogIn').addClass("display-block");
             $$('#navbarUserAccount, #navbarUserRegisterPage, #pageUserAccount, #pageUserRegister').addClass('display-none');
     
@@ -306,6 +306,17 @@
         var self = this;
         self.$app.dialog.alert('Hello World');
       },
+      logOut: function() {
+        let self = this;
+        self.$app.localforage.clear().then(function() {
+          // Run this code once the database has been entirely deleted.
+          console.log('Database is now empty.');
+          self.userLogInPage();
+        }).catch(function(err) {
+          // This code runs if there were any errors
+          console.log(err);
+        });
+      }
     },
     // Page Events
     on: {
