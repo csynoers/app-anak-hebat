@@ -1,58 +1,181 @@
 <template>
 <div class="page" data-name="account-page">
-  <div class="navbar">
-    <div class="navbar-bg"></div>
-    <div class="navbar-inner sliding">
-      <div class="left">
-        <a href="#">
-          <i class="icon f7-icons padding-left">person_alt_circle</i>
-        </a>
-      </div>
-      <div class="title">Developer</div>
-      <div class="right">
-        <a href="/keranjang/" class="link icon-only tab-link">
-          <i class="icon f7-icons">cart<span class="badge color-red cart-label" style="display: none;">0</span></i>
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="page-content">
-    <!-- <div class="block-title">Informasi akun</div> -->
-    <div class="card">
-      <div class="card-header"><a href="/pesanan/selesai" class="link text-color-black" style="font-size: 13px;"><i class="icon f7-icons" >square_list</i> Pesanan Saya</a><a href="/pesanan/selesai" class="link text-color-black" style="font-size: 13px;">Lihat Riwayat Pesanan <i class="icon f7-icons padding-top-half" style="font-size: 12px;">chevron_right</i></a></div>
-      <div class="card-content card-content-padding">
-        <div class="row">
-          <a href="/pesanan/belum-bayar" class="col" style="display: grid;">
-            <i class="icon f7-icons" style="width: auto;"><img class="" src="static/icons/wallet.png" alt=""></i>
-            <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Belum Bayar</span>
+  <!-- navbar user content page -->
+  <div id="navbarUserAccount">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#">
+            <i class="icon f7-icons padding-left">person_alt_circle</i>
           </a>
-          <a href="/pesanan/dikemas" class="col" style="display: grid;">
-            <i class="icon f7-icons" style="width: auto;"><img class="" src="static/icons/box.png" alt=""></i>
-            <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Dikemas</span>
-          </a>
-          <a href="/pesanan/dikirim" class="col" style="display: grid;">
-            <i class="icon f7-icons" style="width: auto;"><img class="" src="static/icons/delivery-truck.png" alt=""></i>
-            <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Dikirim</span>
+        </div>
+        <div class="title">Developer</div>
+        <div class="right">
+          <a href="/keranjang/" class="link icon-only tab-link">
+            <i class="icon f7-icons">cart<span class="badge color-red cart-label" style="display: none;">0</span></i>
           </a>
         </div>
       </div>
-    </div>    
-    <div class="list links-list">
-      <ul>
-        <li>
-          <div class="item-content">
-            <div class="item-media"><i class="f7-icons icon padding-left-half">gear_alt</i></div>
-            <div class="item-inner">
-              <div class="item-title">Pengaturan Akun</div>
-            </div>
-          </div>
-        </li>
-        <li><a href="/account-profil-saya/" class="text-color-gray" style="font-size: 12px;">Profil Saya</a></li>
-        <li><a href="/account-alamat-saya/" class="text-color-gray" style="font-size: 12px;">Alamat Saya</a></li>
-        <li><a href="/account-ubah-password/" class="text-color-gray" style="font-size: 12px;">Ubah Password</a></li>
-        <li class="padding-horizontal padding"><button class="button button-fill color-red">LOGOUT</button></li>
-      </ul>
     </div>
+  </div>
+
+  <!-- navbar user log in page -->
+  <div id="navbarUserLogInPage">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#">
+            <i class="icon f7-icons padding-left">person_alt_circle</i>
+          </a>
+        </div>
+        <div class="title">Log In</div>
+        <div class="right">
+          <a href="/keranjang/" class="link icon-only tab-link">
+            <i class="icon f7-icons">cart<span class="badge color-red cart-label" style="display: none;">0</span></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- navbar user log in page -->
+  <div id="navbarUserRegisterPage">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#">
+            <i class="icon f7-icons padding-left">person_alt_circle</i>
+          </a>
+        </div>
+        <div class="title">Sign Up</div>
+        <div class="right">
+          <a href="/keranjang/" class="link icon-only tab-link">
+            <i class="icon f7-icons">cart<span class="badge color-red cart-label" style="display: none;">0</span></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div id="pageUserAccount">
+      <div class="card">
+        <div class="card-header"><a href="/pesanan/selesai" class="link text-color-black" style="font-size: 13px;"><i class="icon f7-icons" >square_list</i> Pesanan Saya</a><a href="/pesanan/selesai" class="link text-color-black" style="font-size: 13px;">Lihat Riwayat Pesanan <i class="icon f7-icons padding-top-half" style="font-size: 12px;">chevron_right</i></a></div>
+        <div class="card-content card-content-padding">
+          <div class="row">
+            <a href="/pesanan/belum-bayar" class="col" style="display: grid;">
+              <i class="icon f7-icons" style="width: auto;"><img class="" src="static/icons/wallet.png" alt=""></i>
+              <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Belum Bayar</span>
+            </a>
+            <a href="/pesanan/dikemas" class="col" style="display: grid;">
+              <i class="icon f7-icons" style="width: auto;"><img class="" src="static/icons/box.png" alt=""></i>
+              <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Dikemas</span>
+            </a>
+            <a href="/pesanan/dikirim" class="col" style="display: grid;">
+              <i class="icon f7-icons" style="width: auto;"><img class="" src="static/icons/delivery-truck.png" alt=""></i>
+              <span class="padding-top-half text-align-center text-color-gray" style="font-size: 12px;">Dikirim</span>
+            </a>
+          </div>
+        </div>
+      </div>    
+      <div class="list links-list">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-media"><i class="f7-icons icon padding-left-half">gear_alt</i></div>
+              <div class="item-inner">
+                <div class="item-title">Pengaturan Akun</div>
+              </div>
+            </div>
+          </li>
+          <li><a href="/account-profil-saya/" class="text-color-gray" style="font-size: 12px;">Profil Saya</a></li>
+          <li><a href="/account-alamat-saya/" class="text-color-gray" style="font-size: 12px;">Alamat Saya</a></li>
+          <li><a href="/account-ubah-password/" class="text-color-gray" style="font-size: 12px;">Ubah Password</a></li>
+          <li class="padding-horizontal padding"><button class="button button-fill color-red">LOGOUT</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="pageUserLogIn">
+      <form action="javascript:void(0)" id="formUserLogIn">
+        <div class="list no-hairlines-md">
+          <ul>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-floating-label">Email</div>
+                <div class="item-input-wrap">
+                  <input name="email" type="email" placeholder="email@gmail.com" required>
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-floating-label">Password</div>
+                <div class="item-input-wrap">
+                  <input name="password" type="password" placeholder="********" required>
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="padding">
+              <button type="submit" class="button button-fill">Log In</button>
+            </li>
+          </ul>
+        </div>
+      </form>
+      <div class="block text-align-center">
+        Belum punya akun ?<br>
+        <a href="#" @click="userSignUpPage">Daftar sekarang!</a> Ini sangat mudah dan tidak perlu waktu lama!
+      </div>
+    </div>
+
+    <div id="pageUserRegister">
+      <form action="javascript:void(0)" id="formUserRegister">
+        <div class="list no-hairlines-md">
+          <ul>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-floating-label">Nama</div>
+                <div class="item-input-wrap">
+                  <input name="name" type="text" placeholder="Masukan nama anda..." required>
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-floating-label">Email</div>
+                <div class="item-input-wrap">
+                  <input name="email" type="email" placeholder="email@gmail.com" required>
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-floating-label">Password</div>
+                <div class="item-input-wrap">
+                  <input name="password" type="password" placeholder="********" required>
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="padding">
+              <button type="submit" class="button button-fill">Sign Up</button>
+            </li>
+          </ul>
+        </div>
+      </form>
+      <div class="block text-align-center">
+        Sudah punya akun ?<br>
+        <a href="#" @click="userLogInPage">Masuk sekarang!</a> Ini sangat mudah dan tidak perlu waktu lama!
+      </div>
+    </div>
+
   </div>
 </div>
 </template>
@@ -69,7 +192,7 @@
       console.log('componentBeforeMount', this)
     },
     mounted() {
-      console.log('componentMounted', this);
+      console.log('componentMountedACCOUNT', this);
     },
     beforeDestroy() {
       console.log('componentBeforeDestroy', this);
@@ -113,6 +236,76 @@
             console.log(err);
         });
       },
+      userLogInPage: function(){
+        let self = this;
+        let $$ = this.$$;
+        let app = this.$app;
+        this.displayDefault();
+
+        self.$app.localforage.getItem('users', function (err, value) {
+          // if err is non-null, we got an error. otherwise, value is the value
+          if (err) {
+            $$('#navbarUserLogInPage, #pageUserLogIn').addClass("display-block");
+            $$('#navbarUserAccount, #navbarUserRegisterPage, #pageUserAccount, #pageUserRegister').addClass('display-none');
+    
+            $$('#formUserLogIn').on('submit',function(e){
+              var formData = app.form.convertToData('#formUserLogIn');
+              app.request.post('https://anakhebatindonesia.com/auth_check.php', formData, function(data){
+                if ( data.data == 'USER_NOT_FOUND' ) {
+                  app.dialog.alert('Maaf email dan password yang anda masukan tidak sesuai, silahkan coba kembali');
+                } else {
+                  app.localforage.setItem('users', data.data);
+                  self.userAccount();
+                }
+                console.log(data)
+              }, 'json')
+              // alert(JSON.stringify(formData));
+            });
+          }
+
+          if ( value ) {
+           self.userAccount(); 
+          }
+        });
+
+      },
+      userSignUpPage: function(){
+        let $$ = this.$$;
+        this.displayDefault();
+        $$('div#navbarUserRegisterPage, div#pageUserRegister').addClass("display-block");
+        $$('#navbarUserAccount, #navbarUserLogInPage, #pageUserAccount, #pageUserLogIn').addClass('display-none');
+      },
+      userAccount: function(){
+        let self = this;
+        let $$ = this.$$;
+        this.displayDefault();
+        $$('#navbarUserAccount, #pageUserAccount').addClass("display-block");
+        $$('#navbarUserLogInPage, #navbarUserRegisterPage, #pageUserLogIn, #pageUserRegister').addClass('display-none');
+
+        self.$app.localforage.getItem('users', function (err, value) {
+          // if err is non-null, we got an error. otherwise, value is the value
+          if ( value ) {
+            console.log(value)
+            self.$$('#navbarUserAccount .title').html(value.nama);
+          }
+        });
+      },
+      displayDefault: function() {
+        let $$ = this.$$;
+        $$('#navbarUserAccount, #navbarUserLogInPage, #navbarUserRegisterPage, #pageUserAccount, #pageUserLogIn, #pageUserRegister').forEach(function(a,b){
+          let self = $$(a);
+          if ( self.hasClass('display-block') ) {
+            self.removeClass('display-block');
+          }
+          if ( self.hasClass('display-none') ) {
+            self.removeClass('display-none');
+          }
+        });
+      },
+      openAlert: function () {
+        var self = this;
+        self.$app.dialog.alert('Hello World');
+      },
     },
     // Page Events
     on: {
@@ -121,10 +314,10 @@
       },
       pageInit: function(e, page) {
         console.log('pageInit', page);
-
         // update count label cart 
         this.updateCountLabelCart();
 
+        this.userLogInPage();
       },
       pageBeforeIn: function(e, page) {
         console.log('pageBeforeIn', page);
