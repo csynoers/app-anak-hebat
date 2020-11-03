@@ -199,8 +199,14 @@
                         <li class="item-content item-input">
                           <div class="item-inner">
                             <div class="item-input-wrap">
-                              <input name="city" id="autocomplete-dropdown-expand" type="text" placeholder="Kota tujuan pengiriman" required>
-                              <span class="input-clear-button"></span>
+                              <input name="city" id="autocomplete-dropdown-expand" type="text" placeholder="Kota tujuan pengiriman" required autocomplete="off">
+                            </div>
+                          </div>
+                        </li>
+                        <li class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-input-wrap">
+                              <input name="subdistrict" id="autocomplete-dropdown-expand-subdistrict" type="text" placeholder="Kecamatan tujuan pengiriman" required autocomplete="off">
                             </div>
                           </div>
                         </li>
@@ -213,6 +219,7 @@
                           </div>
                         </li>                  
                         <li class="item-content">
+                          <input name="city_id" id="cityId" type="hidden">
                           <button type="submit" class="col button button-fill">Periksa Ongkir</button>
                         </li>
                       </ul>
@@ -233,19 +240,17 @@
                 </div>
               </div>             
             `);
+            
+            $$( "#formCekOngkir #autocomplete-dropdown-expand-subdistrict" ).prop( "disabled", true );
 
             var autocompleteDropdownExpand = app.autocomplete.create({
               inputEl: '#autocomplete-dropdown-expand',
               openIn: 'dropdown',
-              typeahead: true,
-              /* If we set valueProperty to "id" then input value on select will be set according to this property */
-              // valueProperty: 'id', //object's "value" property name
-              // textProperty: 'name', //object's "text" property name
-              // limit: 20, //limit to 20 results
-              // expandInput: true, // expand input
+              valueProperty: 'city_name', //object's "value" property name
+              textProperty: 'city_name', //object's "text" property name
               source: function (query, render) {
                 var results = [];
-                if (query.length === 0) {
+                if (query.length < 3) {
                   render(results);
                   return;
                 }
@@ -263,7 +268,8 @@
                     // Find matched items
                     for (var i = 0; i < data.length; i++) {
                       // console.log(data[i].city_name.toLowerCase())
-                      if (data[i].city_name.toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(data[i].city_name);
+                      if (data[i].city_name.toLowerCase().indexOf(query.toLowerCase()) >= 0)
+                        results.push(data[i]);
                     }
                     // console.log(results)
                     // Render items by passing array with result items
@@ -271,15 +277,56 @@
                   }
                 });
               },
-              // on: {
-                // change: function (value) {
-                  // console.log(value)
-                  // Add item text value to item-after
-                  // $$('#autocomplete-standalone-multiple').find('.item-after').text(value.join(', '));
-                  // Add item value to input value
-                  // $$('#autocomplete-standalone-multiple').find('input').val(value.join(', '));
-                // }
-              // }
+              on: {
+                change: function (value) {
+                  $$('#formCekOngkir').find('#cityId').val(value[0].city_id);
+                  $$( "#formCekOngkir #autocomplete-dropdown-expand-subdistrict" ).prop( "disabled", false );
+                }
+              }
+            });
+
+            var autocompleteDropdownExpandKecamatan = app.autocomplete.create({
+              inputEl: '#formCekOngkir #autocomplete-dropdown-expand-subdistrict',
+              openIn: 'dropdown',
+              valueProperty: 'subdistrict_name', //object's "value" property name
+              textProperty: 'subdistrict_name', //object's "text" property name
+              source: function (query, render) {
+                var results = [];
+                if (query.length < 3) {
+                  render(results);
+                  return;
+                }
+                let city = $$('#formCekOngkir').find('#cityId').val();
+
+                app.request({
+                  url: 'http://m.anakhebatindonesia.com/ongkir/subdistrict',
+                  method: 'GET',
+                  dataType: 'json',
+                  //send "query" to server. Useful in case you generate response dynamically
+                  data: {
+                    city: city
+                  },
+                  success: function (data) {
+                    data = data.rajaongkir.results;
+
+                    // Find matched items
+                    for (var i = 0; i < data.length; i++) {
+                      // console.log(data[i].city_name.toLowerCase())
+                      if (data[i].subdistrict_name.toLowerCase().indexOf(query.toLowerCase()) >= 0)
+                        results.push(data[i]);
+                    }
+                    // console.log(results)
+                    // Render items by passing array with result items
+                    render(results);
+                  }
+                });
+              },
+              on: {
+                change: function (value) {
+                  console.log(value)
+                  // $$('#formCekOngkir').find('#cityId').val(value[0].city_id);
+                }
+              }
             });
 
             $$('#formCekOngkir').on('submit',function(e){
