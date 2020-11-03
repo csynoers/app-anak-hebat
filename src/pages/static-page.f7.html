@@ -220,6 +220,7 @@
                         </li>                  
                         <li class="item-content">
                           <input name="city_id" id="cityId" type="hidden">
+                          <input name="destination" id="destinationId" type="hidden">
                           <button type="submit" class="col button button-fill">Periksa Ongkir</button>
                         </li>
                       </ul>
@@ -323,8 +324,8 @@
               },
               on: {
                 change: function (value) {
+                  $$('#formCekOngkir').find('#destinationId').val(value[0].subdistrict_id);
                   console.log(value)
-                  // $$('#formCekOngkir').find('#cityId').val(value[0].city_id);
                 }
               }
             });
@@ -352,32 +353,32 @@
                   }
 
                   pageContent.find('#listCouriers').html('');
-                  results.forEach(function(item,index) {
-                    app.preloader.show();
-                    app.request.getJSON(`https://m.anakhebatindonesia.com/ongkir/cost-all?destination=${item.city_id}&weight=${getInput.weight}`, function (cost) {
-                      let listCouriersByCity = [];
-                      cost.forEach(function(itemCost,indexCost){
-                        let title = `${itemCost.code} ${itemCost.service} (${itemCost.etd}) - IDR ${itemCost.value}`;
-                        listCouriersByCity.push(`<tr><td class="label-cell">${title}</td></tr>`);
-                      })
-                      listCouriersByCity = listCouriersByCity.join('');
-                      let listCouriersByCityHTML = `
-                      <div class="data-table">
-                        <table>
-                          <thead>
-                            <tr>
-                              <th class="label-cell">Hasil pengecekan ke <b class="padding-horizontal-half">${item.city_name}</b> @ <b class="padding-horizontal-half">${getInput.weight}</b> Gram</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            ${listCouriersByCity}
-                          </tbody>
-                        </table>
-                      </div>`;
-                      pageContent.find('#listCouriers').append(listCouriersByCityHTML);
-                      app.preloader.hide();
-                    })
-                  })
+                  // results.forEach(function(item,index) {
+                  //   app.preloader.show();
+                  //   app.request.getJSON(`https://m.anakhebatindonesia.com/ongkir/cost-all?destination=${item.city_id}&weight=${getInput.weight}`, function (cost) {
+                  //     let listCouriersByCity = [];
+                  //     cost.forEach(function(itemCost,indexCost){
+                  //       let title = `${itemCost.code} ${itemCost.service} (${itemCost.etd}) - IDR ${itemCost.value}`;
+                  //       listCouriersByCity.push(`<tr><td class="label-cell">${title}</td></tr>`);
+                  //     })
+                  //     listCouriersByCity = listCouriersByCity.join('');
+                  //     let listCouriersByCityHTML = `
+                  //     <div class="data-table">
+                  //       <table>
+                  //         <thead>
+                  //           <tr>
+                  //             <th class="label-cell">Hasil pengecekan ke <b class="padding-horizontal-half">${item.city_name}</b> @ <b class="padding-horizontal-half">${getInput.weight}</b> Gram</th>
+                  //           </tr>
+                  //         </thead>
+                  //         <tbody>
+                  //           ${listCouriersByCity}
+                  //         </tbody>
+                  //       </table>
+                  //     </div>`;
+                  //     pageContent.find('#listCouriers').append(listCouriersByCityHTML);
+                  //     app.preloader.hide();
+                  //   })
+                  // })
                 }
               });
 
