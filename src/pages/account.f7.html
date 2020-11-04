@@ -141,7 +141,7 @@
               <div class="item-inner">
                 <div class="item-title item-floating-label">Nama</div>
                 <div class="item-input-wrap">
-                  <input name="name" type="text" placeholder="Masukan nama anda..." required>
+                  <input name="name" type="text" placeholder="Masukan nama anda..." required autocomplete="off">
                   <span class="input-clear-button"></span>
                 </div>
               </div>
@@ -150,7 +150,7 @@
               <div class="item-inner">
                 <div class="item-title item-floating-label">Email</div>
                 <div class="item-input-wrap">
-                  <input name="email" type="email" placeholder="email@gmail.com" required>
+                  <input name="email" type="email" placeholder="email@gmail.com" required autocomplete="off">
                   <span class="input-clear-button"></span>
                 </div>
               </div>
@@ -159,7 +159,7 @@
               <div class="item-inner">
                 <div class="item-title item-floating-label">Password</div>
                 <div class="item-input-wrap">
-                  <input name="password" type="password" placeholder="********" required>
+                  <input name="password" type="password" placeholder="********" required autocomplete="off">
                   <span class="input-clear-button"></span>
                 </div>
               </div>
@@ -270,10 +270,20 @@
 
       },
       userSignUpPage: function(){
+        // initialize
         let $$ = this.$$;
+        let app = this.$app;
+
+        // set to display default
         this.displayDefault();
+
         $$('div#navbarUserRegisterPage, div#pageUserRegister').addClass("display-block");
         $$('#navbarUserAccount, #navbarUserLogInPage, #pageUserAccount, #pageUserLogIn').addClass('display-none');
+
+        $$('#formUserRegister').on('submit',function(e){
+          let formData = app.form.convertToData(this)
+          console.log('data register',formData)
+        })
       },
       userAccount: function(){
         let self = this;
@@ -293,12 +303,12 @@
       displayDefault: function() {
         let $$ = this.$$;
         $$('#navbarUserAccount, #navbarUserLogInPage, #navbarUserRegisterPage, #pageUserAccount, #pageUserLogIn, #pageUserRegister').forEach(function(a,b){
-          let self = $$(a);
-          if ( self.hasClass('display-block') ) {
-            self.removeClass('display-block');
+          let navAndPage = $$(a);
+          if ( navAndPage.hasClass('display-block') ) {
+            navAndPage.removeClass('display-block');
           }
-          if ( self.hasClass('display-none') ) {
-            self.removeClass('display-none');
+          if ( navAndPage.hasClass('display-none') ) {
+            navAndPage.removeClass('display-none');
           }
         });
       },
