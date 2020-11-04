@@ -64,16 +64,38 @@
             </div>             
           </div>
           <div id="listCouriers" class="block no-margin-vertical"></div>
-          <!-- <div class="row text-align-center">
-            <div class="col-100">
-              <div class="preloader" style="display:none"></div>
-            </div>
-          </div>  -->
         </div>
         <div id="tab-2" class="page-content tab">
-          <div class="block text-align-justify">
-            <p>content tab 2</p>
+          <div class="blockXXX">
+            <div class="list inset">
+              <form action="javascript:void(0)" id="formCekOngkirInternasional">
+                <ul>
+                  <li class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-input-wrap">
+                        <input name="country" id="autocomplete-dropdown-expand-country" type="text" placeholder="Negara tujuan pengiriman" required autocomplete="off">
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-title item-label">Berat (Gram)</div>
+                      <div class="item-input-wrap">
+                        <input name="weight_international" type="number" placeholder="Berat kiriman" value="1000" required>
+                      </div>
+                    </div>
+                  </li>                  
+                  <li class="item-content">
+                    <div class="item-inner">
+                      <input name="country_id" id="countryId" type="hidden">
+                      <button type="submit" class="col button button-fill">Periksa Ongkir</button>
+                    </div>
+                  </li>
+                </ul>
+              </form>
+            </div>             
           </div>
+          <div id="listCouriersCountry" class="block no-margin-vertical"></div>
         </div>
       </div>
     </div>   
@@ -86,7 +108,7 @@
     mounted() {
       console.log('# STATIC PAGE ------------------------------------------------------------------');
       const self = this;
-      
+
       let page = self.$$('.page[data-name="static-page-cek-ongkir"]');
       let pageContent1 = page.find('#tab-1');
       let pageContent2 = page.find('#tab-2');
@@ -217,7 +239,7 @@
                   <tr>
                     <th class="label-cell">Kurir</th>
                     <th class="label-cell">Layanan</th>
-                    <th class="label-cell">Estimasi</th>
+                    <th class="label-cell">Estimasi(Hari)</th>
                     <th class="label-cell">Harga</th>
                   </tr>
                 </thead>
@@ -227,6 +249,100 @@
               </table>
             </div>`;
             pageContent1.find('#listCouriers').append(listCouriers);
+            self.$app.preloader.hide();
+          },
+          error: function(){
+            self.$app.preloader.hide()
+          }
+        });
+
+      });
+
+      // autocomplete negara tujuan pengiriman
+      self.$app.autocomplete.create({
+        inputEl: '#formCekOngkirInternasional #autocomplete-dropdown-expand-country',
+        openIn: 'dropdown',
+        valueProperty: 'country_name', //object's "value" property name
+        textProperty: 'country_name', //object's "text" property name
+        source: function (query, render) {
+          var results = [];
+          if (query.length < 3) {
+            render(results);
+            return;
+          }
+
+          self.$app.request({
+            url: 'static/country.json',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+
+              // Find matched items
+              for (var i = 0; i < data.length; i++) {
+                if (data[i].country_name.toLowerCase().indexOf(query.toLowerCase()) >= 0)
+                  results.push(data[i]);
+              }
+              // Render items by passing array with result items
+              render(results);
+            }
+          });
+        },
+        on: {
+          change: function (value) {
+            self.$$('#formCekOngkirInternasional').find('#countryId').val(value[0].country_id);
+          }
+        }
+      });
+
+      // event on submit formCekOngkirInternasional
+      self.$$('#formCekOngkirInternasional').on('submit',function(e){
+        let formData = self.$app.form.convertToData(this);
+        
+        self.$app.preloader.show();
+        self.$app.request({
+          url: 'http://m.anakhebatindonesia.com/ongkir/international-cost-all',
+          method: 'GET',
+          dataType: 'json',
+          data: {
+            destination : formData.country_id,
+            weight : formData.weight_international
+          },
+          success: function (data) {
+            console.log(data);
+
+            // set to empty content before push new element
+            pageContent2.find('#listCouriersCountry').html('');
+
+            let listCouriers = [];
+            data.forEach(function(item,index) {
+              listCouriers.push(`<tr>
+                <td class="label-cell">${item.name}</td>
+                <td class="label-cell">${item.service}</td>
+                <td class="label-cell">${item.etd}</td>
+                <td class="label-cell">IDR ${item.cost}</td>
+              </tr>`);
+            })
+            listCouriers = listCouriers.join('');
+            listCouriers = `
+            <div class="card data-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="label-cell" colspan="4">Hasil pengecekan ke <b class="padding-horizontal-half">${formData.country}</b> @ <b class="padding-horizontal-half">${formData.weight_international}</b> Gram</th>
+                  </tr>
+                  <tr>
+                    <th class="label-cell">Kurir</th>
+                    <th class="label-cell">Layanan</th>
+                    <th class="label-cell">Estimasi(Hari)</th>
+                    <th class="label-cell">Harga</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${listCouriers}
+                </tbody>
+              </table>
+            </div>`;
+            pageContent2.find('#listCouriersCountry').append(listCouriers);
             self.$app.preloader.hide();
           },
           error: function(){
