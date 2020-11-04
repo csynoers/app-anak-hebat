@@ -5,9 +5,13 @@ import KategoriPage from '../pages/kategori.f7.html';
 import AboutPage from '../pages/about.f7.html';
 import FormPage from '../pages/form.f7.html';
 import RegisterMember from '../pages/register-member.f7.html';
-import StaticPage from '../pages/static-page.f7.html';
+
+// import static page
+import StaticPageCekOngkir from '../pages/static-page-cek-ongkir.f7.html';
 import StaticPageJoinReseller from '../pages/static-page-join-reseller.f7.html';
 import StaticPagePointReward from '../pages/static-page-point-reward.f7.html';
+import StaticPage from '../pages/static-page.f7.html';
+
 import CartsPage from '../pages/carts-page.f7.html';
 import InboxPage from '../pages/inbox.f7.html';
 // import account page
@@ -80,6 +84,10 @@ var routes = [
     component: StaticPage,
   },
   // static page
+  {
+    path: '/cek-ongkir/',
+    component: StaticPageCekOngkir,
+  },
   {
     path: '/join-reseller/',
     component: StaticPageJoinReseller,
