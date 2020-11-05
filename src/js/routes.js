@@ -8,6 +8,7 @@ import RegisterMember from '../pages/register-member.f7.html';
 
 // import static page
 import StaticPageCekOngkir from '../pages/static-page-cek-ongkir.f7.html';
+import StaticPageCekResi from '../pages/static-page-cek-resi.f7.html';
 import StaticPageJoinReseller from '../pages/static-page-join-reseller.f7.html';
 import StaticPagePointReward from '../pages/static-page-point-reward.f7.html';
 import StaticPage from '../pages/static-page.f7.html';
@@ -87,6 +88,10 @@ var routes = [
   {
     path: '/cek-ongkir/',
     component: StaticPageCekOngkir,
+  },
+  {
+    path: '/cek-resi/',
+    component: StaticPageCekResi,
   },
   {
     path: '/join-reseller/',

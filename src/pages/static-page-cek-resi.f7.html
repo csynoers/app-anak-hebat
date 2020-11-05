@@ -1,0 +1,358 @@
+<template>
+  <div class="page" data-name="static-page-cek-resi">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Back</span>
+          </a>
+        </div>
+        <div class="title">Informasi Cek Resi</div>
+        <div class="right">
+          <a href="/keranjang/" class="link icon-only">
+            <i class="icon f7-icons">cart<span class="badge color-red cart-label"  >0</span></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="list inset">
+        <form action="javascript:void(0)" id="formCekResi">
+          <ul>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-input-wrap">
+                  <input name="waybill" type="text" placeholder="Masukan nomor resi pengiriman" required>
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">Kurir</div>
+                <div class="item-input-wrap input-dropdown-wrap">
+                  <select name="courier" id="listCouriers" required>
+                  </select>
+                </div>
+              </div>
+            </li>                  
+            <li class="item-content">
+              <div class="item-inner">
+                <button type="submit" class="col button button-fill">Lacak Paket</button>
+              </div>
+            </li>
+          </ul>
+        </form>
+      </div>
+      
+      <div id="resultCekResi" class="block"></div>
+    </div> 
+  </div>
+</template>
+<style></style>
+<script>
+  export default {
+    // Lifecycle Hooks
+    mounted() {
+      console.log('# STATIC PAGE ------------------------------------------------------------------');
+      const self = this;
+
+      let page = self.$$('.page[data-name="static-page-point-reward"]');
+      let pageContent = page.find('.page-content');
+
+      // update count label cart 
+      this.updateCountLabelCart();
+
+      // app.preloader.show();
+
+      // app.preloader.hide();
+
+      // select option couriers
+      self.$app.request({
+        url: 'http://m.anakhebatindonesia.com/ongkir/waybill-couriers',
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+          let selectOption = [];
+          data.forEach(function(item,index){
+            selectOption.push(`<option value="${item.code}">${item.name}</option>`);
+          });
+          selectOption = selectOption.join('');
+          // self.$$('#listCouriers').append(selectOption);
+          self.$$('#formCekResi #listCouriers').append(selectOption);
+        },
+        error: function (){
+          self.$$('#formCekResi #listCouriers').append(`<option value="" disabled>Not found!</option>`);
+        }
+      });
+
+      // form submit
+      self.$$('#formCekResi').on('submit',function(e){
+        let formData = self.$app.form.convertToData(this);
+        console.log(formData);
+        self.$app.preloader.show();
+        self.$app.request({
+          url: 'http://m.anakhebatindonesia.com/ongkir/waybill',
+          method: 'GET',
+          dataType: 'json',
+          data: formData,
+          success: function (data) {
+            data =  {
+   "rajaongkir":{
+      "query":{
+         "waybill":"SOCAG00183235715",
+         "courier":"jne"
+      },
+      "status":{
+         "code":200,
+         "description":"OK"
+      },
+      "result":{
+         "delivered":true,
+         "summary":{
+            "courier_code":"jne",
+            "courier_name":"Jalur Nugraha Ekakurir (JNE)",
+            "waybill_number":"SOCAG00183235715",
+            "service_code":"OKE",
+            "waybill_date":"2015-03-03",
+            "shipper_name":"IRMA F",
+            "receiver_name":"RISKA VIVI",
+            "origin":"WONOGIRI,KAB.WONOGIRI",
+            "destination":"PALEMBANG",
+            "status":"DELIVERED"
+         },
+         "details":{
+            "waybill_number":"SOCAG00183235715",
+            "waybill_date":"2015-03-03",
+            "waybill_time":"13:23",
+            "weight":"1",
+            "origin":"WONOGIRI,KAB.WONOGIRI",
+            "destination":"PALEMBANG",
+            "shippper_name":"IRMA F",
+            "shipper_address1":"WONOGIRI",
+            "shipper_address2":null,
+            "shipper_address3":null,
+            "shipper_city":"WONOGIRI",
+            "receiver_name":"RISKA VIVI",
+            "receiver_address1":"PERUMAHAN BUKIT SEJAHTERA",
+            "receiver_address2":"AF 05 RT 074\/022",
+            "receiver_address3":"PALEMBANG",
+            "receiver_city":"PALEMBANG"
+         },
+         "delivery_status":{
+            "status":"DELIVERED",
+            "pod_receiver":"RISKA",
+            "pod_date":"2015-03-05",
+            "pod_time":"13:22"
+         },
+         "manifest":[
+            {
+               "manifest_code":"1",
+               "manifest_description":"Manifested",
+               "manifest_date":"2015-03-04",
+               "manifest_time":"03:41",
+               "city_name":"SOLO"
+            },
+            {
+               "manifest_code":"2",
+               "manifest_description":"On Transit",
+               "manifest_date":"2015-03-04",
+               "manifest_time":"15:44",
+               "city_name":"JAKARTA"
+            },
+            {
+               "manifest_code":"3",
+               "manifest_description":"Received On Destination",
+               "manifest_date":"2015-03-05",
+               "manifest_time":"08:57",
+               "city_name":"PALEMBANG"
+            }
+         ]
+      }
+   }
+};
+            if ( data.rajaongkir.status.code === 400 ) {
+              self.$app.preloader.hide();
+              self.$app.dialog.alert(data.rajaongkir.status.description);
+            } else {
+              self.$$('#resultCekResi').html(`
+                <div class="data-table data-table-init card">
+                  <!-- Card Header -->
+                  <div class="card-header display-block">
+                    <!-- Table title -->
+                    <div class="data-table-title text-align-center"><strong>EXPEDISI</strong></div>
+                  </div>
+                  <div class="card-header">
+                    <!-- Table title -->
+                    <div class="data-table-title"><strong>Informasi Pengiriman</strong></div>
+                  </div>
+                  <!-- Card Content -->
+                  <div class="card-content">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td class="label-cell">No Resi</td>
+                          <td class="label-cell"><strong>CGK2H03789568816</strong></td>
+                        </tr>
+                        <tr>
+                          <td class="label-cell">Status</td>
+                          <td class="label-cell"><strong>On Process</strong></td>
+                        </tr>
+                        <tr>
+                          <td class="label-cell">Service</td>
+                          <td class="label-cell">REG</td>
+                        </tr>
+                        <tr>
+                          <td class="label-cell">Dikirim tanggal</td>
+                          <td class="label-cell">2016-10-08</td>
+                        </tr>
+                        <tr>
+                          <td class="label-cell">Dikirim oleh</td>
+                          <td class="label-cell">WWW ALATCUKUR RAMBUT
+                            JAKARTA</td>
+                        </tr>
+                        <tr>
+                          <td class="label-cell">Dikirim ke</td>
+                          <td class="label-cell">HARTONO
+                            CICENDO,BANDUNG</td>
+                        </tr>
+                        <tr>
+                          <td class="label-cell">JNE Status</td>
+                          <td class="label-cell">On Process</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="data-table data-table-init card">
+                  <!-- Card Header -->
+                  <div class="card-header">
+                    <!-- Table title -->
+                    <div class="data-table-title"><strong>Delivery Time</strong></div>
+                  </div>
+                  <!-- Card Content -->
+                  <div class="card-content">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td class="label-cell"><strong>Tanggal</strong></td>
+                          <td class="label-cell"><strong>Keterangan</strong></td>
+                        </tr>
+                        <tr>
+                          <td class="label-cell">08-10-2016 16:45</td>
+                          <td class="label-cell">SHIPMENT RECEIVED BY JNE COUNTER OFFICER AT [JAKARTA]</td>
+                        </tr>
+                        <tr>
+                          <td class="label-cell">11-10-2016 07:53</td>
+                          <td class="label-cell">WITH DELIVERY COURIER [BANDUNG]</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>              
+              `);
+              self.$app.preloader.hide()
+            }
+            // set to empty content before push new element
+            // pageContent1.find('#listCouriers').html('');
+
+            // let listCouriers = [];
+            // data.forEach(function(item,index) {
+            //   listCouriers.push(`<tr>
+            //     <td class="label-cell">${item.name}</td>
+            //     <td class="label-cell">${item.service}</td>
+            //     <td class="label-cell">${item.etd}</td>
+            //     <td class="label-cell">IDR ${item.value}</td>
+            //   </tr>`);
+            // })
+            // listCouriers = listCouriers.join('');
+            // listCouriers = `
+            // <div class="card data-table">
+            //   <table>
+            //     <thead>
+            //       <tr>
+            //         <th class="label-cell" colspan="4">Hasil pengecekan ke <b class="padding-horizontal-half">${formData.subdistrict}, ${formData.city}</b> @ <b class="padding-horizontal-half">${formData.weight}</b> Gram</th>
+            //       </tr>
+            //       <tr>
+            //         <th class="label-cell">Kurir</th>
+            //         <th class="label-cell">Layanan</th>
+            //         <th class="label-cell">Estimasi(Hari)</th>
+            //         <th class="label-cell">Harga</th>
+            //       </tr>
+            //     </thead>
+            //     <tbody>
+            //       ${listCouriers}
+            //     </tbody>
+            //   </table>
+            // </div>`;
+            // pageContent1.find('#listCouriers').append(listCouriers);
+            // self.$app.preloader.hide();
+          },
+          error: function(){
+            self.$app.preloader.hide()
+          }
+        });
+
+      });
+      
+    },
+    // Component Methods
+    methods: {
+      toolbarBottomHide: function() {
+        let $$ = this.$$;
+        $$('.toolbar-main').hide();
+      },
+      updateCountLabelCart: function () {
+        let $$ = this.$$;
+        let app = this.$app;
+
+        let cartLabel = $$('.cart-label');
+
+        app.localforage.getItem('carts').then(function(value) {
+            // This code runs once the value has been loaded
+            // from the offline store.
+            if ( value.rowsData ) {
+              let cartRows = value.rowsData.length;
+              cartLabel.text(cartRows);
+              cartLabel.css({"display" : "inline-flex"});
+            }
+            
+            // console.log();
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
+      },
+    },
+    // Page Events
+    on: {
+      pageMounted: function(e, page) {
+        console.log('pageMounted', page);
+      },
+      pageInit: function(e, page) {
+        console.log('pageInit', page);
+      },
+      pageBeforeIn: function(e, page) {
+        console.log('pageBeforeIn', page);
+
+        // hide toolbar in this page
+        this.toolbarBottomHide();
+
+      },
+      pageAfterIn: function(e, page) {
+        console.log('pageAfterIn', page);
+      },
+      pageBeforeOut: function(e, page) {
+        console.log('pageBeforeOut', page);
+      },
+      pageAfterOut: function(e, page) {
+        console.log('pageAfterOut', page);
+      },
+      pageBeforeRemove: function(e, page) {
+        console.log('pageBeforeRemove', page);
+      },
+    }
+  }
+</script>
