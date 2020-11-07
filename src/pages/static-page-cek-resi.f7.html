@@ -99,90 +99,37 @@
           dataType: 'json',
           data: formData,
           success: function (data) {
-            data =  {
-   "rajaongkir":{
-      "query":{
-         "waybill":"SOCAG00183235715",
-         "courier":"jne"
-      },
-      "status":{
-         "code":200,
-         "description":"OK"
-      },
-      "result":{
-         "delivered":true,
-         "summary":{
-            "courier_code":"jne",
-            "courier_name":"Jalur Nugraha Ekakurir (JNE)",
-            "waybill_number":"SOCAG00183235715",
-            "service_code":"OKE",
-            "waybill_date":"2015-03-03",
-            "shipper_name":"IRMA F",
-            "receiver_name":"RISKA VIVI",
-            "origin":"WONOGIRI,KAB.WONOGIRI",
-            "destination":"PALEMBANG",
-            "status":"DELIVERED"
-         },
-         "details":{
-            "waybill_number":"SOCAG00183235715",
-            "waybill_date":"2015-03-03",
-            "waybill_time":"13:23",
-            "weight":"1",
-            "origin":"WONOGIRI,KAB.WONOGIRI",
-            "destination":"PALEMBANG",
-            "shippper_name":"IRMA F",
-            "shipper_address1":"WONOGIRI",
-            "shipper_address2":null,
-            "shipper_address3":null,
-            "shipper_city":"WONOGIRI",
-            "receiver_name":"RISKA VIVI",
-            "receiver_address1":"PERUMAHAN BUKIT SEJAHTERA",
-            "receiver_address2":"AF 05 RT 074\/022",
-            "receiver_address3":"PALEMBANG",
-            "receiver_city":"PALEMBANG"
-         },
-         "delivery_status":{
-            "status":"DELIVERED",
-            "pod_receiver":"RISKA",
-            "pod_date":"2015-03-05",
-            "pod_time":"13:22"
-         },
-         "manifest":[
-            {
-               "manifest_code":"1",
-               "manifest_description":"Manifested",
-               "manifest_date":"2015-03-04",
-               "manifest_time":"03:41",
-               "city_name":"SOLO"
-            },
-            {
-               "manifest_code":"2",
-               "manifest_description":"On Transit",
-               "manifest_date":"2015-03-04",
-               "manifest_time":"15:44",
-               "city_name":"JAKARTA"
-            },
-            {
-               "manifest_code":"3",
-               "manifest_description":"Received On Destination",
-               "manifest_date":"2015-03-05",
-               "manifest_time":"08:57",
-               "city_name":"PALEMBANG"
-            }
-         ]
-      }
-   }
-};
             if ( data.rajaongkir.status.code === 400 ) {
               self.$app.preloader.hide();
               self.$app.dialog.alert(data.rajaongkir.status.description);
             } else {
+              let summary = data.rajaongkir.result.summary;
+              let details = data.rajaongkir.result.details;
+              let manifest = data.rajaongkir.result.manifest;
+              let manifestHTML = [];
+              
+              // manifestHTML.push(`
+              //   <tr>
+              //     <td class="label-cell">${self.convertDate(details.waybill_date)} ${details.waybill_time}</td>
+              //     <td class="label-cell">SHIPMENT RECEIVED BY ${summary.courier_code.toUpperCase()} COUNTER OFFICER AT [${details.origin}]</td>
+              //   </tr>
+              // `);
+              manifest.forEach( function(item,index){
+                let keterangan = (index==0) ? `SHIPMENT RECEIVED BY ${summary.courier_code.toUpperCase()} COUNTER OFFICER AT [${item.city_name}]` : `${item.manifest_description} [${item.city_name}]` ;
+                manifestHTML.push(`
+                  <tr>
+                    <td class="label-cell">${self.convertDate(item.manifest_date)} ${item.manifest_time}</td>
+                    <td class="label-cell">${keterangan}</td>
+                  </tr>
+                `);
+              } );
+
               self.$$('#resultCekResi').html(`
                 <div class="data-table data-table-init card">
                   <!-- Card Header -->
                   <div class="card-header display-block">
                     <!-- Table title -->
-                    <div class="data-table-title text-align-center"><strong>EXPEDISI</strong></div>
+                    <div class="data-table-title text-align-center"><strong>EXPEDISI : ${summary.courier_name}</strong></div>
                   </div>
                   <div class="card-header">
                     <!-- Table title -->
@@ -194,33 +141,31 @@
                       <tbody>
                         <tr>
                           <td class="label-cell">No Resi</td>
-                          <td class="label-cell"><strong>CGK2H03789568816</strong></td>
+                          <td class="label-cell"><strong>${summary.waybill_number}</strong></td>
                         </tr>
                         <tr>
                           <td class="label-cell">Status</td>
-                          <td class="label-cell"><strong>On Process</strong></td>
+                          <td class="label-cell"><strong>${summary.status}</strong></td>
                         </tr>
                         <tr>
                           <td class="label-cell">Service</td>
-                          <td class="label-cell">REG</td>
+                          <td class="label-cell">${summary.service_code}</td>
                         </tr>
                         <tr>
                           <td class="label-cell">Dikirim tanggal</td>
-                          <td class="label-cell">2016-10-08</td>
+                          <td class="label-cell">${self.convertDate(summary.waybill_date)}</td>
                         </tr>
                         <tr>
                           <td class="label-cell">Dikirim oleh</td>
-                          <td class="label-cell">WWW ALATCUKUR RAMBUT
-                            JAKARTA</td>
+                          <td class="label-cell">${summary.shipper_name}</td>
                         </tr>
                         <tr>
                           <td class="label-cell">Dikirim ke</td>
-                          <td class="label-cell">HARTONO
-                            CICENDO,BANDUNG</td>
+                          <td class="label-cell">${summary.receiver_name}, ${summary.destination}</td>
                         </tr>
                         <tr>
-                          <td class="label-cell">JNE Status</td>
-                          <td class="label-cell">On Process</td>
+                          <td class="label-cell"><span>${summary.courier_code.toUpperCase()}</span> Status</td>
+                          <td class="label-cell">${data.rajaongkir.result.delivery_status.status}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -240,14 +185,7 @@
                           <td class="label-cell"><strong>Tanggal</strong></td>
                           <td class="label-cell"><strong>Keterangan</strong></td>
                         </tr>
-                        <tr>
-                          <td class="label-cell">08-10-2016 16:45</td>
-                          <td class="label-cell">SHIPMENT RECEIVED BY JNE COUNTER OFFICER AT [JAKARTA]</td>
-                        </tr>
-                        <tr>
-                          <td class="label-cell">11-10-2016 07:53</td>
-                          <td class="label-cell">WITH DELIVERY COURIER [BANDUNG]</td>
-                        </tr>
+                        ${manifestHTML.join('')}
                       </tbody>
                     </table>
                   </div>
@@ -255,40 +193,6 @@
               `);
               self.$app.preloader.hide()
             }
-            // set to empty content before push new element
-            // pageContent1.find('#listCouriers').html('');
-
-            // let listCouriers = [];
-            // data.forEach(function(item,index) {
-            //   listCouriers.push(`<tr>
-            //     <td class="label-cell">${item.name}</td>
-            //     <td class="label-cell">${item.service}</td>
-            //     <td class="label-cell">${item.etd}</td>
-            //     <td class="label-cell">IDR ${item.value}</td>
-            //   </tr>`);
-            // })
-            // listCouriers = listCouriers.join('');
-            // listCouriers = `
-            // <div class="card data-table">
-            //   <table>
-            //     <thead>
-            //       <tr>
-            //         <th class="label-cell" colspan="4">Hasil pengecekan ke <b class="padding-horizontal-half">${formData.subdistrict}, ${formData.city}</b> @ <b class="padding-horizontal-half">${formData.weight}</b> Gram</th>
-            //       </tr>
-            //       <tr>
-            //         <th class="label-cell">Kurir</th>
-            //         <th class="label-cell">Layanan</th>
-            //         <th class="label-cell">Estimasi(Hari)</th>
-            //         <th class="label-cell">Harga</th>
-            //       </tr>
-            //     </thead>
-            //     <tbody>
-            //       ${listCouriers}
-            //     </tbody>
-            //   </table>
-            // </div>`;
-            // pageContent1.find('#listCouriers').append(listCouriers);
-            // self.$app.preloader.hide();
           },
           error: function(){
             self.$app.preloader.hide()
@@ -325,6 +229,11 @@
             console.log(err);
         });
       },
+      convertDate: function (inputFormat) {
+        function pad(s) { return (s < 10) ? '0' + s : s; }
+        var d = new Date(inputFormat)
+        return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('-')
+      }
     },
     // Page Events
     on: {
