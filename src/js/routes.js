@@ -15,8 +15,13 @@ import StaticPage from '../pages/static-page.f7.html';
 
 import CartsPage from '../pages/carts-page.f7.html';
 import InboxPage from '../pages/inbox.f7.html';
+
 // import account page
 import AccountPage from '../pages/account.f7.html';
+import AccountUserLogInPage from '../pages/account-user-login.f7.html';
+import AccountUserSignUpPage from '../pages/account-user-signup.f7.html';
+import AccountUserPage from '../pages/account-user.f7.html';
+
 import AccountProfilSayaPage from '../pages/account-profil-saya.f7.html';
 import AccountUbahPasswordPage from '../pages/account-ubah-password.f7.html';
 import AccountAlamatSayaPage from '../pages/account-alamat-saya.f7.html';
@@ -54,6 +59,19 @@ var routes = [
     path: '/akun/',
     component: AccountPage,
   },
+  {
+    path: '/account-user-login/',
+    component: AccountUserLogInPage,
+  },
+  {
+    path: '/account-user-signup/',
+    component: AccountUserSignUpPage,
+  },
+  {
+    path: '/account-user/',
+    component: AccountUserPage,
+  },
+
   {
     path: '/account-profil-saya/',
     component: AccountProfilSayaPage,
