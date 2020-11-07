@@ -70,11 +70,11 @@
 
       self.$app.localforage.getItem('users', function (err, value) {
         // if err is non-null, we got an error. otherwise, value is the value
-        if (err===null) {
+        if ( (err===null) && (value===null) ) {
           self.$router.navigate('/account-user-login/',{ transition: 'f7-fade' });
         }
         
-        if ( value ) {
+        if ( value && (err===null) ) {
           self.$router.navigate('/account-user/',{ transition: 'f7-fade' });
         }
       });
