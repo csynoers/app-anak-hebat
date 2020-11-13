@@ -13,37 +13,46 @@
       </div>
     </div>
     <div class="page-content">
-      <div class="list no-hairlines-md">
-        <ul>
-          <li class="item-content item-input">
-            <div class="item-inner">
-              <div class="item-title item-label">Name</div>
-              <div class="item-input-wrap">
-                <input type="text" placeholder="Your name" value="DEVELOPER">
-                <span class="input-clear-button"></span>
+      <form action="javascript:void(0)" id="formUserProfile">
+        <div class="list no-hairlines-md">
+          <ul>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">Name</div>
+                <div class="item-input-wrap">
+                  <input name="name" type="text" placeholder="Your name" required="">
+                  <span class="input-clear-button"></span>
+                </div>
               </div>
-            </div>
-          </li>
-          <li class="item-content item-input">
-            <div class="item-inner">
-              <div class="item-title item-label">E-mail</div>
-              <div class="item-input-wrap">
-                <input type="email" placeholder="Your e-mail" value="developer@gmail.com">
-                <span class="input-clear-button"></span>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">E-mail</div>
+                <div class="item-input-wrap">
+                  <input name="email" type="email" placeholder="Your e-mail" required="">
+                  <span class="input-clear-button"></span>
+                </div>
               </div>
-            </div>
-          </li>
-          <li class="item-content item-input">
-            <div class="item-inner">
-              <div class="item-title item-label">Phone</div>
-              <div class="item-input-wrap">
-                <input type="tel" placeholder="Your phone number" value="081234567890">
-                <span class="input-clear-button"></span>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">Phone</div>
+                <div class="item-input-wrap">
+                  <input name="phone" type="tel" placeholder="Your phone number" required="">
+                  <span class="input-clear-button"></span>
+                </div>
               </div>
-            </div>
-          </li>
-        </ul>
-      </div>
+            </li>
+            <li class="item-content">
+              <div class="item-inner">
+                <input type="hidden" name="token">
+                <input type="hidden" name="id">
+                <button type="submit" class="button button-fill">UPDATE</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -66,6 +75,35 @@
     },
     mounted() {
       console.log('componentMounted', this);
+      const self = this;
+
+      self.$app.localforage.getItem('users', function (err, value) {
+        // if err is non-null, we got an error. otherwise, value is the value        
+        if ( value && (err===null) ) {
+          let form = self.$$('form#formUserProfile');
+          form.find('input[name=name]').val(value.nama)
+          form.find('input[name=email]').val(value.email)
+          form.find('input[name=phone]').val(value.no_telp)
+          form.find('input[name=token]').val(value.token)
+          form.find('input[name=id]').val(value.id_member)
+        }
+      });
+
+      /* aksi form profile */
+      self.$$('form#formUserProfile').on('submit',function(e){
+        var formData = self.$app.form.convertToData(this);
+        console.log(formData);
+        self.$app.request.post(`https://anakhebatindonesia.com/JSON/user_update_profil.php`, formData, function(data){
+          console.log(data)
+        //   if ( data.data == 'USER_NOT_FOUND' ) {
+        //     self.$app.dialog.alert('Maaf email dan password yang anda masukan tidak sesuai, silahkan coba kembali');
+        //   } else {
+        //     self.$app.localforage.setItem('users', data.data);
+
+        //     self.$router.navigate('/account-user/',{ transition: 'f7-fade' });
+        //   }
+        }, 'json')
+      });
     },
     beforeDestroy() {
       console.log('componentBeforeDestroy', this);
