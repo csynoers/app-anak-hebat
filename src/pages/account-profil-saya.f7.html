@@ -95,6 +95,33 @@
         console.log(formData);
         self.$app.request.post(`https://anakhebatindonesia.com/JSON/user_update_profil.php`, formData, function(data){
           console.log(data)
+          if ( data.status===404 ) {
+            if ( data.result==='NO_ROW_UPDATED' ) {
+              self.$app.dialog.alert('Maaf anda belum melakukan perubahan');
+            }
+          }
+
+          if ( data.status===200 ) {
+            self.$app.localforage.getItem('users').then(function(value) {
+              // This code runs once the value has been loaded
+              // from the offline store.
+              value.nama = data.result.nama;
+              value.email = data.result.email;
+              value.no_telp = data.result.phone;
+              value.token = data.result.token;
+
+              self.$app.localforage.setItem('users', value).then(function (value) {
+                // Do other things once the value has been saved.
+                self.$app.dialog.alert('Data berhasil diubah');
+              }).catch(function(err) {
+                // This code runs if there were any errors
+                console.log(err);
+              });
+            }).catch(function(err) {
+              // This code runs if there were any errors
+              console.log(err);
+            });
+          }
         //   if ( data.data == 'USER_NOT_FOUND' ) {
         //     self.$app.dialog.alert('Maaf email dan password yang anda masukan tidak sesuai, silahkan coba kembali');
         //   } else {
