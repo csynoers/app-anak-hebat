@@ -58,12 +58,17 @@
 
       app.preloader.show();
 
-      app.localforage.getItem('users', function (d) {
-        if ( d ) {
-          pageContent1.html(`<h2 style="height:100vh;padding-top:calc(100vh*0.25)">${d.pointReward} pts</h2>`);
-        } else {
-          pageContent1.html(`<p style="height:100vh;padding-top:calc(100vh*0.25)">Maaf informasi point anda belum tersedia, silahkan Log In terlebih dahulu</p>`);
+      app.localforage.getItem('users').then(function(value) {
+        // This code runs once the value has been loaded
+        // from the offline store.
+        console.log(value);
+        if ( value ) {
+          pageContent1.html(`<h2 style="height:100vh;padding-top:calc(100vh*0.25)">${value.point_member} pts</h2>`);
         }
+      }).catch(function(err) {
+        // This code runs if there were any errors
+        console.log(err);
+        pageContent1.html(`<p style="height:100vh;padding-top:calc(100vh*0.25)">Maaf informasi point anda belum tersedia, silahkan Log In terlebih dahulu</p>`);
       });
 
       // get content info point reward
