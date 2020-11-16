@@ -113,6 +113,7 @@
               self.$app.localforage.setItem('users', value).then(function (value) {
                 // Do other things once the value has been saved.
                 self.$app.dialog.alert('Data berhasil diubah');
+                self.$router.back('/account-user/',{force: true})
               }).catch(function(err) {
                 // This code runs if there were any errors
                 console.log(err);

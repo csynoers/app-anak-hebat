@@ -114,7 +114,7 @@
         app.localforage.getItem('carts').then(function(value) {
             // This code runs once the value has been loaded
             // from the offline store.
-            if ( value.rowsData ) {
+            if ( value ) {
               let cartRows = value.rowsData.length;
               cartLabel.text(cartRows);
               cartLabel.css({"display" : "inline-flex"});
@@ -136,7 +136,7 @@
           // This code runs if there were any errors
           console.log(err);
         });
-      }
+      },
     },
     // Page Events
     on: {
@@ -149,31 +149,12 @@
         this.updateCountLabelCart();
 
         // this.userLogInPage();
-        const self = this;
-        console.log(self.$router);
-        // self.$router.navigate(self.$router.currentRoute.url, {
-        //   reloadCurrent: true,
-        //   ignoreCache: true,
-        // });
-        // this.$$('#view-akun').on('tab:show',function(){
-        //   console.log('# HOME REFRESH',page);
-        //   page.router.navigate('/', {
-        //     reloadCurrent: true,
-        //     ignoreCache: true,
-        //   });
-        // })
       },
       pageBeforeIn: function(e, page) {
         console.log('pageBeforeIn', page);
 
         // show toolbar again when toolbar hide by other menu
         this.toolbarBottomShow();
-
-        const self = this;
-        self.$router.navigate(self.$router.currentRoute.url, {
-          reloadCurrent: true,
-          ignoreCache: true,
-        });
       },
       pageAfterIn: function(e, page) {
         console.log('pageAfterIn', page);
