@@ -149,12 +149,31 @@
         this.updateCountLabelCart();
 
         // this.userLogInPage();
+        const self = this;
+        console.log(self.$router);
+        // self.$router.navigate(self.$router.currentRoute.url, {
+        //   reloadCurrent: true,
+        //   ignoreCache: true,
+        // });
+        // this.$$('#view-akun').on('tab:show',function(){
+        //   console.log('# HOME REFRESH',page);
+        //   page.router.navigate('/', {
+        //     reloadCurrent: true,
+        //     ignoreCache: true,
+        //   });
+        // })
       },
       pageBeforeIn: function(e, page) {
         console.log('pageBeforeIn', page);
 
         // show toolbar again when toolbar hide by other menu
         this.toolbarBottomShow();
+
+        const self = this;
+        self.$router.navigate(self.$router.currentRoute.url, {
+          reloadCurrent: true,
+          ignoreCache: true,
+        });
       },
       pageAfterIn: function(e, page) {
         console.log('pageAfterIn', page);

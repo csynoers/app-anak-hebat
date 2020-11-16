@@ -68,7 +68,7 @@
           // This code runs once the value has been loaded
           // from the offline store.
           // console.log(value);
-          if ( value.rowsData ) {
+          if ( value ) {
             value.rowsData.forEach(function(a,b){
               pageContentUl.html('');
               app.request.getJSON(`https://m.anakhebatindonesia.com/books/${a.id}`, function (data) {

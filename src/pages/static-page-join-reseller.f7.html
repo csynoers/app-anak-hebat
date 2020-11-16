@@ -54,12 +54,9 @@
       let $$ = this.$$;
       let app = this.$app;
       let router = this.$router;
-      let pageName = this.$route.params.pageName;
       let page = $$('.page[data-name="static-page-join-reseller"]');
       let pageContentIn = page.find('#tab-1 p');
       let pageContentUs = page.find('#tab-2 p');
-
-      console.log( pageName );
 
       
       // $$('.toolbar-main').hide()
@@ -92,7 +89,7 @@
         app.localforage.getItem('carts').then(function(value) {
             // This code runs once the value has been loaded
             // from the offline store.
-            if ( value.rowsData ) {
+            if ( value ) {
               let cartRows = value.rowsData.length;
               cartLabel.text(cartRows);
               cartLabel.css({"display" : "inline-flex"});

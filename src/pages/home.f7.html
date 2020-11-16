@@ -433,7 +433,7 @@
         app.localforage.getItem('carts').then(function(value) {
             // This code runs once the value has been loaded
             // from the offline store.
-            if ( value.rowsData ) {
+            if ( value ) {
               let cartRows = value.rowsData.length;
               cartLabel.text(cartRows);
               cartLabel.css({"display" : "inline-flex"});
