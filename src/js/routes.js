@@ -25,7 +25,7 @@ import AccountUserPage from '../pages/account-user.f7.html';
 import AccountProfilSayaPage from '../pages/account-profil-saya.f7.html';
 import AccountUbahPasswordPage from '../pages/account-ubah-password.f7.html';
 import AccountAlamatSayaPage from '../pages/account-alamat-saya.f7.html';
-import AccountAlamatSayaDetailPage from '../pages/account-alamat-saya-detail.f7.html';
+import AccountAlamatSayaTambahPage from '../pages/account-alamat-saya-tambah.f7.html';
 
 // import pesanan page
 import PesananPage from '../pages/pesanan.f7.html';
@@ -85,8 +85,8 @@ var routes = [
     component: AccountAlamatSayaPage,
   },
   {
-    path: '/account-alamat-saya/:action',
-    component: AccountAlamatSayaDetailPage,
+    path: '/account-alamat-saya-tambah/',
+    component: AccountAlamatSayaTambahPage,
   },
 
   // pesanan
