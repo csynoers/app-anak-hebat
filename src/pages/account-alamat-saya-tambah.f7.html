@@ -107,7 +107,7 @@
             </li>
           </ul>
         </div>
-        <div class="padding" style="position: fixed;bottom: 0px;width: 90vw;">
+        <div class="padding" style="position: fixed;bottom: 0px;width: 90vw; z-index: 1;">
           <input type="hidden" name="country_id" id="countryId" >
           <input type="hidden" name="province_id" id="provinceId" >
           <input type="hidden" name="city_id" id="cityId">
@@ -241,35 +241,11 @@
         var formData = self.$app.form.convertToData(this);
         console.log(formData);
         self.$app.request.post(`https://anakhebatindonesia.com/JSON/user_address_add.php`, formData, function(data){
-          console.log(data)
-        //   if ( data.status===404 ) {
-        //     if ( data.result==='NO_ROW_UPDATED' ) {
-        //       self.$app.dialog.alert('Maaf anda belum melakukan perubahan');
-        //     }
-        //   }
 
-        //   if ( data.status===200 ) {
-        //     self.$app.localforage.getItem('users').then(function(value) {
-        //       // This code runs once the value has been loaded
-        //       // from the offline store.
-        //       value.nama = data.result.nama;
-        //       value.email = data.result.email;
-        //       value.no_telp = data.result.phone;
-        //       value.token = data.result.token;
-
-        //       self.$app.localforage.setItem('users', value).then(function (value) {
-        //         // Do other things once the value has been saved.
-        //         self.$app.dialog.alert('Data berhasil diubah');
-        //         self.$router.back('/account-user/',{force: true})
-        //       }).catch(function(err) {
-        //         // This code runs if there were any errors
-        //         console.log(err);
-        //       });
-        //     }).catch(function(err) {
-        //       // This code runs if there were any errors
-        //       console.log(err);
-        //     });
-        //   }
+          if ( data.status===200 ) {
+            self.$app.dialog.alert('Alamat Baru berhasil ditambahkan');
+            self.$router.back('/account-alamat-saya/',{force: true});
+          }
 
         }, 'json')
       });
