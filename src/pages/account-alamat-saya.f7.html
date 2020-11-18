@@ -13,15 +13,7 @@
       </div>
     </div>
     <div class="page-content">
-      <div>
-        <div class="card">
-          <div class="card-content padding">
-            <!-- Card content -->
-            <p>JOGJASITE</p>
-            <p>Selatan RSUD, Jl. Ki Ageng Pemanahan Wirosaban No.30A, Sorosutan, Kec. Umbulharjo, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55162</p>
-          </div>
-        </div>
-      </div>
+      <div id="contentAlamat"></div>
       <div class="padding" >
         <a class="button button-outline" href="/account-alamat-saya-tambah/">
           <span>Tambah Alamat Baru</span>
@@ -50,6 +42,48 @@
     },
     mounted() {
       console.log('componentMounted', this);
+
+      const self = this;
+      let page = self.$$('.page[data-name="account-profil-saya-page"]');
+      let pageContent = page.find('.page-content');
+      let pageContentAddress = pageContent.find('#contentAlamat');
+
+      console.log(pageContentAddress)
+
+      self.$app.localforage.getItem('users').then(function(value) {
+          // This code runs once the value has been loaded
+          // from the offline store.
+          // console.log(value);
+          if ( value ) {
+            self.$app.request.get(`https://anakhebatindonesia.com/JSON/user_address.php`,{"token":value.token},function(data){
+
+              if ( data.status===200 ) {
+                data.result.forEach(function(item,index){
+                  let orderText = (item.orders=='primary') ? `<span class="text-color-red">[Utama]</span>` : '' ;
+                  pageContentAddress.append(`
+                    <a href="/account-alamat-saya-edit/${item.address_id}" style="color: unset;">
+                      <div class="card">
+                        <div class="card-content padding">
+                          <p><strong>${item.address_content.fullname}</strong> ${orderText}<br><small>${item.address_content.phone}</small></p>
+                          <p>${item.address_text}</p>
+                        </div>
+                      </div>
+                    </a>
+                  `);
+                  console.log(item)
+                });
+                // self.$router.back('/account-alamat-saya/',{force: true});
+              }
+        
+            }, 'json')
+          }
+
+      }).catch(function(err) {
+          // This code runs if there were any errors
+          console.log(err);
+      });
+
+
     },
     beforeDestroy() {
       console.log('componentBeforeDestroy', this);
