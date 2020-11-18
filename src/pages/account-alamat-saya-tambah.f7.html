@@ -81,7 +81,7 @@
             <li class="item-content item-input">
               <div class="item-inner">
                 <div class="item-input-wrap">
-                  <input name="addressfull" type="text" placeholder="Nama Jalan, Gedung, No. Rumah/Unit" required>
+                  <input name="addressfull" id="form-input-addressfull" type="text" placeholder="Nama Jalan, Gedung, No. Rumah/Unit" required>
                   <span class="input-clear-button"></span>
                 </div>
               </div>
@@ -94,6 +94,17 @@
                 </div>
               </div>
             </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-input-wrap">
+                  <span>Atur sebagai Alamat Utama</span>
+                  <label class="color-blue float-right padding-vertical-half toggle toggle-init">
+                    <input name="set_address" type="checkbox" >
+                    <span class="toggle-icon"></span>
+                  </label>
+                </div>
+              </div>
+            </li>
           </ul>
         </div>
         <div class="padding" style="position: fixed;bottom: 0px;width: 90vw;">
@@ -103,6 +114,7 @@
           <input type="hidden" name="city_type" id="form-input-citytype" >
           <input type="hidden" name="subdistrict_id" id="subdistrictId" >
           <input type="hidden" name="subdistrict_type" id="form-input-subdistricttype" >
+          <input type="hidden" name="token" id="form-input-token" >
           <button type="submit" class="button button-fill">KIRIM</button>
         </div>
       </form>
@@ -132,50 +144,75 @@
       const self = this;
 
       // destination event: domestik/international
-      // jika domestik :
-      // setting default form
-      // 1. hide input negara & call autocomplete country destroy
-      // 2. call autocomplete provinsi
-      // 3. call autocomplete Kota/Kabupaten
-      // 4. call autocomplete Kecamatan
-      
-      // jika internasional :
-      // setting default form
-      // 1. display input negara & call autocomplete country
-      // 2. call autocomplete provinsi
-      // 3. call autocomplete Kota/Kabupaten
-      // 4. call autocomplete Kecamatan
       self.$$('form#formNewAddress select#form-input-destinationtype').on('change',function(){
         if ( self.$$(this).val() == 'internasional' ) {
-          // call autocomplete country selection
-          self.autocompleteCountry()
+          // show input country
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').closest('.item-content').setAttribute('style','display: block');
+          // add required country
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').required = true;
 
-          // call autocomplete province destroy
-          self.autocompleteProvinceDestroy()
-          
-          // call autocomplete kota/Kabupaten destroy
-          self.autocompleteCityDestroy()
-          
-          // call autocomplete kecamatan destroy
-          self.autocompleteSubDistrictDestroy()
+          // hide input province
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-province').closest('.item-content').setAttribute('style','display: none');
+          // remove required province
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-province').required = false;
+
+          // hide input city
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-city').closest('.item-content').setAttribute('style','display: none');
+          // remove required city
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-city').required = false;
+
+          // hide input subdistrict
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-subdistrict').closest('.item-content').setAttribute('style','display: none');
+          // remove required subdistrict
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-subdistrict').required = false;
+
+          // hide input postalcode
+          document.querySelector('form#formNewAddress input#form-input-postalcode').closest('.item-content').setAttribute('style','display: none');
+          // remove required postalcode
+          document.querySelector('form#formNewAddress input#form-input-postalcode').required = false;
+
+          // change placeholder input addressfull
+          document.querySelector('form#formNewAddress input#form-input-addressfull').setAttribute('placeholder','Rincian Alamat Lengkap');
 
         } else {
-          // call autocomplete country destroy
-          self.autocompleteCountryDestroy()
+          // hide input country
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').closest('.item-content').setAttribute('style','display: none');
+          // remove required country
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').required = false;
 
-          // call autocomplete province
-          self.autocompleteProvince()
+          // show input province
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-province').closest('.item-content').setAttribute('style','display: block');
+          // add required province
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-province').required = true;
 
-          // call autocomplete kota/Kabupaten
-          self.autocompleteCity()
+          // show input city
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-city').closest('.item-content').setAttribute('style','display: block');
+          // add required city
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-city').required = true;
 
-          // call autocomplete kecamatan
-          self.autocompleteSubDistrict()
+          // show input subdistrict
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-subdistrict').closest('.item-content').setAttribute('style','display: block');
+          // add required subdistrict
+          document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-subdistrict').required = true;
+
+          // show input postalcode
+          document.querySelector('form#formNewAddress input#form-input-postalcode').closest('.item-content').setAttribute('style','display: block');
+          // add required postalcode
+          document.querySelector('form#formNewAddress input#form-input-postalcode').required = true;
+
+          // change placeholder input addressfull
+          document.querySelector('form#formNewAddress input#form-input-addressfull').setAttribute('placeholder','Nama Jalan, Gedung, No. Rumah/Unit');
+
         }
       });
 
-      // call autocomplete country destroy
-      self.autocompleteCountryDestroy()
+      // hide input country
+      document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').closest('.item-content').setAttribute('style','display: none');
+      // remove required country
+      document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').required = false;
+      
+      // call autocomplete country
+      self.autocompleteCountry()
       
       // call autocomplete province
       self.autocompleteProvince()
@@ -186,8 +223,56 @@
       // call autocomplete kecamatan
       self.autocompleteSubDistrict()
 
+      // get token
+      self.$app.localforage.getItem('users').then(function(value) {
+          // This code runs once the value has been loaded
+          // from the offline store.
+          console.log(value);
+          if ( value ) {
+            self.$$('form#formNewAddress #form-input-token').val(value.token)
+          }
+      }).catch(function(err) {
+          // This code runs if there were any errors
+          console.log(err);
+      });
 
-      
+      /* aksi form */
+      self.$$('form#formNewAddress').on('submit',function(e){
+        var formData = self.$app.form.convertToData(this);
+        console.log(formData);
+        self.$app.request.post(`https://anakhebatindonesia.com/JSON/user_address_add.php`, formData, function(data){
+          console.log(data)
+        //   if ( data.status===404 ) {
+        //     if ( data.result==='NO_ROW_UPDATED' ) {
+        //       self.$app.dialog.alert('Maaf anda belum melakukan perubahan');
+        //     }
+        //   }
+
+        //   if ( data.status===200 ) {
+        //     self.$app.localforage.getItem('users').then(function(value) {
+        //       // This code runs once the value has been loaded
+        //       // from the offline store.
+        //       value.nama = data.result.nama;
+        //       value.email = data.result.email;
+        //       value.no_telp = data.result.phone;
+        //       value.token = data.result.token;
+
+        //       self.$app.localforage.setItem('users', value).then(function (value) {
+        //         // Do other things once the value has been saved.
+        //         self.$app.dialog.alert('Data berhasil diubah');
+        //         self.$router.back('/account-user/',{force: true})
+        //       }).catch(function(err) {
+        //         // This code runs if there were any errors
+        //         console.log(err);
+        //       });
+        //     }).catch(function(err) {
+        //       // This code runs if there were any errors
+        //       console.log(err);
+        //     });
+        //   }
+
+        }, 'json')
+      });
 
     },
     beforeDestroy() {
@@ -200,29 +285,6 @@
     data: function () {
       // Must return an object
       return {
-        address: {
-          province : {
-            id : "",
-            name : "",
-          },
-          city : {
-            id : "",
-            name : "",
-          },
-          sub_district : {
-            id : "",
-            name : "",
-          },
-          village : {
-            id : "",
-            name : "",
-          },
-          village : {
-            id : "",
-            name : "",
-          },
-          postal_code: ""
-        },
         name: 'Jimmy',
         age: 25,
         like: ['Tennis', 'Chess', 'Football'],
@@ -236,10 +298,6 @@
       },
       autocompleteCountry: function() {
         const self = this;
-        // show input country
-        document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').closest('.item-content').setAttribute('style','display: block');
-        // setAttribute required 
-        document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').required = true;
 
         self.$app.autocomplete.create({
           inputEl: 'form#formNewAddress input#autocomplete-dropdown-expand-country',
@@ -275,16 +333,6 @@
             }
           }
         });
-      },
-      autocompleteCountryDestroy: function() {
-        const self = this;
-        // destroy autocomplete country
-        self.$app.autocomplete.destroy( self.$$('form#formNewAddress input#autocomplete-dropdown-expand-country') );
-        // hide input country
-        document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').closest('.item-content').setAttribute('style','display: none');
-        // remove required
-        document.querySelector('form#formNewAddress input#autocomplete-dropdown-expand-country').required = false;
-
       },
       autocompleteProvince: function() {
         const self = this;
@@ -329,12 +377,6 @@
           }
         });
       },
-      autocompleteProvinceDestroy: function() {
-        const self = this;
-        self.$app.autocomplete.destroy( self.$$('form#formNewAddress input#autocomplete-dropdown-expand-province') );
-        self.$$("form#formNewAddress input#autocomplete-dropdown-expand-city" ).prop( "disabled", false );
-        self.$$("form#formNewAddress input#autocomplete-dropdown-expand-city" ).css({"background-color" : "unset","cursor" : "unset"});
-      },
       autocompleteCity: function() {
         const self = this;
 
@@ -378,16 +420,12 @@
             change: function (value) {
               console.log(value)
               self.$$('form#formNewAddress input#cityId').val(value[0].city_id);
-              self.$$('form#formNewAddress input#form-input-postalcode').val(value[0].postal_code);
               self.$$('form#formNewAddress input#form-input-citytype').val(value[0].type);
               self.$$("form#formNewAddress input#autocomplete-dropdown-expand-subdistrict" ).prop( "disabled", false );
               self.$$("form#formNewAddress input#autocomplete-dropdown-expand-subdistrict" ).css({"background-color" : "unset","cursor" : "unset"});
             }
           }
         });
-      },
-      autocompleteCityDestroy: function() {
-
       },
       autocompleteSubDistrict: function() {
         const self = this;
@@ -436,9 +474,7 @@
           }
         });        
       },
-      autocompleteSubDistrictDestroy: function() {
 
-      }
     },
     // Page Events
     on: {
