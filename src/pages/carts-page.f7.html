@@ -22,7 +22,7 @@
                 <div class="item-inner">
                   <div class="item-title" style="white-space: unset;">Tukarkan <span id="pointRewardCheckout">0</span> Point Reward</div>
                   <div class="item-after">
-                    <span class="margin-right">[-Rp0]</span>
+                    <span class="margin-right" id="pointRewardCheckoutConvert">[-Rp0]</span>
                     <label class="toggle" id="toggleCheckout">
                       <input type="checkbox"/>
                       <span class="toggle-icon"></span>
@@ -121,8 +121,8 @@
         // from the offline store.
         // console.log(value);
         if ( value ) {
-          console.log(value.point_member)
-          self.$$('#pointRewardCheckout').text( self.formatRupiah(value.point_member) )
+          self.$$('#pointRewardCheckout').attr("data-point-reward", value.point_member);
+          self.$$('#pointRewardCheckout').text( self.formatRupiah(value.point_member) );
         }
       }).catch(function(err) {
         // This code runs if there were any errors
@@ -136,9 +136,9 @@
           change: function () {
             console.log(this)
             if ( this.checked ) {
-              
+              self.$$('#pointRewardCheckoutConvert').css("color","#ee4d2d");
             } else {
-              
+              self.$$('#pointRewardCheckoutConvert').css("color","unset");
             }
           }
         }
