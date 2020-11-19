@@ -12,12 +12,37 @@
       <div class="title">Keranjang Belanja</div>
     </div>
   </div>
-  <div class="toolbar toolbar-bottom">
+  <div class="toolbar toolbar-bottom" style="height: calc(var(--f7-toolbar-height) *2);">
     <div class="toolbar-inner">
       <div class="block" style="width: 100vw">
-        <div class="row">
-          <div class="col">SubTotal: Rp</div>
-          <div class="col"><button type="button" class="button button-fill">Checkout</button></div>
+        <div class="list no-hairlines">
+          <ul>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-title" style="white-space: unset;">Tukarkan <span id="pointRewardCheckout">0</span> Point Reward</div>
+                  <div class="item-after">
+                    <span class="margin-right">[-Rp0]</span>
+                    <label class="toggle" id="toggleCheckout">
+                      <input type="checkbox"/>
+                      <span class="toggle-icon"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-inner">
+                  <div class="item-after">
+                    <span class="text-color-black" style="padding-top: 6px;">SubTotal: </span>
+                    <span class="margin-left-half margin-right text-currency-primary" style="font-weight: bold; padding-top: 6px;">Rp0</span>
+                    <button type="button" class="button button-fill">Checkout</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -40,12 +65,8 @@
     // Lifecycle Hooks
     mounted() {
       console.log('# CART PAGE --------------------------------------------------------------------');
-
-      // this tab show
-      // this.$$('#view-keranjang').on('tab:show',function(){
-      //   console.log('# CART SHOW',this)
-      // })
-
+      const self = this;
+      
       let $$ = this.$$;
       let route = this.$route;
       let app = this.$app;
@@ -53,16 +74,6 @@
       let pageContent = page.find('.page-content');
       let pageContentBlockTitle = page.find('.block-title');
       let pageContentUl = pageContent.find('ul');
-
-      // if ( route.hash ) {
-      //   if ( route.hash == 'from-book-details' ) {
-      //     console.log('CART FROM DETAIL',this)
-
-      //     // clear history
-      //     this.$router.clearPreviousHistory();
-      //     app.tab.show('#view-keranjang', '.link-tab-keranjang');
-      //   }
-      // }
 
       app.localforage.getItem('carts').then(function(value) {
           // This code runs once the value has been loaded
@@ -103,6 +114,35 @@
           console.log(err);
       });
       // app.request.getJSON(`https://m.anakhebatindonesia.com/books/${bookId}`, function (data) {
+
+      // set point reward
+      self.$app.localforage.getItem('users').then(function(value) {
+        // This code runs once the value has been loaded
+        // from the offline store.
+        // console.log(value);
+        if ( value ) {
+          console.log(value.point_member)
+          self.$$('#pointRewardCheckout').text( self.formatRupiah(value.point_member) )
+        }
+      }).catch(function(err) {
+        // This code runs if there were any errors
+        console.log(err);
+      });
+
+      // event toggle point reward
+      self.$app.toggle.create({
+        el: '#toggleCheckout',
+        on: {
+          change: function () {
+            console.log(this)
+            if ( this.checked ) {
+              
+            } else {
+              
+            }
+          }
+        }
+      })
     },
     // Component Methods
     methods: {
@@ -110,6 +150,19 @@
         let $$ = this.$$;
         $$('.toolbar-main').hide();
       },
+      formatRupiah: function(angka){
+        var	number_string = angka.toString(),
+        sisa 	= number_string.length % 3,
+        rupiah 	= number_string.substr(0, sisa),
+        ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+          
+        if (ribuan) {
+          let separator = sisa ? '.' : '';
+          rupiah += separator + ribuan.join('.');
+        }
+
+        return rupiah; // Hasil: 23.456.789
+      }
     },
     // Page Events
     on: {
