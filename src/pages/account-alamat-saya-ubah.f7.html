@@ -43,35 +43,35 @@
                 </div>
               </div>
             </li>
-            <li class="item-content item-input">
+            <li class="item-content item-input" style="display: none;">
               <div class="item-inner">
                 <div class="item-input-wrap">
                   <input name="country" id="autocomplete-dropdown-expand-country" type="text" placeholder="Negara" required autocomplete="off">
                 </div>
               </div>
             </li>
-            <li class="item-content item-input">
+            <li class="item-content item-input" style="display: none;">
               <div class="item-inner">
                 <div class="item-input-wrap">
                   <input name="province" id="autocomplete-dropdown-expand-province" type="text" placeholder="Provinsi" required autocomplete="off">
                 </div>
               </div>
             </li>
-            <li class="item-content item-input">
+            <li class="item-content item-input" style="display: none;">
               <div class="item-inner">
                 <div class="item-input-wrap">
                   <input name="city" id="autocomplete-dropdown-expand-city" type="text" placeholder="Kota/Kabupaten" required autocomplete="off">
                 </div>
               </div>
             </li>
-            <li class="item-content item-input">
+            <li class="item-content item-input" style="display: none;">
               <div class="item-inner">
                 <div class="item-input-wrap">
                   <input name="subdistrict" id="autocomplete-dropdown-expand-subdistrict" type="text" placeholder="Kecamatan" required autocomplete="off">
                 </div>
               </div>
             </li>
-            <li class="item-content item-input">
+            <li class="item-content item-input" style="display: none;">
               <div class="item-inner">
                 <div class="item-input-wrap">
                   <input name="postalcode" id="form-input-postalcode" type="number" placeholder="Kode Pos" required autocomplete="off">
@@ -142,7 +142,7 @@
       console.log('DETAIL ALAMAT => componentMounted', this);
 
       const self = this;
-      let addressId = this.$route.params.addressId;
+      let addressId = self.$route.params.addressId;
 
       self.$app.localforage.getItem('users').then(function(value) {
           // This code runs once the value has been loaded
@@ -150,6 +150,64 @@
           // console.log(value);
           if ( value ) {
             self.$app.request.get(`https://anakhebatindonesia.com/JSON/user_address.php`,{"token":value.token,"id":addressId},function(data){
+              data.result.forEach(function(item,index){
+                // set value Nama lengkap
+                self.$$('form#formEditAddress input[name=fullname]').val(item.address_content.fullname)
+                // set value No. Handphone
+                self.$$('form#formEditAddress input[name=phone]').val(item.address_content.phone)
+                // set value selected domestik/internasional
+                self.$$('form#formEditAddress #form-input-destinationtype').val(item.address_type)
+                
+                if ( item.address_type == 'domestik' ) {
+                  // set requied input negara to false
+                  document.querySelector('form#formEditAddress input#autocomplete-dropdown-expand-country').required = false;
+                  // show input province
+                  document.querySelector('form#formEditAddress input#autocomplete-dropdown-expand-province').closest('.item-content').setAttribute('style','display: block');
+                  // set value province
+                  self.$$('form#formEditAddress input#autocomplete-dropdown-expand-province').val(item.address_content.province)
+                  // set value city
+                  self.$$('form#formEditAddress input#autocomplete-dropdown-expand-city').val(item.address_content.city)
+                  // set value subdistrict
+                  self.$$('form#formEditAddress input#autocomplete-dropdown-expand-subdistrict').val(item.address_content.subdistrict)
+                  // set value postalcode
+                  self.$$('form#formEditAddress input#form-input-postalcode').val(item.address_content.postalcode)
+                  // change placeholder Alamat Lengkap
+                  document.querySelector('form#formEditAddress input#form-input-addressfull').setAttribute('placeholder','Nama Jalan, Gedung, No. Rumah/Unit');
+                  
+                } else {
+                  // set value country
+                  self.$$('form#formEditAddress input#autocomplete-dropdown-expand-country').val(item.address_content.country)
+                  // hide input province
+                  document.querySelector('form#formEditAddress input#autocomplete-dropdown-expand-province').closest('.item-content').setAttribute('style','display: none');
+                  // set required input province to false
+                  document.querySelector('form#formEditAddress input#autocomplete-dropdown-expand-province').required = false;
+                  // hide input city
+                  document.querySelector('form#formEditAddress input#autocomplete-dropdown-expand-city').closest('.item-content').setAttribute('style','display: none');
+                  // set required input city to false
+                  document.querySelector('form#formEditAddress input#autocomplete-dropdown-expand-city').required = false;
+                  // hide input subdistrict
+                  document.querySelector('form#formEditAddress input#autocomplete-dropdown-expand-subdistrict').closest('.item-content').setAttribute('style','display: none');
+                  // set required input subdistrict to false
+                  document.querySelector('form#formEditAddress input#autocomplete-dropdown-expand-subdistrict').required = false;
+                  // hide input postalcode
+                  document.querySelector('form#formEditAddress input#form-input-postalcode').closest('.item-content').setAttribute('style','display: none');
+                  // set required input postalcode to false
+                  document.querySelector('form#formEditAddress input#form-input-postalcode').required = true;
+                  // change placeholder Alamat Lengkap
+                  document.querySelector('form#formEditAddress input#form-input-addressfull').setAttribute('placeholder','Rincian Alamat Lengkap');
+                }
+
+                // set value Alamat Lengkap
+                self.$$('form#formEditAddress input#form-input-addressfull').val(item.address_content.addressfull)
+                // set value Alamat Optional
+                self.$$('form#formEditAddress input[name=addressoptional]').val(item.address_content.addressoptional)
+                
+                // set checked if item.orders is 'primary'
+                if ( item.orders == 'primary' ) {
+                  document.querySelector('form#formEditAddress input[name=set_address]').setAttribute('checked','')
+                }
+                
+              })
               console.log(data)
             },'json')
           }
