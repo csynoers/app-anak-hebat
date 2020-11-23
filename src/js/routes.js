@@ -13,6 +13,7 @@ import StaticPageJoinReseller from '../pages/static-page-join-reseller.f7.html';
 import StaticPagePointReward from '../pages/static-page-point-reward.f7.html';
 import StaticPage from '../pages/static-page.f7.html';
 
+import CheckoutPage from '../pages/carts-checkout.f7.html';
 import CartsPage from '../pages/carts-page.f7.html';
 import InboxPage from '../pages/inbox.f7.html';
 
@@ -41,6 +42,36 @@ import NewsDetail from '../pages/news-detail.f7.html';
 import DynamicRoutePage from '../pages/dynamic-route.f7.html';
 import RequestAndLoad from '../pages/request-and-load.f7.html';
 import NotFoundPage from '../pages/404.f7.html';
+
+function internetConnection(to, from, resolve, reject) {
+  var router = this;
+
+  // App instance
+  var app = router.app;
+
+  if (navigator.onLine) {
+    resolve()
+  } else {
+    app.dialog.alert('Maaf koneksi internet anda tidak tersedia saat ini', () => {
+      reject()
+    })
+  }
+  
+}
+
+function checkAuthorization(to, from, resolve, reject) {
+  console.log('Cek Authorization');
+  var router = this;
+
+  // App instance
+  var app = router.app;
+
+  app.localforage.getItem('users').then(value => resolve()).catch(err => {
+    app.dialog.alert('Maaf anda belum Login', () => {
+      reject()
+    })
+  });
+}
 
 function updateCart(to, from, resolve, reject) {
   var router = this;
@@ -90,6 +121,7 @@ var routes = [
   {
     path: '/',
     component: HomePage,
+    // beforeEnter: [internetConnection,updateCart],
   },
   {
     path: '/feeds/',
@@ -177,6 +209,39 @@ var routes = [
       }, 1000);
     },
     beforeEnter: [updateCart],
+  },
+  {
+    path: '/checkout/',
+    async: function (routeTo, routeFrom, resolve, reject) {
+      // Router instance
+      var router = this;
+
+      // App instance
+      var app = router.app;
+
+      // Show Preloader
+      app.preloader.show();
+
+      // Simulate Ajax Request
+      setTimeout(function () {
+        // We got user data from request
+        // Hide Preloader
+        app.preloader.hide();
+
+        // Resolve route to load page
+        resolve(
+          {
+            component: CheckoutPage,
+          },
+          {
+            context: {
+              titlePage: 'Checkout', 
+            }
+          }
+        );
+      }, 1000);
+    },
+    beforeEnter: [internetConnection,checkAuthorization,updateCart],
   },
   {
     path: '/page/:pageName',
