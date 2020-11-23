@@ -200,13 +200,20 @@
         }
       },
       getPoinReward: function(value) {
-        value.pointRewardInPercent = (value.pointReward/100000)*100;
-        value.pointRewardInConvert = (value.pointRewardInPercent/100)*value.subtotal;
-        value.pointRewardInConvertMax = 50000;
+        // value.pointRewardInPercent = (value.pointReward/100000)*100;
+        // value.pointRewardInConvert = (value.pointRewardInPercent/100)*value.subtotal;
+        // value.pointRewardInConvertMax = 50000;
+        // value.pointRewardInConvertAllowed = (value.pointRewardInConvert >= value.pointRewardInConvertMax) ? value.pointRewardInConvertMax : value.pointRewardInConvert ;
+        // value.pointRewardInPercentAllowed = (value.pointRewardInConvertAllowed/value.subtotal)*100;
+        // value.pointRewardAllowed = Math.ceil((value.pointRewardInPercentAllowed*100000)/100);
+        // value.subtotalInConvert = value.subtotal-Math.floor(value.pointRewardInConvertAllowed);
+        // value.pointRewardInPercent = (value.pointReward/100000)*100;
+
+        value.pointRewardInConvert = value.pointReward;
+        value.pointRewardInConvertMax = (25*value.subtotal)/100;
         value.pointRewardInConvertAllowed = (value.pointRewardInConvert >= value.pointRewardInConvertMax) ? value.pointRewardInConvertMax : value.pointRewardInConvert ;
-        value.pointRewardInPercentAllowed = (value.pointRewardInConvertAllowed/value.subtotal)*100;
-        value.pointRewardAllowed = Math.ceil((value.pointRewardInPercentAllowed*100000)/100);
-        value.subtotalInConvert = value.subtotal-Math.floor(value.pointRewardInConvertAllowed);
+        value.pointRewardAllowed = value.pointRewardInConvertAllowed;
+        value.subtotalInConvert = value.subtotal-value.pointRewardInConvertAllowed;
 
         return value;
       },
