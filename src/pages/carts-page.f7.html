@@ -9,7 +9,7 @@
           <span class="if-not-md">Back</span>
         </a>
       </div>
-      <div class="title">Keranjang Belanja</div>
+      <div class="title">{{titlePage}}</div>
     </div>
   </div>
   <div class="toolbar toolbar-bottom" style="height: calc(var(--f7-toolbar-height) *2);">
@@ -20,11 +20,11 @@
             <li>
               <div class="item-content">
                 <div class="item-inner">
-                  <div class="item-title" style="white-space: unset;">Tukarkan <span id="pointRewardCheckout">0</span> Point Reward</div>
+                  <div class="item-title" style="white-space: unset; font-size: small;">Tukarkan <span id="pointRewardCheckout">0</span> Point Reward</div>
                   <div class="item-after">
                     <span class="margin-right" id="pointRewardCheckoutConvert">[-Rp0]</span>
                     <label class="toggle" id="toggleCheckout">
-                      <input type="checkbox"/>
+                      <input name="togle_point" type="checkbox" data-value="off" />
                       <span class="toggle-icon"></span>
                     </label>
                   </div>
@@ -36,8 +36,8 @@
                 <div class="item-inner">
                   <div class="item-after">
                     <span class="text-color-black" style="padding-top: 6px;">SubTotal: </span>
-                    <span class="margin-left-half margin-right text-currency-primary" style="font-weight: bold; padding-top: 6px;">Rp0</span>
-                    <button type="button" class="button button-fill">Checkout</button>
+                    <span class="margin-left-half margin-right text-currency-primary" id="subTotalCheckout" style="font-weight: bold; padding-top: 6px;">Rp0</span>
+                    <button type="button" id="submitCheckout" class="button button-fill">Checkout</button>
                   </div>
                 </div>
               </div>
@@ -63,86 +63,113 @@
 <script>
   export default {
     // Lifecycle Hooks
+    beforeCreate() {
+      console.log('componentBeforeCreate', this)
+      // this.updatedCarts();
+    },
+    created() {
+      console.log('componentCreated', this)
+      // this.updatedCarts();
+    },
+    beforeMount() {
+      console.log('componentBeforeMount', this)
+
+      // this.updatedCarts();
+    },
     mounted() {
-      console.log('# CART PAGE --------------------------------------------------------------------');
-      const self = this;
-      
-      let $$ = this.$$;
-      let route = this.$route;
-      let app = this.$app;
-      let page = $$('.page[data-name=carts-page]');
-      let pageContent = page.find('.page-content');
+      console.log('# CART PAGE --------------------------------------------------------------------',this);
+      let self = this;
+      let page = self.$$('.page[data-name=carts-page]');
       let pageContentBlockTitle = page.find('.block-title');
-      let pageContentUl = pageContent.find('ul');
-
-      app.localforage.getItem('carts').then(function(value) {
-          // This code runs once the value has been loaded
-          // from the offline store.
-          // console.log(value);
-          if ( value ) {
-            value.rowsData.forEach(function(a,b){
-              pageContentUl.html('');
-              app.request.getJSON(`https://m.anakhebatindonesia.com/books/${a.id}`, function (data) {
-                pageContentUl.append(`
-                  <li class="item-content">
-                    <div class="item-media"><img src="${data.data.image.thumbnail}" width="44"/></div>
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title">${data.data.title}</div>
-                      </div>
-                      <div class="text-currency-primary"><span class="text-currency-format">Rp</span>${data.data.price.idr.text}</div>
-                      <div class="stepper stepper-small stepper-init">
-                        <div class="stepper-button-minus"></div>
-                        <div class="stepper-input-wrap">
-                          <input type="text" value="${a.qty}" min="0" max="100" step="1" readonly>
-                        </div>
-                        <div class="stepper-button-plus"></div>
-                      </div>
-                    </div>
-                  </li>              
-                `);
-                // console.log(data.data)
-              })
-            });
-            
-            pageContentBlockTitle.css({"display":"none"});
-          } else {
-            
-          }
-      }).catch(function(err) {
-          // This code runs if there were any errors
-          console.log(err);
-      });
-      // app.request.getJSON(`https://m.anakhebatindonesia.com/books/${bookId}`, function (data) {
-
-      // set point reward
-      self.$app.localforage.getItem('users').then(function(value) {
-        // This code runs once the value has been loaded
-        // from the offline store.
-        // console.log(value);
+      let pageContentUl = page.find('.page-content ul');
+      
+      self.getCarts().then(value => {
         if ( value ) {
-          self.$$('#pointRewardCheckout').attr("data-point-reward", value.point_member);
-          self.$$('#pointRewardCheckout').text( self.formatRupiah(value.point_member) );
-        }
-      }).catch(function(err) {
-        // This code runs if there were any errors
-        console.log(err);
-      });
+          value.rowsData.forEach((item,index) => {
+            pageContentUl.append(`
+              <li class="item-content cart-item-content" id="cartItemContent${index}" data-qty="${item.qty}" data-idr="${item.idr}" data-id="${item.id}">
+                <div class="item-media"><img src="${item.result.image.thumbnail}" width="44"/></div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title"><a href="/book/${item.id}">${item.result.title}</a></div>
+                  </div>
+                  <div class="text-currency-primary"><span class="text-currency-format">Rp</span>${self.formatRupiah(item.idr)}</div>
+                  <div class="stepper stepper-small">
+                    <div class="stepper-button-minus"></div>
+                    <div class="stepper-input-wrap">
+                      <input type="text" value="${item.qty}" min="0" max="100" step="1" readonly>
+                    </div>
+                    <div class="stepper-button-plus"></div>
+                  </div>
+                </div>
+              </li>              
+            `);
+          });          
+          
+          self.$$('.stepper').each(function(index, stepperEl) {
+            var stepper = self.$app.stepper.create({
+              el: stepperEl,
+              // step: 1,
+              // min: 1,
+              // max: 100,
+              // value: 1,
+              on: {
+                change: function () {
+                  let selfStepper = this;
+                  
+                  if ( this.getValue() < 1 ) {
+                    self.$app.dialog.confirm('Apakah Anda yakin ingin menghapus?', () => {
+                      // after deleted
+                      self.$$(`#cartItemContent${index}`).remove();
 
-      // event toggle point reward
-      self.$app.toggle.create({
-        el: '#toggleCheckout',
-        on: {
-          change: function () {
-            console.log(this)
-            if ( this.checked ) {
-              self.$$('#pointRewardCheckoutConvert').css("color","#ee4d2d");
-            } else {
-              self.$$('#pointRewardCheckoutConvert').css("color","unset");
-            }
-          }
+                      let pointReward = self.getPoinReward({
+                        pointReward: value.pointReward,
+                        subtotal: self.getSubtotalAfterStepper(self.$$('.cart-item-content'))
+                      });
+
+                      self.$$('#pointRewardCheckout').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
+                      self.$$('#pointRewardCheckoutConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
+                      self.$$('#subTotalCheckout').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+                    },()=>{
+                      selfStepper.setValue(1)
+                    });
+
+                  }
+
+                  self.$$(`#cartItemContent${index}`).attr('data-qty',this.getValue());
+
+                  // after updated stepper not empty
+                  let pointReward = self.getPoinReward({
+                    pointReward: value.pointReward,
+                    subtotal: self.getSubtotalAfterStepper(self.$$('.cart-item-content'))
+                  });
+
+                  self.$$('#pointRewardCheckout').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
+                  self.$$('#pointRewardCheckoutConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
+                  self.$$('#subTotalCheckout').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+
+
+                }
+              }
+            });
+          })
+
+          let pointReward = self.getPoinReward({
+            pointReward: value.pointReward,
+            subtotal: value.subtotal
+          });
+
+          self.$$('#pointRewardCheckout').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
+          self.$$('#pointRewardCheckoutConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
+          self.$$('#subTotalCheckout').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+
+          // alert display none if not empty
+          pageContentBlockTitle.css({"display":"none"});
         }
-      })
+
+      }).catch(err => console.log('carts',err));
+
+
     },
     // Component Methods
     methods: {
@@ -162,7 +189,47 @@
         }
 
         return rupiah; // Hasil: 23.456.789
+      },
+      getCarts: async function() {
+        let self = this;
+        try {
+          let rows = await self.$app.localforage.getItem('carts');
+          return rows;
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      getPoinReward: function(value) {
+        value.pointRewardInPercent = (value.pointReward/100000)*100;
+        value.pointRewardInConvert = (value.pointRewardInPercent/100)*value.subtotal;
+        value.pointRewardInConvertMax = 50000;
+        value.pointRewardInConvertAllowed = (value.pointRewardInConvert >= value.pointRewardInConvertMax) ? value.pointRewardInConvertMax : value.pointRewardInConvert ;
+        value.pointRewardInPercentAllowed = (value.pointRewardInConvertAllowed/value.subtotal)*100;
+        value.pointRewardAllowed = Math.ceil((value.pointRewardInPercentAllowed*100000)/100);
+        value.subtotalInConvert = value.subtotal-Math.floor(value.pointRewardInConvertAllowed);
+
+        return value;
+      },
+      getSubtotalAfterStepper: function(value) {
+        let self = this;
+        let subtotal = 0;
+        let rowsData = [];
+        let rowsId = [];
+        value.each((index,item)=>{
+          let id  = parseInt(self.$$(item).attr('data-id'));
+          let idr = parseInt(self.$$(item).attr('data-idr'));
+          let qty = parseInt(self.$$(item).attr('data-qty'));
+          rowsData.push({id:id,qty:qty});
+          rowsId.push(id);
+          subtotal += qty*idr;
+        })
+
+        // new set itemcarts
+        self.$app.localforage.setItem('carts',{rowsData,rowsId});
+
+        return subtotal;
       }
+      
     },
     // Page Events
     on: {
@@ -170,9 +237,38 @@
         this.toolbarBottomHide();
         // console.log(page)
       },
-      pageBeforeIn: function(e, page) {
-        // console.log(page)
-      },
+      pageInit: function() {
+        let self = this;
+
+        // event toggle point reward
+        self.$app.toggle.create({
+          el: '#toggleCheckout',
+          on: {
+            change: function () {
+              let pointReward = self.getPoinReward({
+                pointReward: self.$$('#pointRewardCheckout').data('pointreward'),
+                subtotal: self.$$('#subTotalCheckout').data('subtotal')
+              });
+
+              if ( this.checked ) {
+                self.$$('#toggleCheckout input').attr('data-value','on');
+                self.$$('#pointRewardCheckoutConvert').css("color","#ee4d2d");
+                self.$$('#subTotalCheckout').text(`Rp${self.formatRupiah(pointReward.subtotalInConvert)}`);
+              } else {
+                self.$$('#toggleCheckout input').attr('data-value','off');
+                self.$$('#pointRewardCheckoutConvert').css("color","unset");
+                self.$$('#subTotalCheckout').text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+              }
+            }
+          }
+        })
+
+        self.$$('#submitCheckout').on('click',function(){
+          console.log(self.$$('#subTotalCheckout').html())
+          console.log(self.$$('#toggleCheckout input').attr('data-value'))
+        })
+      }
+
     }
   }
 </script>

@@ -42,6 +42,50 @@ import DynamicRoutePage from '../pages/dynamic-route.f7.html';
 import RequestAndLoad from '../pages/request-and-load.f7.html';
 import NotFoundPage from '../pages/404.f7.html';
 
+function updateCart(to, from, resolve, reject) {
+  var router = this;
+
+  // App instance
+  var app = router.app;
+  console.log('before cart in');
+
+  app.localforage.getItem('carts').then((valueCarts)=>{
+    if ( valueCarts ) {
+      valueCarts.subtotal = 0;
+      valueCarts.pointReward = 0;
+
+      valueCarts.rowsData.forEach(cart=>{
+        app.request({
+          url: `https://m.anakhebatindonesia.com/books/${cart.id}`,
+          method: 'GET',
+          dataType: 'json',
+          success: (json) => {
+            if ( cart.id== parseInt(json.data.id_book) ) {
+              cart.result  = json.data;
+              cart.idr     = json.data.price.idr.value;
+              cart.total   = (cart.qty*json.data.price.idr.value);
+              
+              // update localforage carts
+              valueCarts.subtotal += cart.total;
+
+              app.localforage.getItem('users').then(user => {
+                if ( user ) {
+                  valueCarts.pointReward = parseInt(user.point_member);
+                }
+                app.localforage.setItem('carts',valueCarts)
+                // .then(tes => console.log(tes)).catch(err => console.log(err))
+
+              }).catch(err => console.log(err))
+            }
+          }
+        })
+      });
+    }
+  }).catch(err => console.error('update carts',err))
+
+  resolve()
+}
+
 var routes = [
   {
     path: '/',
@@ -101,7 +145,38 @@ var routes = [
   },
   {
     path: '/keranjang/',
-    component: CartsPage,
+    // component: CartsPage,
+    async: function (routeTo, routeFrom, resolve, reject) {
+      // console.log('TES',this)
+      // Router instance
+      var router = this;
+
+      // App instance
+      var app = router.app;
+
+      // Show Preloader
+      app.preloader.show();
+
+      // Simulate Ajax Request
+      setTimeout(function () {
+        // We got user data from request
+        // Hide Preloader
+        app.preloader.hide();
+
+        // Resolve route to load page
+        resolve(
+          {
+            component: CartsPage,
+          },
+          {
+            context: {
+              titlePage: 'Keranjang Belanja', 
+            }
+          }
+        );
+      }, 1000);
+    },
+    beforeEnter: [updateCart],
   },
   {
     path: '/page/:pageName',
@@ -169,7 +244,7 @@ var routes = [
     path: '/register-member/',
     // component: RegisterMember,
     async: function (routeTo, routeFrom, resolve, reject) {
-      console.log('TES',this)
+      // console.log('TES',this)
       // Router instance
       var router = this;
 
@@ -182,8 +257,6 @@ var routes = [
 
       // Show Preloader
       app.preloader.show();
-      // User ID from request
-      var userId = routeTo.params.userId;
 
       // Simulate Ajax Request
       setTimeout(function () {
