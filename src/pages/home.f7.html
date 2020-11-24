@@ -11,8 +11,13 @@
         </div>
         <div class="title" style="font-size: medium;">Anak Hebat Indonesia</span></div>
         <div class="right">
-          <a href="#" class="link icon-only">
+          <a href="#" class="link icon-only" id="autocomplete-standalone-popup">
             <i class="icon f7-icons">search</i>
+            <input type="hidden">
+            <div class="item-inner" style="display: none;">
+              <div class="item-title">Cari Buku</div>
+              <div class="item-after"></div>
+            </div>
           </a>
           <a href="/keranjang/" class="link icon-only">
             <i class="icon f7-icons">cart<span class="badge color-red cart-label"  >0</span></i>
@@ -545,6 +550,35 @@
       pageInit: function(e, page) {
         // console.log('PAGE INIT',page);
         // this.refreshPage(page)
+        let self = this;
+
+        var autocompleteStandalonePopup = self.$app.autocomplete.create({
+          openIn: 'popup', //open in page
+          openerEl: '#autocomplete-standalone-popup', //link that opens autocomplete
+          closeOnSelect: true, //go back after we select something
+          source: function (query, render) {
+            var results = [];
+            if (query.length === 0) {
+              render(results);
+              return;
+            }
+            // Find matched items
+            for (var i = 0; i < fruits.length; i++) {
+              if (fruits[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(fruits[i]);
+            }
+            // Render items by passing array with result items
+            render(results);
+          },
+          on: {
+            change: function (value) {
+              // Add item text value to item-after
+              // $$('#autocomplete-standalone-popup').find('.item-after').text(value[0]);
+              // Add item value to input value
+              // $$('#autocomplete-standalone-popup').find('input').val(value[0]);
+            },
+          },
+        });
+
       },
       pageBeforeIn: function(e, page) {
         // console.log('PAGE BEFORE IN',page);
