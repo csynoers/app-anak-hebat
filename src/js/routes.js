@@ -117,11 +117,101 @@ function updateCart(to, from, resolve, reject) {
   resolve()
 }
 
+function getMainSliderUpdated(to, from, resolve, reject) {
+  console.log('Main Slider updated');
+  var router = this;
+
+  // App instance
+  var app = router.app;
+
+  app.localforage.getItem('mainSliders').then(value => {
+    app.request.getJSON('https://m.anakhebatindonesia.com/slide', function (data) {
+      if(data) {
+        app.localforage.setItem('mainSliders',data);
+      }
+    })
+  }).catch(err => console.log(err) )
+
+  resolve();
+}
+
+function getReleaseBookUpdated(to, from, resolve, reject) {
+  console.log('Release Book updated');
+  var router = this;
+
+  // App instance
+  var app = router.app;
+
+  app.localforage.getItem('releaseBooks').then(value => {
+    app.request.getJSON('https://m.anakhebatindonesia.com/books?release=new-release', function (data) {
+      if(data) {
+        app.localforage.setItem('releaseBooks',data);
+      }
+    })
+  }).catch(err => console.log(err) )
+
+  resolve();
+}
+
+function getComingSoonBookUpdated(to, from, resolve, reject) {
+  console.log('Coming Soon Book updated');
+  var router = this;
+
+  // App instance
+  var app = router.app;
+
+  app.localforage.getItem('comingSoonBooks').then(value => {
+    app.request.getJSON('https://m.anakhebatindonesia.com/books?release=coming-soon', function (data) {
+      if(data) {
+        app.localforage.setItem('comingSoonBooks',data);
+      }
+    })
+  }).catch(err => console.log(err) )
+
+  resolve();
+}
+
+function getRecomendedBookUpdated(to, from, resolve, reject) {
+  console.log('Recomended Book updated');
+  var router = this;
+
+  // App instance
+  var app = router.app;
+
+  app.localforage.getItem('recomendedBooks').then(value => {
+    app.request.getJSON('https://m.anakhebatindonesia.com/books?release=best-seller', function (data) {
+      if(data) {
+        app.localforage.setItem('recomendedBooks',data);
+      }
+    })
+  }).catch(err => console.log(err) )
+
+  resolve();
+}
+
+function getArtikelUpdated(to, from, resolve, reject) {
+  console.log('Artikel updated');
+  var router = this;
+
+  // App instance
+  var app = router.app;
+
+  app.localforage.getItem('news').then(value => {
+    app.request.getJSON('https://m.anakhebatindonesia.com/news', function (data) {
+      if(data) {
+        app.localforage.setItem('news',data);
+      }
+    })
+  }).catch(err => console.log(err) )
+
+  resolve();
+}
+
 var routes = [
   {
     path: '/',
     component: HomePage,
-    // beforeEnter: [internetConnection,updateCart],
+    beforeEnter: [getMainSliderUpdated,getReleaseBookUpdated,getComingSoonBookUpdated,getRecomendedBookUpdated,getArtikelUpdated],
   },
   {
     path: '/feeds/',
