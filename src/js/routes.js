@@ -66,7 +66,15 @@ function checkAuthorization(to, from, resolve, reject) {
   // App instance
   var app = router.app;
 
-  app.localforage.getItem('users').then(value => resolve()).catch(err => {
+  app.localforage.getItem('users').then(value => {
+    if ( value ) {
+      resolve()
+    } else {
+      app.dialog.alert('Maaf anda belum Login', () => {
+        reject()
+      })
+    }
+  }).catch(err => {
     app.dialog.alert('Maaf anda belum Login', () => {
       reject()
     })
