@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.anakhebatindonesia.m" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Anak Hebat</name>
+    <name>Anak Hebat Indonesia</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>
@@ -28,7 +28,7 @@
 
     <platform name="android">
       <preference name="StatusBarOverlaysWebView" value="false" />
-      <preference name="android-minSdkVersion" value="21" />
+      <preference name="android-minSdkVersion" value="29" />
       <preference name="SplashMaintainAspectRatio" value="true" />
       <splash density="land-hdpi" src="res/screen/android/drawable-hdpi/screen.png" />
       <splash density="land-mdpi" src="res/screen/android/drawable-mdpi/screen.png" />

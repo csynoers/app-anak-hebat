@@ -20,7 +20,7 @@ var app = new Framework7({
   root: '#app', // App root element
   component: App, // App main component
   id: 'com.anakhebatindonesia.m', // App bundle ID
-  name: 'Anak Hebat', // App name
+  name: 'Anak Hebat Indonesia', // App name
   theme: 'auto', // Automatic theme detection
 
   cache: true, // enable caching true || false
