@@ -20,10 +20,10 @@
             <li>
               <div class="item-content">
                 <div class="item-inner">
-                  <div class="item-title" style="white-space: unset; font-size: small;">Tukarkan <span id="pointRewardCheckout">0</span> Point Reward</div>
+                  <div class="item-title" style="white-space: unset; font-size: small;">Tukarkan <span id="pointRewardCart">0</span> Point Reward</div>
                   <div class="item-after">
-                    <span class="margin-right" id="pointRewardCheckoutConvert">[-Rp0]</span>
-                    <label class="toggle" id="toggleCheckout">
+                    <span class="margin-right" id="pointRewardCartConvert">[-Rp0]</span>
+                    <label class="toggle" id="toggleCart">
                       <input name="togle_point" type="checkbox" data-value="off" />
                       <span class="toggle-icon"></span>
                     </label>
@@ -36,8 +36,8 @@
                 <div class="item-inner">
                   <div class="item-after">
                     <span class="text-color-black" style="padding-top: 6px;">SubTotal: </span>
-                    <span class="margin-left-half margin-right text-currency-primary" id="subTotalCheckout" style="font-weight: bold; padding-top: 6px;">Rp0</span>
-                    <button type="button" id="submitCheckout" class="button button-fill">Checkout</button>
+                    <span class="margin-left-half margin-right text-currency-primary" id="subTotalCart" style="font-weight: bold; padding-top: 6px;">Rp0</span>
+                    <button type="button" id="submitCart" class="button button-fill">Checkout</button>
                   </div>
                 </div>
               </div>
@@ -127,9 +127,9 @@
                         subtotal: self.getSubtotalAfterStepper(self.$$('.cart-item-content'))
                       });
 
-                      self.$$('#pointRewardCheckout').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
-                      self.$$('#pointRewardCheckoutConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
-                      self.$$('#subTotalCheckout').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+                      self.$$('#pointRewardCart').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
+                      self.$$('#pointRewardCartConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
+                      self.$$('#subTotalCart').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
                     },()=>{
                       selfStepper.setValue(1)
                     });
@@ -144,9 +144,9 @@
                     subtotal: self.getSubtotalAfterStepper(self.$$('.cart-item-content'))
                   });
 
-                  self.$$('#pointRewardCheckout').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
-                  self.$$('#pointRewardCheckoutConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
-                  self.$$('#subTotalCheckout').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+                  self.$$('#pointRewardCart').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
+                  self.$$('#pointRewardCartConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
+                  self.$$('#subTotalCart').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
 
 
                 }
@@ -159,9 +159,9 @@
             subtotal: value.subtotal
           });
 
-          self.$$('#pointRewardCheckout').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
-          self.$$('#pointRewardCheckoutConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
-          self.$$('#subTotalCheckout').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+          self.$$('#pointRewardCart').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
+          self.$$('#pointRewardCartConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
+          self.$$('#subTotalCart').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
 
           // alert display none if not empty
           pageContentBlockTitle.css({"display":"none"});
@@ -249,30 +249,30 @@
         self.$$('.page[data-name=carts-page] .page-content ul').html('')
         // event toggle point reward
         self.$app.toggle.create({
-          el: '#toggleCheckout',
+          el: '#toggleCart',
           on: {
             change: function () {
               let pointReward = self.getPoinReward({
-                pointReward: self.$$('#pointRewardCheckout').data('pointreward'),
-                subtotal: self.$$('#subTotalCheckout').data('subtotal')
+                pointReward: self.$$('#pointRewardCart').data('pointreward'),
+                subtotal: self.$$('#subTotalCart').data('subtotal')
               });
 
               if ( this.checked ) {
-                self.$$('#toggleCheckout input').attr('data-value','on');
-                self.$$('#pointRewardCheckoutConvert').css("color","#ee4d2d");
-                self.$$('#subTotalCheckout').text(`Rp${self.formatRupiah(pointReward.subtotalInConvert)}`);
+                self.$$('#toggleCart input').attr('data-value','on');
+                self.$$('#pointRewardCartConvert').css("color","#ee4d2d");
+                self.$$('#subTotalCart').text(`Rp${self.formatRupiah(pointReward.subtotalInConvert)}`);
               } else {
-                self.$$('#toggleCheckout input').attr('data-value','off');
-                self.$$('#pointRewardCheckoutConvert').css("color","unset");
-                self.$$('#subTotalCheckout').text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+                self.$$('#toggleCart input').attr('data-value','off');
+                self.$$('#pointRewardCartConvert').css("color","unset");
+                self.$$('#subTotalCart').text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
               }
             }
           }
         })
 
-        self.$$('#submitCheckout').on('click',function(){
-          // console.log(self.$$('#subTotalCheckout').html())
-          let togleInput = self.$$('#toggleCheckout input').attr('data-value');
+        self.$$('#submitCart').on('click',function(){
+          // console.log(self.$$('#subTotalCart').html())
+          let togleInput = self.$$('#toggleCart input').attr('data-value');
           self.$router.navigate(`/checkout/?point=${togleInput}`);
           // console.log()
           // router.navigate(dataHref,{ transition: 'f7-push' })

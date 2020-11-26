@@ -175,7 +175,7 @@
           let city = self.$$('#formCekOngkirDomestik').find('#cityId').val();
 
           self.$app.request({
-            url: 'http://m.anakhebatindonesia.com/ongkir/subdistrict',
+            url: 'https://m.anakhebatindonesia.com/ongkir/subdistrict',
             method: 'GET',
             dataType: 'json',
             data: {
@@ -207,7 +207,7 @@
         
         self.$app.preloader.show();
         self.$app.request({
-          url: 'http://m.anakhebatindonesia.com/ongkir/cost-all',
+          url: 'https://m.anakhebatindonesia.com/ongkir/cost-all',
           method: 'GET',
           dataType: 'json',
           data: {
@@ -300,7 +300,7 @@
         
         self.$app.preloader.show();
         self.$app.request({
-          url: 'http://m.anakhebatindonesia.com/ongkir/international-cost-all',
+          url: 'https://m.anakhebatindonesia.com/ongkir/international-cost-all',
           method: 'GET',
           dataType: 'json',
           data: {

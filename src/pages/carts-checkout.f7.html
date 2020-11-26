@@ -10,51 +10,118 @@
         </a>
       </div>
       <div class="title">{{titlePage}}</div>
-    </div>
+    </div>  
   </div>
-  <div class="toolbar toolbar-bottom" style="height: calc(var(--f7-toolbar-height) *2);">
+  <div class="toolbar toolbar-bottom">
     <div class="toolbar-inner">
-      <div class="block" style="width: 100vw">
-        <div class="list no-hairlines">
-          <ul>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                  <div class="item-title" style="white-space: unset; font-size: small;">Tukarkan <span id="pointRewardCheckout">0</span> Point Reward</div>
-                  <div class="item-after">
-                    <span class="margin-right" id="pointRewardCheckoutConvert">[-Rp0]</span>
-                    <label class="toggle" id="toggleCheckout">
-                      <input name="togle_point" type="checkbox" data-value="off" />
-                      <span class="toggle-icon"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-inner">
-                  <div class="item-after">
-                    <span class="text-color-black" style="padding-top: 6px;">SubTotal: </span>
-                    <span class="margin-left-half margin-right text-currency-primary" id="subTotalCheckout" style="font-weight: bold; padding-top: 6px;">Rp0</span>
-                    <button type="button" id="submitCheckout" class="button button-fill">Checkout</button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
+      <div class="row" style="width: 100vw">
+        <div class="col-50">
+          <span class="float-right">Total Pembayaran</span><br>
+          <span class="total-pembayaran-checkout float-right text-currency-primary" style="font-weight: bold;">Rp0</span>
+        </div>
+        <div class="col-50 bg-color-primary">
+          <a href="#" class="link text-color-white">Buat Pesanan</a>
         </div>
       </div>
     </div>
   </div>
   <div class="page-content">
-    <div class="block-title">Keranjang Belanja Kosong</div>
+    <div class="block padding-vertical no-margin">
+      <p>Alamat Pengiriman</p>
+      <div id="alamatPengirimanCheckout" data-active="false">
+        <center>
+          <div class="preloader"></div>
+        </center>
+      </div>
+    </div>
+    <div style="background-image: url('static/garis-tepi-surat.png');height: 6px;background-position-y: bottom;"></div>
+
     <div class="card">
       <div class="card-content">
         <div class="list media-list">
-          <ul>
+          <ul id="itemContentCheckout">
           </ul>
         </div>
+      </div>
+    </div>
+
+    <div class="padding-vertical" style="background-color: aliceblue;" >
+      <p class="padding-horizontal text-color-teal">Opsi Pengiriman</p>
+      <div class="list no-margin media-list">
+        <ul id="opsiPengirimanCheckout" style="background-color: transparent;">
+          <center>
+            <div class="preloader"></div>
+          </center>        
+        </ul>
+      </div>
+    </div>
+    <div class="block padding-vertical no-margin">
+      <div class="row">
+        <div class="col-15">Pesan:</div>
+        <div class="col-85"><input class="width-100 text-align-right" type="text" name="name" placeholder="Silahkan tinggalkan pesan ..."></div>
+      </div>
+      <div class="row margin-top">
+        <div>Total Pesanan (<span id="totalPesananCheckout">0 Produk</span>)</div>
+        <div class="text-currency-primary subtotal-checkout" style="font-weight: bold;">Rp0</div>
+      </div>
+      <div class="row">
+        <div>Tukarkan <span id="pointRewardCheckout">0</span> Point Reward</div>
+        <div>
+          <span class="margin-right" id="pointRewardCheckoutConvert">[-Rp0]</span>
+          <label class="toggle" id="toggleCheckout">
+            <input name="togle_point" type="checkbox" />
+            <span class="toggle-icon"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="block no-margin">
+      <div class="row">
+        <div>Metode Pembayaran</div>
+        <div class="text-color-primary" style="font-weight: bold">Bank Transfer</div>
+      </div>
+      <div class="text-align-center" style="font-weight: Bold;">
+        <div class="border-color-primary padding-half" style="border: 1px solid;">
+          Bank BCA Yogyakarta<br>
+          No. Rekening: 1690-193-996<br>
+          Atas Nama: Akbar Kaelola
+        </div>
+
+        <div class="border-color-primary padding-half margin-top-half" style="border: 1px solid;">
+          Bank Mandiri Yogyakarta<br>
+          No. Rekening: 1370-0144-364-69<br>
+          Atas Nama: Akbar Kaelola
+        </div>
+
+        <div class="border-color-primary padding-half margin-top-half" style="border: 1px solid;">
+          Bank BNI Yogyakarta<br>
+          No. Rekening: 0850-8608-75<br>
+          Atas Nama: Anak Hebat Indonesia
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="row">
+        <div>Subtotal untuk Produk</div>
+        <div class="subtotal-checkout" data-value="0">Rp0</div>
+      </div>
+      <div class="row">
+        <div>Subtotal Pengiriman</div>
+        <div id="subTotalPengirimanCheckout" data-value="0">Rp0</div>
+      </div>
+      <div class="row">
+        <div>Kode UNIK</div>
+        <div id="kodeUnikCheckout" >123</div>
+      </div>
+      <div class="row" style="font-weight: bold;">
+        <div>Total Pembayaran</div>
+        <div class="total-pembayaran-checkout text-currency-primary">Rp0</div>
+      </div>
+      <div class="border-color-red margin-top-half padding-half text-color-red" style="border: 1px solid;">
+        <strong>PENTING !!!</strong>
+        pastikan transfer sesuai dengan <strong>Total Pembayaran</strong> tidak kurang tidak lebih, terimakasih
       </div>
     </div>
   </div>
@@ -81,10 +148,12 @@
       let self = this;
       let page = self.$$('.page[data-name=carts-checkout-page]');
       let pageContentBlockTitle = page.find('.block-title');
-      let pageContentUl = page.find('.page-content ul');
+      let pageContentUl = page.find('#itemContentCheckout');
       
       self.getCarts().then(value => {
         if ( value ) {
+          value.totalWeight = 0;
+
           value.rowsData.forEach((item,index) => {
             pageContentUl.append(`
               <li class="item-content cart-item-content" id="cartItemContent${index}" data-qty="${item.qty}" data-idr="${item.idr}" data-id="${item.id}">
@@ -97,70 +166,167 @@
                 </div>
               </li>              
             `);
-          });          
+            value.totalWeight += (item.qty*item.result.weight.gram);
+          });
           
-          self.$$('.stepper').each(function(index, stepperEl) {
-            var stepper = self.$app.stepper.create({
-              el: stepperEl,
-              // step: 1,
-              // min: 1,
-              // max: 100,
-              // value: 1,
-              on: {
-                change: function () {
-                  let selfStepper = this;
-                  
-                  if ( this.getValue() < 1 ) {
-                    self.$app.dialog.confirm('Apakah Anda yakin ingin menghapus?', () => {
-                      // after deleted
-                      self.$$(`#cartItemContent${index}`).remove();
+          // set total pesanan ([jumlah] produk)
+          self.$$('#totalPesananCheckout')
+            .text(value.rowsData.length + ' Produk')
 
-                      let pointReward = self.getPoinReward({
-                        pointReward: value.pointReward,
-                        subtotal: self.getSubtotalAfterStepper(self.$$('.cart-item-content'))
-                      });
-
-                      self.$$('#pointRewardCheckout').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
-                      self.$$('#pointRewardCheckoutConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
-                      self.$$('#subTotalCheckout').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
-                    },()=>{
-                      selfStepper.setValue(1)
-                    });
-
-                  }
-
-                  self.$$(`#cartItemContent${index}`).attr('data-qty',this.getValue());
-
-                  // after updated stepper not empty
-                  let pointReward = self.getPoinReward({
-                    pointReward: value.pointReward,
-                    subtotal: self.getSubtotalAfterStepper(self.$$('.cart-item-content'))
-                  });
-
-                  self.$$('#pointRewardCheckout').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
-                  self.$$('#pointRewardCheckoutConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
-                  self.$$('#subTotalCheckout').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
-
-
-                }
-              }
-            });
-          })
-
+          // get 25% point reward
           let pointReward = self.getPoinReward({
             pointReward: value.pointReward,
             subtotal: value.subtotal
-          });
+          })
 
-          self.$$('#pointRewardCheckout').attr('data-pointreward',pointReward.pointReward).text(pointReward.pointRewardAllowed);
-          self.$$('#pointRewardCheckoutConvert').text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`);
-          self.$$('#subTotalCheckout').attr('data-subtotal',pointReward.subtotal).text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+          // set point reward
+          self.$$('#pointRewardCheckout')
+            .attr('data-value',pointReward.pointReward)
+            .text(pointReward.pointRewardAllowed)
+          
+          // set point reward convert
+          self.$$('#pointRewardCheckoutConvert')
+            .text(`[-Rp${self.formatRupiah(pointReward.pointRewardInConvertAllowed)}]`)
+          
+          // set toggle point reward
+          let point = self.$route.query.point;
+          if ( point == 'on' ) {
+            self.$$('#toggleCheckout input')
+              .attr("checked", '')
+              .attr("data-value", point)
 
-          // alert display none if not empty
-          pageContentBlockTitle.css({"display":"none"});
+            // set subtotal produk
+            self.$$('.subtotal-checkout')
+              .attr('data-value',value.subtotal)
+              .text(`Rp${self.formatRupiah(pointReward.subtotalInConvert)}`)
+
+          } else {
+            self.$$('#toggleCheckout input')
+              .attr("data-value", point)
+
+            // set subtotal produk
+            self.$$('.subtotal-checkout')
+              .attr('data-value',value.subtotal)
+              .text(`Rp${self.formatRupiah(value.subtotal)}`)
+              
+          }
+          // set kode unik
+          let kodeUnik = Math.floor(100 + Math.random() * 900);
+          self.$$('#kodeUnikCheckout')
+            .attr('data-value',kodeUnik)
+            .text(kodeUnik)
+
+          self.$app.localforage.getItem('users').then(user => {
+            if ( user ) {
+              let token = user.token;
+
+              self.$app.request.json(`https://anakhebatindonesia.com/JSON/user_address.php`,{"token": token ,"type": "primary"}, (address) => {
+                if (address.status == 200) {
+                  address.fullname      = address.result[0].address_content.fullname;
+                  address.phone         = address.result[0].address_content.phone;
+                  address.text          = address.result[0].address_text;
+                  address.address_type  = address.result[0].address_type;
+                  address.destination_id= address.result[0].destination_id;
+
+                  self.$$('#alamatPengirimanCheckout')
+                    .attr('data-active','true')
+                    // .attr('data-address-type',address.address_type)
+                    // .attr('data-destination-id',address.destination_id)
+                    .html(`${address.fullname} | (${address.phone})<br>${address.text}`)
+
+                  self.$app.preloader.hideIn('#lamatPengirimanCheckout');
+
+                  // set opsi pengiriman
+                  if ( address.address_type == 'domestik' ) {
+                    self.$app.request.json(`https://m.anakhebatindonesia.com/ongkir/cost-all`,{"destination": address.destination_id,"weight": value.totalWeight}, (ongkir) => {
+                      self.$$('#opsiPengirimanCheckout').html('');
+                      ongkir.forEach((item,index) => {
+                        item.checked = null;
+                        if ( index == 0 ) {
+                          item.checked = 'checked';
+                          self.$$('#subTotalPengirimanCheckout')
+                            .attr('data-value',item.value)
+                            .text('Rp'+self.formatRupiah(item.value))
+
+                          
+                          self.$$('.total-pembayaran-checkout')
+                            .text('Rp' +self.formatRupiah((point=='on'? pointReward.subtotalInConvert : pointReward.subtotal ) + kodeUnik + item.value) )
+
+                        }
+
+                        self.$$('#opsiPengirimanCheckout').append(`
+                          <li>
+                            <label class="item-radio item-radio-icon-start item-content">
+                              <input class="courier-checkout" type="radio" name="courier" value="${item.value}" ${item.checked} />
+                              <i class="icon icon-radio" ${item.checked}></i>
+                              <div class="item-inner">
+                                <div class="item-title-row">
+                                  <div class="item-title">${item.description}</div>
+                                  <div class="item-after">Rp${self.formatRupiah(item.value)}</div>
+                                </div>
+                                <div class="item-subtitle">${item.name}</div>
+                                <div class="item-text">Estimasi: ${(item.etd ? item.etd : '-' )}</div>
+                              </div>
+                            </label>
+                          </li>                        
+                        `)
+                      })
+
+                      // opsi pengiriman on change
+                      self.eventOpsiPengiriman()
+                    })
+                  } else {
+                    self.$app.request.json(`https://m.anakhebatindonesia.com/ongkir/international-cost-all`,{"destination": address.destination_id,"weight": value.totalWeight}, (ongkir) => {
+                      self.$$('#opsiPengirimanCheckout').html('');
+                      ongkir.forEach((item,index) => {
+                        item.checked = null;
+                        if ( index == 0 ) {
+                          item.checked = 'checked';
+                          self.$$('#subTotalPengirimanCheckout')
+                            .attr('data-value',item.cost)
+                            .text('Rp'+self.formatRupiah(item.cost))
+
+                          self.$$('.total-pembayaran-checkout')
+                            .text('Rp' +self.formatRupiah((point=='on'? pointReward.subtotalInConvert : pointReward.subtotal ) + kodeUnik + item.cost) )
+
+                        }
+
+                        self.$$('#opsiPengirimanCheckout').append(`
+                          <li>
+                            <label class="item-radio item-radio-icon-start item-content">
+                              <input class="courier-checkout" type="radio" name="courier" value="${item.cost}" ${item.checked} />
+                              <i class="icon icon-radio" ${item.checked}></i>
+                              <div class="item-inner">
+                                <div class="item-title-row">
+                                  <div class="item-title">${item.service}</div>
+                                  <div class="item-after">Rp${self.formatRupiah(item.cost)}</div>
+                                </div>
+                                <div class="item-subtitle">${item.name}</div>
+                                <div class="item-text">Estimasi: ${(item.etd ? item.etd : '-' )}</div>
+                              </div>
+                            </label>
+                          </li>                        
+                        `)
+                      })
+
+                      // opsi pengiriman on change
+                      self.eventOpsiPengiriman()
+
+                    })
+                  }
+                } else {
+                  self.$$('#alamatPengirimanCheckout')
+                    .html('Maaf anda belum melakukan pengaturan alamat')
+
+                  self.$app.preloader.hideIn('#lamatPengirimanCheckout');
+                }
+              })
+            }
+          }).catch(err => console.log(err))
         }
 
       }).catch(err => console.log('carts',err));
+
 
 
     },
@@ -228,6 +394,40 @@
         self.$app.localforage.setItem('carts',{rowsData,rowsId});
 
         return subtotal;
+      },
+      eventOpsiPengiriman: function() {
+        let self = this;
+
+        // opsi pengiriman on change
+        self.$$('.courier-checkout').on('change',(tes)=>{
+          let ongkir    = parseInt(self.$$('.courier-checkout:checked').val());
+          let kodeUnik  = parseInt(self.$$('#kodeUnikCheckout').attr('data-value'));
+          let toggle    = self.$$('#toggleCheckout input').attr('data-value');
+
+          let value = self.getPoinReward({
+            pointReward: parseInt(self.$$('#pointRewardCheckout').attr('data-value')),
+            subtotal: parseInt(document.querySelector('.subtotal-checkout').getAttribute('data-value'))
+          })
+
+          // re-set subtotal pengiriman
+          self.$$('#subTotalPengirimanCheckout')
+            .attr('data-value',ongkir)
+            .text('Rp'+ self.formatRupiah(ongkir))
+
+          if (toggle == 'on') {
+            let totalPembayaran = value.subtotalInConvert+ongkir+kodeUnik;
+            // re-set total pembayaran
+            self.$$('.total-pembayaran-checkout')
+              .attr('data-value',totalPembayaran)
+              .text('Rp' +self.formatRupiah(totalPembayaran))
+          } else { //off
+            let totalPembayaran = value.subtotal+ongkir+kodeUnik; 
+            // re-set total pembayaran
+            self.$$('.total-pembayaran-checkout')
+              .attr('data-value',totalPembayaran)
+              .text('Rp' +self.formatRupiah(totalPembayaran))
+          }
+        })
       }
       
     },
@@ -246,23 +446,44 @@
           on: {
             change: function () {
               let pointReward = self.getPoinReward({
-                pointReward: self.$$('#pointRewardCheckout').data('pointreward'),
-                subtotal: self.$$('#subTotalCheckout').data('subtotal')
+                pointReward: parseInt(self.$el.find('#pointRewardCheckout').data('value')),
+                subtotal: parseInt(document.querySelector('.subtotal-checkout').getAttribute('data-value'))
               });
 
+              let kodeUnik = parseInt(self.$$('#kodeUnikCheckout').data('value'));
+              let subTotalPengirimanCheckout = parseInt(self.$$('#subTotalPengirimanCheckout').data('value'));
+
               if ( this.checked ) {
-                self.$$('#toggleCheckout input').attr('data-value','on');
-                self.$$('#pointRewardCheckoutConvert').css("color","#ee4d2d");
-                self.$$('#subTotalCheckout').text(`Rp${self.formatRupiah(pointReward.subtotalInConvert)}`);
+                self.$$('#toggleCheckout input')
+                  .attr('data-value','on')
+
+                self.$$('#pointRewardCheckoutConvert')
+                  .css("color","#ee4d2d")
+
+                // set subtotal dikurangi pointmember 
+                self.$$('.subtotal-checkout')
+                  .text(`Rp${self.formatRupiah(pointReward.subtotalInConvert)}`)
+                self.$$('.total-pembayaran-checkout')
+                  .text(`Rp${self.formatRupiah(pointReward.subtotalInConvert+kodeUnik+subTotalPengirimanCheckout)}`)
+
               } else {
-                self.$$('#toggleCheckout input').attr('data-value','off');
-                self.$$('#pointRewardCheckoutConvert').css("color","unset");
-                self.$$('#subTotalCheckout').text(`Rp${self.formatRupiah(pointReward.subtotal)}`);
+                self.$$('#toggleCheckout input')
+                  .attr('data-value','off')
+
+                self.$$('#pointRewardCheckoutConvert')
+                  .css("color","unset")
+
+                // set subtotal tanpa point member
+                self.$$('.subtotal-checkout')
+                  .text(`Rp${self.formatRupiah(pointReward.subtotal)}`)
+                self.$$('.total-pembayaran-checkout')
+                  .text(`Rp${self.formatRupiah(pointReward.subtotal+kodeUnik+subTotalPengirimanCheckout)}`)
+
               }
             }
           }
         })
-
+       
         self.$$('#submitCheckout').on('click',function(){
           // console.log(self.$$('#subTotalCheckout').html())
           let togleInput = self.$$('#toggleCheckout input').attr('data-value');
