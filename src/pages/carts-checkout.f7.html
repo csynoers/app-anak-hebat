@@ -487,7 +487,8 @@
         self.$$('#submitCheckout').on('click',function(){
           // console.log(self.$$('#subTotalCheckout').html())
           let togleInput = self.$$('#toggleCheckout input').attr('data-value');
-          self.$router.navigate(`/checkout/?point=${togleInput}`);
+          // self.$app.dialog.alert('Maaf terjadi kesalahan')
+          // self.$router.navigate(`/checkout/?point=${togleInput}`);
           // console.log()
           // router.navigate(dataHref,{ transition: 'f7-push' })
         })
